@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "684716408090",
+    "project_id": "sccf-97823",
+    "storage_bucket": "sccf-97823.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:684716408090:android:a76c1d9f5b6b43425ac0a3",
+        "android_client_info": {
+          "package_name": "com.example.sccf"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeF4aL-Q_9FTGOqGMLKx8HJqLKjEa1nUs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
