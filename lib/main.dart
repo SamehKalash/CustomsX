@@ -1,21 +1,47 @@
 import 'package:flutter/material.dart';
-import 'dashboard.dart';
+import 'package:provider/provider.dart';
+import 'screens/dashboard.dart';
+import 'screens/tracking.dart';
+import 'screens/documents.dart';
+import 'theme/theme_provider.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(
+  ChangeNotifierProvider(
+    create: (context) => ThemeProvider(),
+    child: const GlobalClearApp(),
+  ),
+);
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class GlobalClearApp extends StatelessWidget {
+  const GlobalClearApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return MaterialApp(
-      title: 'Customs Dashboard',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.grey[100],
+      title: 'SCCF',
+      theme: ThemeData.light().copyWith(
+        primaryColor: const Color.fromARGB(255, 211, 174, 9),
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          secondary: const Color.fromARGB(255, 212, 173, 0),
+        ),
       ),
-      home: const DashboardScreen(),
+      darkTheme: ThemeData.dark().copyWith(
+        primaryColor: const Color.fromARGB(255, 211, 174, 9),
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          secondary: const Color.fromARGB(255, 212, 162, 0),
+          brightness: Brightness.dark,
+        ),
+        scaffoldBackgroundColor: const Color(0xFF121212),
+      ),
+      themeMode: themeProvider.themeMode,
+      routes: {
+        '/': (context) => const DashboardScreen(),
+        '/tracking': (context) => const ShipmentTrackingScreen(),
+        '/documents': (context) => const DocumentManagementScreen(),
+      },
+      debugShowCheckedModeBanner: false,
     );
   }
 }
