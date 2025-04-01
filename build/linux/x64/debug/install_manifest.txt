@@ -9,5 +9,4 @@
 /home/sam/SCCF/build/linux/x64/debug/bundle/data/flutter_assets/shaders/ink_sparkle.frag
 /home/sam/SCCF/build/linux/x64/debug/bundle/data/flutter_assets/AssetManifest.bin
 /home/sam/SCCF/build/linux/x64/debug/bundle/data/flutter_assets/fonts/MaterialIcons-Regular.otf
-/home/sam/SCCF/build/linux/x64/debug/bundle/data/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf
 /home/sam/SCCF/build/linux/x64/debug/bundle/data/flutter_assets/NOTICES.Z
