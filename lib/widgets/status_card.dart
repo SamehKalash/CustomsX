@@ -31,18 +31,27 @@ class StatusCard extends StatelessWidget {
           color: colors['background'],
           borderRadius: BorderRadius.circular(15),
           border: Border.all(color: colors['border']!, width: 1),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           children: [
+            // Icon with background
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: colors['iconBackground'],
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: colors['icon']),
+              child: Icon(icon, color: colors['icon'], size: 28),
             ),
             const SizedBox(width: 16),
+            // Text content
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,27 +59,36 @@ class StatusCard extends StatelessWidget {
                   Text(
                     title,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: colors['title'],
-                      fontWeight: FontWeight.w500,
-                    ),
+                          color: colors['title'],
+                          fontWeight: FontWeight.w600,
+                        ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
+                  const SizedBox(height: 4),
                   Text(
                     value,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: colors['value'],
-                      fontWeight: FontWeight.bold,
-                    ),
+                          color: colors['value'],
+                          fontWeight: FontWeight.bold,
+                        ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
+                  const SizedBox(height: 4),
                   Text(
                     subText,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodySmall?.copyWith(color: colors['subText']),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: colors['subText'],
+                        ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ],
               ),
             ),
-            Icon(Icons.chevron_right, color: colors['icon']),
+            // Chevron icon
+            Icon(Icons.chevron_right, color: colors['icon'], size: 20),
           ],
         ),
       ),
