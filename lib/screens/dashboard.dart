@@ -12,7 +12,13 @@ class DashboardScreen extends StatelessWidget {
     final isDarkMode = themeProvider.themeMode == ThemeMode.dark;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Dashboard'), actions: [
+      appBar: AppBar(
+        title: const Text('Dashboard'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            onPressed: () => _showNotifications(context),
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -22,6 +28,7 @@ class DashboardScreen extends StatelessWidget {
             _buildWelcomeBanner(context, isDarkMode),
             _buildQuickActions(context),
             _buildStatusSection(context),
+            _buildComplianceUpdates(context),
           ],
         ),
       ),
@@ -40,7 +47,6 @@ class DashboardScreen extends StatelessWidget {
         borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20)),
       ),
       child: Column(
-        // Corrected: Added 'child' parameter here
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -161,6 +167,101 @@ class DashboardScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildComplianceUpdates(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Compliance Updates',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const SizedBox(height: 10),
+          _buildUpdateItem(
+            context,
+            'Egypt Customs Regulations',
+            'New tariff codes effective March 2024',
+            Icons.gavel,
+          ),
+          _buildUpdateItem(
+            context,
+            'Egypt Import Restrictions',
+            'Updated restricted items list',
+            Icons.block,
+          ),
+          _buildUpdateItem(
+            context,
+            'Global Trade News',
+            'Latest international trade agreements',
+            Icons.public,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildUpdateItem(
+    BuildContext context,
+    String title,
+    String subtitle,
+    IconData icon,
+  ) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Icon(icon, color: Theme.of(context).colorScheme.secondary),
+      ),
+      title: Text(
+        title,
+        style: Theme.of(
+          context,
+        ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+      ),
+      subtitle: Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
+      onTap: () => Navigator.pushNamed(context, '/compliance'),
+    );
+  }
+
+  void _showNotifications(BuildContext context) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Notifications'),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: ListView(
+                shrinkWrap: true,
+                children: const [
+                  ListTile(
+                    leading: Icon(Icons.check_circle, color: Colors.green),
+                    title: Text('Document Approved'),
+                    subtitle: Text('Invoice_123.pdf has been cleared'),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.warning, color: Colors.orange),
+                    title: Text('Customs Hold'),
+                    subtitle: Text('Shipment #456 requires additional docs'),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: const Text('Dismiss All'),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          ),
     );
   }
 }

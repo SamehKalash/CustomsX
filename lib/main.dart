@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'screens/dashboard.dart';
 import 'screens/tracking.dart';
 import 'screens/documents.dart';
+import 'screens/compliance.dart';
 import 'theme/theme_provider.dart';
 
 void main() => runApp(
@@ -40,6 +41,7 @@ class GlobalClearApp extends StatelessWidget {
         '/': (context) => const DashboardScreen(),
         '/tracking': (context) => const ShipmentTrackingScreen(),
         '/documents': (context) => const DocumentManagementScreen(),
+        '/compliance': (context) => const ComplianceGuideScreen(),
       },
       debugShowCheckedModeBanner: false,
     );
