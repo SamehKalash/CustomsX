@@ -19,6 +19,10 @@ class DashboardScreen extends StatelessWidget {
             icon: const Icon(Icons.notifications),
             onPressed: () => _showNotifications(context),
           ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () => Navigator.pushNamed(context, '/settings'),
+          ),
         ],
       ),
       body: SingleChildScrollView(
