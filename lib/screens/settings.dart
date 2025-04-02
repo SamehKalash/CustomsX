@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme_provider.dart';
+import './payment_method.dart'; 
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -145,11 +146,7 @@ class SettingsScreen extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder:
-            (context) => Scaffold(
-              appBar: AppBar(title: const Text('Payment Methods')),
-              body: const Center(child: Text('Payment methods content')),
-            ),
+        builder: (context) => const PaymentMethodsScreen(),
       ),
     );
   }
