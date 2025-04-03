@@ -29,8 +29,16 @@ class ShipmentTrackingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Shipment Tracking')),
+      appBar: AppBar(
+        title: const Text('Shipment Tracking'),
+        backgroundColor: isDarkMode ? Colors.grey[900] : Colors.blue,
+        iconTheme: IconThemeData(
+          color: isDarkMode ? Colors.white : Colors.black, // Adjust icon color
+        ),
+      ),
       body: Column(
         children: [
           Padding(
@@ -38,31 +46,99 @@ class ShipmentTrackingScreen extends StatelessWidget {
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Enter tracking number',
+                hintStyle: TextStyle(
+                  color:
+                      isDarkMode
+                          ? Colors.white70
+                          : Colors.grey, // Adjust hint text color
+                ),
                 suffixIcon: IconButton(
-                  icon: const Icon(Icons.qr_code_scanner),
+                  icon: Icon(
+                    Icons.qr_code_scanner,
+                    color:
+                        isDarkMode
+                            ? Colors.white
+                            : Colors.black, // Adjust icon color
+                  ),
                   onPressed: () => _scanBarcode(context),
                 ),
                 border: const OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color:
+                        isDarkMode
+                            ? Colors.white70
+                            : Colors.grey, // Adjust border color
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color:
+                        isDarkMode
+                            ? Colors.white
+                            : Colors.blue, // Adjust focused border color
+                  ),
+                ),
+              ),
+              style: TextStyle(
+                color:
+                    isDarkMode
+                        ? Colors.white
+                        : Colors.black, // Adjust input text color
               ),
             ),
           ),
-          Expanded(child: ShipmentTimeline(statuses: _statuses)),
+          Expanded(
+            child: ShipmentTimeline(
+              statuses: _statuses,
+            ),
+          ),
         ],
       ),
     );
   }
 
   void _scanBarcode(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     showDialog(
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text('Barcode Scanning'),
-            content: const Text('Scanner functionality to be implemented'),
+            backgroundColor:
+                isDarkMode
+                    ? Colors.grey[900]
+                    : Colors.white, // Adjust dialog background
+            title: Text(
+              'Barcode Scanning',
+              style: TextStyle(
+                color:
+                    isDarkMode
+                        ? Colors.white
+                        : Colors.black, // Adjust title color
+              ),
+            ),
+            content: Text(
+              'Scanner functionality to be implemented',
+              style: TextStyle(
+                color:
+                    isDarkMode
+                        ? Colors.white70
+                        : Colors.grey, // Adjust content color
+              ),
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
+                child: Text(
+                  'OK',
+                  style: TextStyle(
+                    color:
+                        isDarkMode
+                            ? Colors.blue[300]
+                            : Colors.blue, // Adjust button color
+                  ),
+                ),
               ),
             ],
           ),

@@ -11,58 +11,30 @@ class ComplianceGuideScreen extends StatefulWidget {
 
 class _ComplianceGuideScreenState extends State<ComplianceGuideScreen> {
   String _selectedCountry = 'Egypt';
-  List<String> _countries = ['Egypt'];
+  List<String> _countries = [];
   List<String> _prohibitedItems = [];
   bool _isLoading = true;
+  bool _isDropdownLoading = true;
   String _errorMessage = '';
   bool _firebaseReady = false;
-
-  // Method to verify Firebase connection
-  Future<void> _verifyFirebaseConnection() async {
-    try {
-      final firestore = FirebaseFirestore.instance;
-      debugPrint('Firestore instance created');
-
-      // Test with a simple read operation
-      final testDoc = await firestore.collection('compliance').doc('test').get();
-      debugPrint('Firestore test read successful: ${testDoc.exists}');
-
-      // Get actual server version
-      await firestore.terminate();
-      debugPrint('Firestore connection terminated successfully');
-
-      await firestore.clearPersistence();
-      await firestore.enableNetwork();
-    } catch (e) {
-      debugPrint('Firestore connection failed: $e');
-    }
-  }
 
   @override
   void initState() {
     super.initState();
-    _verifyFirebaseConnection(); // Verify Firebase connection
-    _checkFirebaseAndLoad(); // Check Firebase initialization and load data
+    _initializeFirebaseAndLoadData();
   }
 
-  Future<void> _checkFirebaseAndLoad() async {
+  Future<void> _initializeFirebaseAndLoadData() async {
     try {
-      // Check if Firebase is initialized
-      try {
-        Firebase.app();
-        _firebaseReady = true;
-      } catch (_) {
-        _firebaseReady = false;
-        _errorMessage = 'Firebase not initialized';
-        _isLoading = false;
-        return;
-      }
+      Firebase.app();
+      _firebaseReady = true;
 
       await _loadCountries();
       await _loadProhibitedItems();
     } catch (e) {
       setState(() {
-        _errorMessage = 'Error: ${e.toString()}';
+        _firebaseReady = false;
+        _errorMessage = 'Firebase initialization failed: ${e.toString()}';
         _isLoading = false;
       });
     }
@@ -71,11 +43,16 @@ class _ComplianceGuideScreenState extends State<ComplianceGuideScreen> {
   Future<void> _loadCountries() async {
     if (!_firebaseReady) return;
 
+    setState(() {
+      _isDropdownLoading = true;
+    });
+
     try {
-      final snapshot = await FirebaseFirestore.instance
-          .collection('compliance')
-          .doc('countries')
-          .get();
+      final snapshot =
+          await FirebaseFirestore.instance
+              .collection('compliance')
+              .doc('countries')
+              .get();
 
       if (snapshot.exists) {
         setState(() {
@@ -86,6 +63,10 @@ class _ComplianceGuideScreenState extends State<ComplianceGuideScreen> {
     } catch (e) {
       setState(() {
         _errorMessage = 'Failed to load countries: ${e.toString()}';
+      });
+    } finally {
+      setState(() {
+        _isDropdownLoading = false;
       });
     }
   }
@@ -99,22 +80,30 @@ class _ComplianceGuideScreenState extends State<ComplianceGuideScreen> {
     });
 
     try {
-      final querySnapshot = await FirebaseFirestore.instance
-          .collection('compliance')
-          .doc('prohibited_items')
-          .collection(_selectedCountry)
-          .get();
+      final querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('compliance')
+              .doc('prohibited_items')
+              .collection(_selectedCountry)
+              .get();
 
       setState(() {
-        _prohibitedItems = querySnapshot.docs.map((doc) => doc['name'] as String).toList();
-        _isLoading = false;
+        _prohibitedItems =
+            querySnapshot.docs.map((doc) => doc['name'] as String).toList();
       });
     } catch (e) {
       setState(() {
         _errorMessage = 'Failed to load items: ${e.toString()}';
+      });
+    } finally {
+      setState(() {
         _isLoading = false;
       });
     }
+  }
+
+  Future<void> _refreshProhibitedItems() async {
+    await _loadProhibitedItems();
   }
 
   @override
@@ -126,30 +115,50 @@ class _ComplianceGuideScreenState extends State<ComplianceGuideScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            DropdownButtonFormField(
-              value: _selectedCountry,
-              items: _countries.map((String country) {
-                return DropdownMenuItem<String>(
-                  value: country,
-                  child: Text(country),
-                );
-              }).toList(),
-              onChanged: (value) async {
-                if (value != null) {
-                  setState(() => _selectedCountry = value);
-                  await _loadProhibitedItems();
-                }
-              },
-              decoration: const InputDecoration(
-                labelText: 'Select Country',
-                border: OutlineInputBorder(),
-              ),
-            ),
+            _isDropdownLoading
+                ? const Center(child: CircularProgressIndicator())
+                : DropdownButtonFormField(
+                  value: _selectedCountry,
+                  items:
+                      _countries.map((String country) {
+                        return DropdownMenuItem<String>(
+                          value: country,
+                          child: Text(country),
+                        );
+                      }).toList(),
+                  onChanged: (value) async {
+                    if (value != null) {
+                      setState(() => _selectedCountry = value);
+                      await _loadProhibitedItems();
+                    }
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Select Country',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
             const SizedBox(height: 20),
             if (_errorMessage.isNotEmpty)
-              Text(
-                _errorMessage,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              Column(
+                children: [
+                  Text(
+                    _errorMessage,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () async {
+                      setState(() {
+                        _errorMessage = '';
+                        _isLoading = true;
+                      });
+                      await _initializeFirebaseAndLoadData();
+                    },
+                    child: const Text('Retry'),
+                  ),
+                ],
               ),
             const SizedBox(height: 10),
             Text(
@@ -158,18 +167,42 @@ class _ComplianceGuideScreenState extends State<ComplianceGuideScreen> {
             ),
             const SizedBox(height: 10),
             _isLoading
-                ? const Expanded(child: Center(child: CircularProgressIndicator()))
+                ? const Expanded(
+                  child: Center(child: CircularProgressIndicator()),
+                )
                 : _prohibitedItems.isEmpty
-                    ? const Expanded(child: Center(child: Text('No items found')))
-                    : Expanded(
-                        child: ListView.builder(
-                          itemCount: _prohibitedItems.length,
-                          itemBuilder: (context, index) => ListTile(
-                            leading: const Icon(Icons.dangerous, color: Colors.red),
+                ? Expanded(
+                  child: Center(
+                    child: Text(
+                      'No prohibited items found for $_selectedCountry.',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
+                )
+                : Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: _refreshProhibitedItems,
+                    child: ListView.builder(
+                      itemCount: _prohibitedItems.length,
+                      itemBuilder:
+                          (context, index) => ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.red.shade100,
+                              child: Text(
+                                '${index + 1}',
+                                style: const TextStyle(color: Colors.red),
+                              ),
+                            ),
                             title: Text(_prohibitedItems[index]),
+                            subtitle: Text('Prohibited in $_selectedCountry'),
+                            trailing: const Icon(
+                              Icons.dangerous,
+                              color: Colors.red,
+                            ),
                           ),
-                        ),
-                      ),
+                    ),
+                  ),
+                ),
           ],
         ),
       ),

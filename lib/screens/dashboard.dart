@@ -52,11 +52,13 @@ class DashboardScreen extends StatelessWidget {
             const SizedBox(height: 10),
             _buildComplianceUpdates(context),
             const SizedBox(height: 20),
-            _buildExchangeRateSection(
-              context,
-            ), // Add the exchange rate section here
+            _buildExchangeRateSection(context),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.pushNamed(context, '/help'),
+        child: const Icon(Icons.help),
       ),
     );
   }
@@ -68,7 +70,7 @@ class DashboardScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color:
             isDarkMode
-                ? const Color.fromARGB(255, 211, 174, 9)
+                ? Theme.of(context).colorScheme.secondary.withOpacity(0.2)
                 : Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
@@ -84,23 +86,23 @@ class DashboardScreen extends StatelessWidget {
         children: [
           Text(
             'Welcome Back,',
-            style: Theme.of(
-              context,
-            ).textTheme.bodyLarge?.copyWith(color: Colors.white70),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: isDarkMode ? Colors.white70 : Colors.white,
+            ),
           ),
           Text(
             'Sam!',
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: isDarkMode ? Colors.white : Colors.white,
             ),
           ),
           const SizedBox(height: 10),
           Text(
             'Last login: 2 hours ago',
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: Colors.white70),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: isDarkMode ? Colors.white70 : Colors.white70,
+            ),
           ),
         ],
       ),
@@ -110,9 +112,10 @@ class DashboardScreen extends StatelessWidget {
   Widget _buildSectionTitle(BuildContext context, String title) {
     return Text(
       title,
-      style: Theme.of(
-        context,
-      ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+        fontWeight: FontWeight.bold,
+        color: Theme.of(context).textTheme.titleLarge?.color,
+      ),
     );
   }
 
@@ -150,10 +153,6 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildExchangeRateSection(BuildContext context) {
-    return ExchangeRateWidget();
-  }
-
   Widget _buildActionButton(
     BuildContext context,
     IconData icon,
@@ -163,6 +162,7 @@ class DashboardScreen extends StatelessWidget {
   ) {
     return Card(
       elevation: 4,
+      color: Theme.of(context).cardColor, // Adapts to dark mode
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: InkWell(
         borderRadius: BorderRadius.circular(15),
@@ -247,6 +247,7 @@ class DashboardScreen extends StatelessWidget {
     return Card(
       elevation: 2,
       margin: const EdgeInsets.only(bottom: 10),
+      color: Theme.of(context).cardColor, // Adapts to light/dark mode
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: ListTile(
         contentPadding: const EdgeInsets.all(10),
@@ -270,11 +271,16 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildExchangeRateSection(BuildContext context) {
+    return const ExchangeRateWidget();
+  }
+
   void _showNotifications(BuildContext context) {
     showDialog(
       context: context,
       builder:
           (context) => AlertDialog(
+            backgroundColor: Theme.of(context).cardColor, // Adapts to dark mode
             title: const Text('Notifications'),
             content: SizedBox(
               width: double.maxFinite,

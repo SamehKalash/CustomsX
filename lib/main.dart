@@ -7,6 +7,8 @@ import 'screens/documents.dart';
 import 'screens/compliance.dart';
 import 'screens/settings.dart';
 import 'theme/theme_provider.dart';
+import 'theme/theme.dart'; // Import centralized theme definitions
+import 'screens/splash_screen.dart';
 
 void main() async {
   // Ensure Flutter binding is initialized
@@ -29,11 +31,8 @@ void main() async {
   }
 
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        // Add other providers here if needed
-      ],
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
       child: const GlobalClearApp(),
     ),
   );
@@ -47,36 +46,25 @@ class GlobalClearApp extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return MaterialApp(
-      title: 'SCCF',
+      title: 'SCCF App',
       debugShowCheckedModeBanner: false,
-      themeMode: themeProvider.themeMode,
-      theme: ThemeData.light().copyWith(
-        primaryColor: const Color.fromARGB(255, 211, 174, 9),
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          secondary: const Color.fromARGB(255, 212, 173, 0),
-        ),
-        scaffoldBackgroundColor: Colors.white,
-      ),
-      darkTheme: ThemeData.dark().copyWith(
-        primaryColor: const Color.fromARGB(255, 211, 174, 9),
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          secondary: const Color.fromARGB(255, 212, 162, 0),
-          brightness: Brightness.dark,
-        ),
-        scaffoldBackgroundColor: const Color(0xFF121212),
-      ),
+      themeMode: themeProvider.themeMode, // Use theme mode from ThemeProvider
+      theme: lightTheme, // Centralized light theme
+      darkTheme: darkTheme, // Centralized dark theme
+      home: const SplashScreen(),
       routes: {
-        '/': (context) => const DashboardScreen(),
+        '/dashboard': (context) => const DashboardScreen(),
         '/tracking': (context) => const ShipmentTrackingScreen(),
         '/documents': (context) => const DocumentManagementScreen(),
         '/compliance': (context) => const ComplianceGuideScreen(),
         '/settings': (context) => const SettingsScreen(),
       },
-      onUnknownRoute: (settings) => MaterialPageRoute(
-        builder: (context) => const Scaffold(
-          body: Center(child: Text('Page not found')),
-        ),
-      ),
+      onUnknownRoute:
+          (settings) => MaterialPageRoute(
+            builder:
+                (context) =>
+                    const Scaffold(body: Center(child: Text('Page not found'))),
+          ),
     );
   }
 }
