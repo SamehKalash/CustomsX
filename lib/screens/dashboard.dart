@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme_provider.dart';
 import '../widgets/status_card.dart';
-import './settings.dart'; 
-//import '../widgets/exhannge_rate.dart';
+import './settings.dart';
+import '../widgets/exhannge_rate.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -23,10 +23,13 @@ class DashboardScreen extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const SettingsScreen()),
-            ),
+            onPressed:
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsScreen(),
+                  ),
+                ),
           ),
         ],
       ),
@@ -49,20 +52,24 @@ class DashboardScreen extends StatelessWidget {
             const SizedBox(height: 10),
             _buildComplianceUpdates(context),
             const SizedBox(height: 20),
-            _buildExchangeRateSection(context), // Add the exchange rate section here
+            _buildExchangeRateSection(
+              context,
+            ), // Add the exchange rate section here
           ],
         ),
       ),
     );
   }
+
   Widget _buildWelcomeBanner(BuildContext context, bool isDarkMode) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDarkMode
-            ? const Color.fromARGB(255, 211, 174, 9)
-            : Theme.of(context).primaryColor,
+        color:
+            isDarkMode
+                ? const Color.fromARGB(255, 211, 174, 9)
+                : Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
@@ -77,23 +84,23 @@ class DashboardScreen extends StatelessWidget {
         children: [
           Text(
             'Welcome Back,',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Colors.white70,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.copyWith(color: Colors.white70),
           ),
           Text(
             'Sam!',
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
           const SizedBox(height: 10),
           Text(
             'Last login: 2 hours ago',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.white70,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: Colors.white70),
           ),
         ],
       ),
@@ -103,9 +110,9 @@ class DashboardScreen extends StatelessWidget {
   Widget _buildSectionTitle(BuildContext context, String title) {
     return Text(
       title,
-      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+      style: Theme.of(
+        context,
+      ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
     );
   }
 
@@ -142,56 +149,11 @@ class DashboardScreen extends StatelessWidget {
       ],
     );
   }
-  Widget _buildExchangeRateSection(BuildContext context) {
-    final List<Map<String, String>> exchangeRates = [
-      {'currency': 'USD', 'rate': '50.65', 'country': 'United States'},
-      {'currency': 'GBP', 'rate': '65.51', 'country': 'United Kingdom'},
-      {'currency': 'CAD', 'rate': '35.44', 'country': 'Canada'},
-      {'currency': 'DKK', 'rate': '7.32', 'country': 'Denmark'},
-      {'currency': 'NOK', 'rate': '4.81', 'country': 'Norway'},
-      {'currency': 'SEK', 'rate': '5.05', 'country': 'Sweden'},
-      {'currency': 'CHF', 'rate': '57.28', 'country': 'Switzerland'},
-      {'currency': 'JPY', 'rate': '0.34', 'country': 'Japan'},
-      {'currency': 'EUR', 'rate': '54.62', 'country': 'European Union'},
-      {'currency': 'EGP', 'rate': '1.00', 'country': 'Egypt'},
-    ];
 
-    return Card(
-      elevation: 4,
-      margin: const EdgeInsets.symmetric(vertical: 20),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Exchange Rates',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            const SizedBox(height: 10),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: exchangeRates.length,
-              itemBuilder: (context, index) {
-                final rate = exchangeRates[index];
-                return ListTile(
-                  leading: CircleAvatar(
-                    child: Text(rate['currency']!),
-                  ),
-                  title: Text(rate['country']!),
-                  subtitle: Text('Rate: ${rate['rate']}'),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+  Widget _buildExchangeRateSection(BuildContext context) {
+    return ExchangeRateWidget();
   }
+
   Widget _buildActionButton(
     BuildContext context,
     IconData icon,
@@ -219,10 +181,9 @@ class DashboardScreen extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               label,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(fontWeight: FontWeight.w500),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
             ),
           ],
         ),
@@ -299,10 +260,9 @@ class DashboardScreen extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(fontWeight: FontWeight.w500),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
         ),
         subtitle: Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
         onTap: () => Navigator.pushNamed(context, '/compliance'),
@@ -313,33 +273,34 @@ class DashboardScreen extends StatelessWidget {
   void _showNotifications(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Notifications'),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: ListView(
-            shrinkWrap: true,
-            children: const [
-              ListTile(
-                leading: Icon(Icons.check_circle, color: Colors.green),
-                title: Text('Document Approved'),
-                subtitle: Text('Invoice_123.pdf has been cleared'),
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Notifications'),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: ListView(
+                shrinkWrap: true,
+                children: const [
+                  ListTile(
+                    leading: Icon(Icons.check_circle, color: Colors.green),
+                    title: Text('Document Approved'),
+                    subtitle: Text('Invoice_123.pdf has been cleared'),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.warning, color: Colors.orange),
+                    title: Text('Customs Hold'),
+                    subtitle: Text('Shipment #456 requires additional docs'),
+                  ),
+                ],
               ),
-              ListTile(
-                leading: Icon(Icons.warning, color: Colors.orange),
-                title: Text('Customs Hold'),
-                subtitle: Text('Shipment #456 requires additional docs'),
+            ),
+            actions: [
+              TextButton(
+                child: const Text('Dismiss All'),
+                onPressed: () => Navigator.pop(context),
               ),
             ],
           ),
-        ),
-        actions: [
-          TextButton(
-            child: const Text('Dismiss All'),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ],
-      ),
     );
   }
 }
