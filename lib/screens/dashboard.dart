@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../theme/theme_provider.dart';
 import '../widgets/status_card.dart';
 import './settings.dart'; 
-import '../widgets/exhannge_rate.dart';
+//import '../widgets/exhannge_rate.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});

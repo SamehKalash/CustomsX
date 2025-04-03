@@ -14,6 +14,8 @@ class ExchangeRateWidget extends StatelessWidget {
     {'currency': 'EGP', 'rate': '1.00', 'country': 'Egypt'},
   ];
 
+  ExchangeRateWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Card(
