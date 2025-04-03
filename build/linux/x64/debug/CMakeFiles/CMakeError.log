@@ -5,12 +5,11 @@ Id flags:
 
 The output was:
 1
-/snap/flutter/current/usr/bin/ld: /lib/x86_64-linux-gnu/libm.so.6: unknown type [0x13] section `.relr.dyn'
-/snap/flutter/current/usr/bin/ld: skipping incompatible /lib/x86_64-linux-gnu/libm.so.6 when searching for /lib/x86_64-linux-gnu/libm.so.6
-/snap/flutter/current/usr/bin/ld: cannot find /lib/x86_64-linux-gnu/libm.so.6
-/snap/flutter/current/usr/bin/ld: /lib/x86_64-linux-gnu/libmvec.so.1: unknown type [0x13] section `.relr.dyn'
-/snap/flutter/current/usr/bin/ld: skipping incompatible /lib/x86_64-linux-gnu/libmvec.so.1 when searching for /lib/x86_64-linux-gnu/libmvec.so.1
-/snap/flutter/current/usr/bin/ld: cannot find /lib/x86_64-linux-gnu/libmvec.so.1
+/snap/flutter/current/usr/bin/ld: /lib/x86_64-linux-gnu/libgcc_s.so.1: undefined reference to `pthread_key_create@GLIBC_2.34'
+/snap/flutter/current/usr/bin/ld: /lib/x86_64-linux-gnu/libgcc_s.so.1: undefined reference to `pthread_setspecific@GLIBC_2.34'
+/snap/flutter/current/usr/bin/ld: /lib/x86_64-linux-gnu/libgcc_s.so.1: undefined reference to `_dl_find_object@GLIBC_2.35'
+/snap/flutter/current/usr/bin/ld: /lib/x86_64-linux-gnu/libgcc_s.so.1: undefined reference to `pthread_getspecific@GLIBC_2.34'
+/snap/flutter/current/usr/bin/ld: /lib/x86_64-linux-gnu/libgcc_s.so.1: undefined reference to `pthread_once@GLIBC_2.34'
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 
 
