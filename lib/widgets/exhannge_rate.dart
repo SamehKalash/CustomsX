@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ExchangeRateWidget extends StatelessWidget {
+class ExchangeRateWidget extends StatefulWidget {
+  const ExchangeRateWidget({super.key});
+
+  @override
+  _ExchangeRateWidgetState createState() => _ExchangeRateWidgetState();
+}
+
+class _ExchangeRateWidgetState extends State<ExchangeRateWidget> {
   final List<Map<String, String>> exchangeRates = [
     {
       'currency': 'USD',
@@ -74,10 +81,17 @@ class ExchangeRateWidget extends StatelessWidget {
     },
   ];
 
-  ExchangeRateWidget({super.key});
+  String searchQuery = '';
 
   @override
   Widget build(BuildContext context) {
+    final filteredRates =
+        exchangeRates.where((rate) {
+          final query = searchQuery.toLowerCase();
+          return rate['country']!.toLowerCase().contains(query) ||
+              rate['currency']!.toLowerCase().contains(query);
+        }).toList();
+
     return Card(
       elevation: 4,
       margin: const EdgeInsets.symmetric(vertical: 20),
@@ -87,6 +101,7 @@ class ExchangeRateWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Title Section
             Text(
               'Exchange Rates',
               style: Theme.of(
@@ -94,36 +109,62 @@ class ExchangeRateWidget extends StatelessWidget {
               ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: exchangeRates.length,
-              itemBuilder: (context, index) {
-                final rate = exchangeRates[index];
-                return ListTile(
-                  leading: CircleAvatar(
-                    child: Text(
-                      rate['currency']!,
-                      style: const TextStyle(
-                        fontSize: 12,
-                      ), // Adjust font size for better fit
-                    ),
-                  ),
-                  title: Text(
-                    rate['country']!,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ), // Make country name bold
-                  ),
-                  subtitle: Text(
-                    '${rate['currencyName']} - Rate: ${rate['symbol']}${rate['rate']}', // Combine currency name and rate
-                    style: const TextStyle(
-                      color: Colors.grey,
-                    ), // Add styling for visibility
-                  ),
-                );
+
+            // Search Bar
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Search by country or currency...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                });
               },
             ),
+            const SizedBox(height: 10),
+
+            // Exchange Rates List
+            filteredRates.isEmpty
+                ? const Center(
+                  child: Text(
+                    'No results found.',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                )
+                : ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: filteredRates.length,
+                  itemBuilder: (context, index) {
+                    final rate = filteredRates[index];
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.primary.withOpacity(0.1),
+                        child: Text(
+                          rate['currency']!,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      title: Text(
+                        rate['country']!,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        '${rate['currencyName']} - Rate: ${rate['symbol']}${rate['rate']}',
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                    );
+                  },
+                ),
           ],
         ),
       ),

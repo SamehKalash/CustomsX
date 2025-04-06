@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Import for TextInputFormatter
+import 'package:flutter/services.dart';
 
 class PaymentMethodsScreen extends StatefulWidget {
   const PaymentMethodsScreen({super.key});
@@ -16,8 +16,13 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Payment Method')),
+      appBar: AppBar(
+        title: const Text('Add Payment Method'),
+        backgroundColor: isDarkMode ? Colors.grey[900] : Theme.of(context).primaryColor,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: SingleChildScrollView(
@@ -31,7 +36,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                   'Enter Card Details',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).primaryColor,
+                    color: isDarkMode ? Colors.white : Theme.of(context).primaryColor,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -44,19 +49,24 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    prefixIcon: const Icon(Icons.credit_card),
+                    prefixIcon: Icon(
+                      Icons.credit_card,
+                      color: isDarkMode ? Colors.white70 : Colors.grey,
+                    ),
+                    filled: true,
+                    fillColor: isDarkMode ? Colors.grey[850] : Colors.white,
+                    labelStyle: TextStyle(
+                      color: isDarkMode ? Colors.white70 : Colors.black,
+                    ),
+                  ),
+                  style: TextStyle(
+                    color: isDarkMode ? Colors.white : Colors.black, // Ensure text is visible
                   ),
                   keyboardType: TextInputType.number,
                   inputFormatters: [
-                    FilteringTextInputFormatter
-                        .digitsOnly, // Allow only numbers
-                    LengthLimitingTextInputFormatter(16), // Limit to 16 digits
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(16),
                   ],
-                  onChanged: (value) {
-                    if (value.length != 16) {
-                      print('Card number must be 16 digits');
-                    }
-                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your card number';
@@ -78,14 +88,19 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    prefixIcon: const Icon(Icons.person),
+                    prefixIcon: Icon(
+                      Icons.person,
+                      color: isDarkMode ? Colors.white70 : Colors.grey,
+                    ),
+                    filled: true,
+                    fillColor: isDarkMode ? Colors.grey[850] : Colors.white,
+                    labelStyle: TextStyle(
+                      color: isDarkMode ? Colors.white70 : Colors.black,
+                    ),
                   ),
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                      RegExp(r'[a-zA-Z\s]'),
-                    ), // Allow only letters and spaces
+                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')),
                   ],
-                  style: Theme.of(context).textTheme.bodyMedium,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter the card holder name';
@@ -111,40 +126,42 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          prefixIcon: const Icon(Icons.calendar_today),
+                          prefixIcon: Icon(
+                            Icons.calendar_today,
+                            color: isDarkMode ? Colors.white70 : Colors.grey,
+                          ),
+                          filled: true,
+                          fillColor: isDarkMode ? Colors.grey[850] : Colors.white,
+                          labelStyle: TextStyle(
+                            color: isDarkMode ? Colors.white70 : Colors.black,
+                          ),
                         ),
                         keyboardType: TextInputType.number,
                         inputFormatters: [
-                          FilteringTextInputFormatter
-                              .digitsOnly, // Allow only digits
-                          LengthLimitingTextInputFormatter(
-                            5,
-                          ), // Limit input to 5 characters (MM/YY)
-                          _ExpiryDateFormatter(), // Custom formatter for MM/YY
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(5),
+                          _ExpiryDateFormatter(),
                         ],
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter the expiry date';
                           }
 
-                          // Validate expiry date format
                           final regex = RegExp(r'^(0[1-9]|1[0-2])\/\d{2}$');
                           if (!regex.hasMatch(value)) {
                             return 'Invalid expiry date format (MM/YY)';
                           }
 
-                          // Validate expiry date is not in the past or the current month
                           final now = DateTime.now();
                           final parts = value.split('/');
                           final month = int.parse(parts[0]);
-                          final year =
-                              int.parse(parts[1]) + 2000; // Convert YY to YYYY
+                          final year = int.parse(parts[1]) + 2000;
                           final expiryDate = DateTime(year, month);
 
                           if (expiryDate.isBefore(
                             DateTime(now.year, now.month + 1),
                           )) {
-                            return 'Expiry date cannot be in the past or the current month';
+                            return 'Expiry date cannot be in the past';
                           }
 
                           return null;
@@ -153,6 +170,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                       ),
                     ),
                     const SizedBox(width: 16),
+                    // CVV Field
                     Expanded(
                       child: TextFormField(
                         decoration: InputDecoration(
@@ -161,16 +179,21 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          prefixIcon: const Icon(Icons.lock),
+                          prefixIcon: Icon(
+                            Icons.lock,
+                            color: isDarkMode ? Colors.white70 : Colors.grey,
+                          ),
+                          filled: true,
+                          fillColor: isDarkMode ? Colors.grey[850] : Colors.white,
+                          labelStyle: TextStyle(
+                            color: isDarkMode ? Colors.white70 : Colors.black,
+                          ),
                         ),
-                        obscureText: true, // Mask the CVV input
+                        obscureText: true,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
-                          FilteringTextInputFormatter
-                              .digitsOnly, // Allow only numbers
-                          LengthLimitingTextInputFormatter(
-                            3,
-                          ), // Limit to 3 digits
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(3),
                         ],
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -190,37 +213,36 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
 
                 // Save Button
                 Center(
-                  child: ElevatedButton.icon(
-                    onPressed:
-                        isSubmitting
-                            ? null
-                            : () async {
-                              setState(() => isSubmitting = true);
-                              if (formKey.currentState!.validate()) {
-                                formKey.currentState!.save();
-                                setState(() => isLoading = true);
+                  child: ElevatedButton(
+                    onPressed: isSubmitting
+                        ? null
+                        : () async {
+                            setState(() => isSubmitting = true);
+                            if (formKey.currentState!.validate()) {
+                              formKey.currentState!.save(); // Save the form data
+                              setState(() => isLoading = true);
 
-                                // Simulate saving process
-                                await Future.delayed(
-                                  const Duration(seconds: 2),
-                                );
+                              // Simulate saving process
+                              await Future.delayed(
+                                const Duration(seconds: 2),
+                              );
 
-                                setState(() => isLoading = false);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: const Text(
-                                      'Payment method added successfully!',
-                                    ),
-                                    backgroundColor:
-                                        Theme.of(context).primaryColor,
+                              setState(() => isLoading = false);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Text(
+                                    'Payment method added successfully!',
                                   ),
-                                );
-                                Navigator.pop(context);
-                              }
-                              setState(() => isSubmitting = false);
-                            },
-                    icon: const Icon(Icons.save),
-                    label: const Text('Save Payment Method'),
+                                  backgroundColor: Theme.of(context).primaryColor,
+                                ),
+                              );
+                              Navigator.pop(context);
+                            } else {
+                              // Debugging: Add a log if validation fails
+                              print('Form validation failed');
+                            }
+                            setState(() => isSubmitting = false);
+                          },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                         vertical: 16,
@@ -229,7 +251,22 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
+                      backgroundColor: isDarkMode ? Colors.grey[800] : Colors.blue,
+                      foregroundColor: Colors.white, // Text color
                     ),
+                    child: isSubmitting
+                        ? const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Text(
+                            'Save Payment',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
                   ),
                 ),
               ],
@@ -247,11 +284,8 @@ class _ExpiryDateFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    final text = newValue.text.replaceAll(
-      '/',
-      '',
-    ); // Remove any existing slashes
-    if (text.length == 0) {
+    final text = newValue.text.replaceAll('/', '');
+    if (text.isEmpty) {
       return newValue;
     } else if (text.length <= 2) {
       return TextEditingValue(
@@ -265,7 +299,7 @@ class _ExpiryDateFormatter extends TextInputFormatter {
         selection: TextSelection.collapsed(offset: formatted.length),
       );
     } else {
-      return oldValue; // Prevent further input if length exceeds 5
+      return oldValue;
     }
   }
 }

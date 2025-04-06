@@ -6,13 +6,17 @@ import 'screens/tracking.dart';
 import 'screens/documents.dart';
 import 'screens/compliance.dart';
 import 'screens/settings.dart';
+import 'screens/forgot_password_screen.dart';
+import 'screens/create_account_screen.dart';
+import 'screens/create_company_screen.dart';
 import 'theme/theme_provider.dart';
+import 'theme/theme.dart';
+import 'screens/splash_screen.dart';
+import 'screens/login_screen.dart';
 
 void main() async {
-  // Ensure Flutter binding is initialized
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase with error handling
   try {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
@@ -29,11 +33,8 @@ void main() async {
   }
 
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        // Add other providers here if needed
-      ],
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
       child: const GlobalClearApp(),
     ),
   );
@@ -50,32 +51,24 @@ class GlobalClearApp extends StatelessWidget {
       title: 'SCCF',
       debugShowCheckedModeBanner: false,
       themeMode: themeProvider.themeMode,
-      theme: ThemeData.light().copyWith(
-        primaryColor: const Color.fromARGB(255, 211, 174, 9),
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          secondary: const Color.fromARGB(255, 212, 173, 0),
-        ),
-        scaffoldBackgroundColor: Colors.white,
-      ),
-      darkTheme: ThemeData.dark().copyWith(
-        primaryColor: const Color.fromARGB(255, 211, 174, 9),
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          secondary: const Color.fromARGB(255, 212, 162, 0),
-          brightness: Brightness.dark,
-        ),
-        scaffoldBackgroundColor: const Color(0xFF121212),
-      ),
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      initialRoute: '/splash', // Set Splash Screen as the initial route
       routes: {
-        '/': (context) => const DashboardScreen(),
+        '/splash': (context) => const SplashScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/createCompany': (context) => const CreateCompanyScreen(),
+        '/createAccount': (context) => const CreateAccountScreen(),
+        '/dashboard': (context) => const DashboardScreen(),
         '/tracking': (context) => const ShipmentTrackingScreen(),
         '/documents': (context) => const DocumentManagementScreen(),
         '/compliance': (context) => const ComplianceGuideScreen(),
         '/settings': (context) => const SettingsScreen(),
+        '/forgot-password': (context) => const ForgotPasswordScreen(),
       },
       onUnknownRoute: (settings) => MaterialPageRoute(
-        builder: (context) => const Scaffold(
-          body: Center(child: Text('Page not found')),
-        ),
+        builder: (context) =>
+            const Scaffold(body: Center(child: Text('Page not found'))),
       ),
     );
   }

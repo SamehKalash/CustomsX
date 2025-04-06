@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "81796630791",
+    "project_id": "smart-customs-relief-system",
+    "storage_bucket": "smart-customs-relief-system.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81796630791:android:3b4be3ef14a295c0f05da2",
+        "android_client_info": {
+          "package_name": "smart.customs.clearance.systems"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATPG_jGjPZpfFAe0YNzpqi4aLw9EwUCSg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

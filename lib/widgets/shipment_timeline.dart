@@ -11,12 +11,19 @@ class ShipmentTimeline extends StatelessWidget {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: statuses.length,
-      itemBuilder: (context, index) =>
-          _buildTimelineItem(context, statuses[index], index),
+      itemBuilder:
+          (context, index) =>
+              _buildTimelineItem(context, statuses[index], index),
     );
   }
 
-  Widget _buildTimelineItem(BuildContext context, ShipmentStatus status, int index) {
+  Widget _buildTimelineItem(
+    BuildContext context,
+    ShipmentStatus status,
+    int index,
+  ) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
@@ -26,20 +33,24 @@ class ShipmentTimeline extends StatelessWidget {
             children: [
               Icon(
                 status.isCurrent ? Icons.gps_fixed : Icons.check_circle,
-                color: status.isCurrent ? Colors.blue : Colors.green,
+                color:
+                    status.isCurrent
+                        ? (isDarkMode ? Colors.blue[300] : Colors.blue)
+                        : (isDarkMode ? Colors.green[300] : Colors.green),
                 size: 24,
               ),
               if (index != statuses.length - 1)
                 Container(
                   width: 2,
                   height: 50,
-                  color: Colors.grey[300],
+                  color: isDarkMode ? Colors.grey[700] : Colors.grey[300],
                 ),
             ],
           ),
           const SizedBox(width: 16),
           Expanded(
             child: Card(
+              color: isDarkMode ? Colors.grey[850] : Colors.white,
               elevation: 2,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -51,18 +62,17 @@ class ShipmentTimeline extends StatelessWidget {
                   children: [
                     Text(
                       status.event,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: isDarkMode ? Colors.white : Colors.black,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       '${status.date} ${status.time}',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.grey[600],
-                          ),
+                      style: TextStyle(
+                        color: isDarkMode ? Colors.white70 : Colors.grey[600],
+                      ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
