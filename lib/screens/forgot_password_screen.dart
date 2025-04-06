@@ -11,6 +11,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
   String? _emailError;
 
+  // Define the yellowish color to match the dashboard theme
+  static const Color yellowishColor = Color(0xFFE3B505);
+
   void _resetPassword() {
     final email = _emailController.text.trim();
 
@@ -40,7 +43,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Forgot Password'),
-        backgroundColor: isDarkMode ? Colors.grey[900] : Colors.blue,
+        backgroundColor: isDarkMode ? Colors.grey[900] : yellowishColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -65,7 +68,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ),
                 prefixIcon: Icon(
                   Icons.email,
-                  color: isDarkMode ? Colors.white70 : Colors.grey,
+                  color: isDarkMode ? Colors.white70 : yellowishColor,
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.0),
@@ -76,7 +79,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   ),
                 ),
                 focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue),
+                  borderSide: BorderSide(color: yellowishColor),
                 ),
                 errorText: _emailError,
                 filled: true,
@@ -93,7 +96,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                backgroundColor: isDarkMode ? Colors.grey[800] : Colors.blue,
+                backgroundColor: isDarkMode ? Colors.grey[800] : yellowishColor,
                 foregroundColor: Colors.white, // Text color
               ),
               child: const Text(
