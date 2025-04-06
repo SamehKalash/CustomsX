@@ -16,8 +16,13 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Payment Method')),
+      appBar: AppBar(
+        title: const Text('Add Payment Method'),
+        backgroundColor: isDarkMode ? Colors.grey[900] : Theme.of(context).primaryColor,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: SingleChildScrollView(
@@ -31,7 +36,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                   'Enter Card Details',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).primaryColor,
+                    color: isDarkMode ? Colors.white : Theme.of(context).primaryColor,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -44,7 +49,18 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    prefixIcon: const Icon(Icons.credit_card),
+                    prefixIcon: Icon(
+                      Icons.credit_card,
+                      color: isDarkMode ? Colors.white70 : Colors.grey,
+                    ),
+                    filled: true,
+                    fillColor: isDarkMode ? Colors.grey[850] : Colors.white,
+                    labelStyle: TextStyle(
+                      color: isDarkMode ? Colors.white70 : Colors.black,
+                    ),
+                  ),
+                  style: TextStyle(
+                    color: isDarkMode ? Colors.white : Colors.black, // Ensure text is visible
                   ),
                   keyboardType: TextInputType.number,
                   inputFormatters: [
@@ -72,7 +88,15 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    prefixIcon: const Icon(Icons.person),
+                    prefixIcon: Icon(
+                      Icons.person,
+                      color: isDarkMode ? Colors.white70 : Colors.grey,
+                    ),
+                    filled: true,
+                    fillColor: isDarkMode ? Colors.grey[850] : Colors.white,
+                    labelStyle: TextStyle(
+                      color: isDarkMode ? Colors.white70 : Colors.black,
+                    ),
                   ),
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')),
@@ -102,7 +126,15 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          prefixIcon: const Icon(Icons.calendar_today),
+                          prefixIcon: Icon(
+                            Icons.calendar_today,
+                            color: isDarkMode ? Colors.white70 : Colors.grey,
+                          ),
+                          filled: true,
+                          fillColor: isDarkMode ? Colors.grey[850] : Colors.white,
+                          labelStyle: TextStyle(
+                            color: isDarkMode ? Colors.white70 : Colors.black,
+                          ),
                         ),
                         keyboardType: TextInputType.number,
                         inputFormatters: [
@@ -147,7 +179,15 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          prefixIcon: const Icon(Icons.lock),
+                          prefixIcon: Icon(
+                            Icons.lock,
+                            color: isDarkMode ? Colors.white70 : Colors.grey,
+                          ),
+                          filled: true,
+                          fillColor: isDarkMode ? Colors.grey[850] : Colors.white,
+                          labelStyle: TextStyle(
+                            color: isDarkMode ? Colors.white70 : Colors.black,
+                          ),
                         ),
                         obscureText: true,
                         keyboardType: TextInputType.number,
@@ -173,47 +213,36 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
 
                 // Save Button
                 Center(
-                  child: ElevatedButton.icon(
-                    onPressed:
-                        isSubmitting
-                            ? null
-                            : () async {
-                              setState(() => isSubmitting = true);
-                              if (formKey.currentState!.validate()) {
-                                formKey.currentState!.save();
-                                setState(() => isLoading = true);
+                  child: ElevatedButton(
+                    onPressed: isSubmitting
+                        ? null
+                        : () async {
+                            setState(() => isSubmitting = true);
+                            if (formKey.currentState!.validate()) {
+                              formKey.currentState!.save(); // Save the form data
+                              setState(() => isLoading = true);
 
-                                // Simulate saving process
-                                await Future.delayed(
-                                  const Duration(seconds: 2),
-                                );
+                              // Simulate saving process
+                              await Future.delayed(
+                                const Duration(seconds: 2),
+                              );
 
-                                setState(() => isLoading = false);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: const Text(
-                                      'Payment method added successfully!',
-                                    ),
-                                    backgroundColor:
-                                        Theme.of(context).primaryColor,
+                              setState(() => isLoading = false);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Text(
+                                    'Payment method added successfully!',
                                   ),
-                                );
-                                Navigator.pop(context);
-                              }
-                              setState(() => isSubmitting = false);
-                            },
-                    icon:
-                        isSubmitting
-                            ? const SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2,
-                              ),
-                            )
-                            : const Icon(Icons.save),
-                    label: const Text('Save Payment Method'),
+                                  backgroundColor: Theme.of(context).primaryColor,
+                                ),
+                              );
+                              Navigator.pop(context);
+                            } else {
+                              // Debugging: Add a log if validation fails
+                              print('Form validation failed');
+                            }
+                            setState(() => isSubmitting = false);
+                          },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                         vertical: 16,
@@ -222,7 +251,22 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
+                      backgroundColor: isDarkMode ? Colors.grey[800] : Colors.blue,
+                      foregroundColor: Colors.white, // Text color
                     ),
+                    child: isSubmitting
+                        ? const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Text(
+                            'Save Payment',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
                   ),
                 ),
               ],
