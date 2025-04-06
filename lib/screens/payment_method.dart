@@ -241,7 +241,7 @@ class _ExpiryDateFormatter extends TextInputFormatter {
     TextEditingValue newValue,
   ) {
     final text = newValue.text.replaceAll('/', '');
-    if (text.length == 0) {
+    if (text.isEmpty) {
       return newValue;
     } else if (text.length <= 2) {
       return TextEditingValue(

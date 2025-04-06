@@ -15,15 +15,15 @@ The CXX compiler identification is Clang, found in "/home/adel/Downloads/f2/SCCF
 Determining if the CXX compiler works passed with the following output:
 Change Dir: /home/adel/Downloads/f2/SCCF/build/linux/x64/debug/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/snap/flutter/current/usr/bin/ninja cmTC_0a232 && [1/2] Building CXX object CMakeFiles/cmTC_0a232.dir/testCXXCompiler.cxx.o
-[2/2] Linking CXX executable cmTC_0a232
+Run Build Command(s):/snap/flutter/current/usr/bin/ninja cmTC_7b992 && [1/2] Building CXX object CMakeFiles/cmTC_7b992.dir/testCXXCompiler.cxx.o
+[2/2] Linking CXX executable cmTC_7b992
 
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: /home/adel/Downloads/f2/SCCF/build/linux/x64/debug/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/snap/flutter/current/usr/bin/ninja cmTC_37ea4 && [1/2] Building CXX object CMakeFiles/cmTC_37ea4.dir/CMakeCXXCompilerABI.cpp.o
+Run Build Command(s):/snap/flutter/current/usr/bin/ninja cmTC_e481d && [1/2] Building CXX object CMakeFiles/cmTC_e481d.dir/CMakeCXXCompilerABI.cpp.o
 clang version 10.0.0-4ubuntu1 
 Target: x86_64-pc-linux-gnu
 Thread model: posix
@@ -34,7 +34,7 @@ Selected GCC installation: /snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux
 Candidate multilib: .;@m64
 Selected multilib: .;@m64
  (in-process)
- "/snap/flutter/149/usr/lib/llvm-10/bin/clang" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model static -mthread-model posix -mframe-pointer=all -fmath-errno -fno-rounding-math -masm-verbose -mconstructor-aliases -munwind-tables -target-cpu x86-64 -dwarf-column-info -fno-split-dwarf-inlining -debugger-tuning=gdb -v -resource-dir /snap/flutter/149/usr/lib/llvm-10/lib/clang/10.0.0 -cxx-isystem /snap/flutter/current/usr/include/x86_64-linux-gnu/c++/9 -cxx-isystem /snap/flutter/current/usr/include/c++/9 -cxx-isystem /snap/flutter/current/usr/include -cxx-isystem /snap/flutter/current/usr/include/x86_64-linux-gnu -cxx-isystem /snap/flutter/current/usr/include/c++/9 -internal-isystem /snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10 -internal-isystem /snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/x86_64-linux-gnu/c++/10 -internal-isystem /snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/x86_64-linux-gnu/c++/10 -internal-isystem /snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/backward -internal-isystem /usr/local/include -internal-isystem /snap/flutter/149/usr/lib/llvm-10/lib/clang/10.0.0/include -internal-externc-isystem /usr/include/x86_64-linux-gnu -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -fdebug-compilation-dir /home/adel/Downloads/f2/SCCF/build/linux/x64/debug/CMakeFiles/CMakeTmp -ferror-limit 19 -fmessage-length 0 -fgnuc-version=4.2.1 -fobjc-runtime=gcc -fcxx-exceptions -fexceptions -fdiagnostics-show-option -faddrsig -o CMakeFiles/cmTC_37ea4.dir/CMakeCXXCompilerABI.cpp.o -x c++ /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeCXXCompilerABI.cpp
+ "/snap/flutter/149/usr/lib/llvm-10/bin/clang" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model static -mthread-model posix -mframe-pointer=all -fmath-errno -fno-rounding-math -masm-verbose -mconstructor-aliases -munwind-tables -target-cpu x86-64 -dwarf-column-info -fno-split-dwarf-inlining -debugger-tuning=gdb -v -resource-dir /snap/flutter/149/usr/lib/llvm-10/lib/clang/10.0.0 -cxx-isystem /snap/flutter/current/usr/include/x86_64-linux-gnu/c++/9 -cxx-isystem /snap/flutter/current/usr/include/c++/9 -cxx-isystem /snap/flutter/current/usr/include -cxx-isystem /snap/flutter/current/usr/include/x86_64-linux-gnu -cxx-isystem /snap/flutter/current/usr/include/c++/9 -internal-isystem /snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10 -internal-isystem /snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/x86_64-linux-gnu/c++/10 -internal-isystem /snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/x86_64-linux-gnu/c++/10 -internal-isystem /snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/backward -internal-isystem /usr/local/include -internal-isystem /snap/flutter/149/usr/lib/llvm-10/lib/clang/10.0.0/include -internal-externc-isystem /usr/include/x86_64-linux-gnu -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -fdebug-compilation-dir /home/adel/Downloads/f2/SCCF/build/linux/x64/debug/CMakeFiles/CMakeTmp -ferror-limit 19 -fmessage-length 0 -fgnuc-version=4.2.1 -fobjc-runtime=gcc -fcxx-exceptions -fexceptions -fdiagnostics-show-option -faddrsig -o CMakeFiles/cmTC_e481d.dir/CMakeCXXCompilerABI.cpp.o -x c++ /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeCXXCompilerABI.cpp
 clang -cc1 version 10.0.0 based upon LLVM 10.0.0 default target x86_64-pc-linux-gnu
 ignoring nonexistent directory "/include"
 ignoring duplicate directory "/snap/flutter/current/usr/include/c++/9"
@@ -53,7 +53,7 @@ ignoring duplicate directory "/snap/flutter/current/usr/bin/../lib/gcc/x86_64-li
  /usr/include/x86_64-linux-gnu
  /usr/include
 End of search list.
-[2/2] Linking CXX executable cmTC_37ea4
+[2/2] Linking CXX executable cmTC_e481d
 clang version 10.0.0-4ubuntu1 
 Target: x86_64-pc-linux-gnu
 Thread model: posix
@@ -63,7 +63,7 @@ Found candidate GCC installation: /snap/flutter/current/usr/bin/../lib/gcc/x86_6
 Selected GCC installation: /snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10
 Candidate multilib: .;@m64
 Selected multilib: .;@m64
- "/snap/flutter/current/usr/bin/ld" --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_37ea4 /snap/flutter/current/usr/lib/x86_64-linux-gnu/crt1.o /snap/flutter/current/usr/lib/x86_64-linux-gnu/crti.o /snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9/crtbegin.o -L/snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9 -L/snap/flutter/current/usr/lib/x86_64-linux-gnu -L/snap/flutter/current/lib/x86_64-linux-gnu -L/snap/flutter/current/usr/lib/ -L/snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10 -L/snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../x86_64-linux-gnu -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib64 -L/usr/lib/x86_64-linux-gnu/../../lib64 -L/snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../.. -L/snap/flutter/149/usr/lib/llvm-10/bin/../lib -L/lib -L/usr/lib -L/snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9 -L/snap/flutter/current/usr/lib/x86_64-linux-gnu -L/snap/flutter/current/lib/x86_64-linux-gnu -L/snap/flutter/current/usr/lib -lblkid -lgcrypt -llzma -llz4 -lgpg-error -luuid -lpthread -ldl -lepoxy -lfontconfig CMakeFiles/cmTC_37ea4.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9/crtend.o /snap/flutter/current/usr/lib/x86_64-linux-gnu/crtn.o
+ "/snap/flutter/current/usr/bin/ld" --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_e481d /snap/flutter/current/usr/lib/x86_64-linux-gnu/crt1.o /snap/flutter/current/usr/lib/x86_64-linux-gnu/crti.o /snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9/crtbegin.o -L/snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9 -L/snap/flutter/current/usr/lib/x86_64-linux-gnu -L/snap/flutter/current/lib/x86_64-linux-gnu -L/snap/flutter/current/usr/lib/ -L/snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10 -L/snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../x86_64-linux-gnu -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib64 -L/usr/lib/x86_64-linux-gnu/../../lib64 -L/snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../.. -L/snap/flutter/149/usr/lib/llvm-10/bin/../lib -L/lib -L/usr/lib -L/snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9 -L/snap/flutter/current/usr/lib/x86_64-linux-gnu -L/snap/flutter/current/lib/x86_64-linux-gnu -L/snap/flutter/current/usr/lib -lblkid -lgcrypt -llzma -llz4 -lgpg-error -luuid -lpthread -ldl -lepoxy -lfontconfig CMakeFiles/cmTC_e481d.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9/crtend.o /snap/flutter/current/usr/lib/x86_64-linux-gnu/crtn.o
 
 
 
@@ -100,7 +100,7 @@ Parsed CXX implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
   ignore line: [Change Dir: /home/adel/Downloads/f2/SCCF/build/linux/x64/debug/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command(s):/snap/flutter/current/usr/bin/ninja cmTC_37ea4 && [1/2] Building CXX object CMakeFiles/cmTC_37ea4.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [Run Build Command(s):/snap/flutter/current/usr/bin/ninja cmTC_e481d && [1/2] Building CXX object CMakeFiles/cmTC_e481d.dir/CMakeCXXCompilerABI.cpp.o]
   ignore line: [clang version 10.0.0-4ubuntu1 ]
   ignore line: [Target: x86_64-pc-linux-gnu]
   ignore line: [Thread model: posix]
@@ -113,7 +113,7 @@ Parsed CXX implicit link information from above output:
   ignore line: [Selected multilib: .]
   ignore line: [@m64]
   ignore line: [ (in-process)]
-  ignore line: [ "/snap/flutter/149/usr/lib/llvm-10/bin/clang" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model static -mthread-model posix -mframe-pointer=all -fmath-errno -fno-rounding-math -masm-verbose -mconstructor-aliases -munwind-tables -target-cpu x86-64 -dwarf-column-info -fno-split-dwarf-inlining -debugger-tuning=gdb -v -resource-dir /snap/flutter/149/usr/lib/llvm-10/lib/clang/10.0.0 -cxx-isystem /snap/flutter/current/usr/include/x86_64-linux-gnu/c++/9 -cxx-isystem /snap/flutter/current/usr/include/c++/9 -cxx-isystem /snap/flutter/current/usr/include -cxx-isystem /snap/flutter/current/usr/include/x86_64-linux-gnu -cxx-isystem /snap/flutter/current/usr/include/c++/9 -internal-isystem /snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10 -internal-isystem /snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/x86_64-linux-gnu/c++/10 -internal-isystem /snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/x86_64-linux-gnu/c++/10 -internal-isystem /snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/backward -internal-isystem /usr/local/include -internal-isystem /snap/flutter/149/usr/lib/llvm-10/lib/clang/10.0.0/include -internal-externc-isystem /usr/include/x86_64-linux-gnu -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -fdebug-compilation-dir /home/adel/Downloads/f2/SCCF/build/linux/x64/debug/CMakeFiles/CMakeTmp -ferror-limit 19 -fmessage-length 0 -fgnuc-version=4.2.1 -fobjc-runtime=gcc -fcxx-exceptions -fexceptions -fdiagnostics-show-option -faddrsig -o CMakeFiles/cmTC_37ea4.dir/CMakeCXXCompilerABI.cpp.o -x c++ /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [ "/snap/flutter/149/usr/lib/llvm-10/bin/clang" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model static -mthread-model posix -mframe-pointer=all -fmath-errno -fno-rounding-math -masm-verbose -mconstructor-aliases -munwind-tables -target-cpu x86-64 -dwarf-column-info -fno-split-dwarf-inlining -debugger-tuning=gdb -v -resource-dir /snap/flutter/149/usr/lib/llvm-10/lib/clang/10.0.0 -cxx-isystem /snap/flutter/current/usr/include/x86_64-linux-gnu/c++/9 -cxx-isystem /snap/flutter/current/usr/include/c++/9 -cxx-isystem /snap/flutter/current/usr/include -cxx-isystem /snap/flutter/current/usr/include/x86_64-linux-gnu -cxx-isystem /snap/flutter/current/usr/include/c++/9 -internal-isystem /snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10 -internal-isystem /snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/x86_64-linux-gnu/c++/10 -internal-isystem /snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/x86_64-linux-gnu/c++/10 -internal-isystem /snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/backward -internal-isystem /usr/local/include -internal-isystem /snap/flutter/149/usr/lib/llvm-10/lib/clang/10.0.0/include -internal-externc-isystem /usr/include/x86_64-linux-gnu -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -fdebug-compilation-dir /home/adel/Downloads/f2/SCCF/build/linux/x64/debug/CMakeFiles/CMakeTmp -ferror-limit 19 -fmessage-length 0 -fgnuc-version=4.2.1 -fobjc-runtime=gcc -fcxx-exceptions -fexceptions -fdiagnostics-show-option -faddrsig -o CMakeFiles/cmTC_e481d.dir/CMakeCXXCompilerABI.cpp.o -x c++ /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeCXXCompilerABI.cpp]
   ignore line: [clang -cc1 version 10.0.0 based upon LLVM 10.0.0 default target x86_64-pc-linux-gnu]
   ignore line: [ignoring nonexistent directory "/include"]
   ignore line: [ignoring duplicate directory "/snap/flutter/current/usr/include/c++/9"]
@@ -132,7 +132,7 @@ Parsed CXX implicit link information from above output:
   ignore line: [ /usr/include/x86_64-linux-gnu]
   ignore line: [ /usr/include]
   ignore line: [End of search list.]
-  ignore line: [[2/2] Linking CXX executable cmTC_37ea4]
+  ignore line: [[2/2] Linking CXX executable cmTC_e481d]
   ignore line: [clang version 10.0.0-4ubuntu1 ]
   ignore line: [Target: x86_64-pc-linux-gnu]
   ignore line: [Thread model: posix]
@@ -144,7 +144,7 @@ Parsed CXX implicit link information from above output:
   ignore line: [@m64]
   ignore line: [Selected multilib: .]
   ignore line: [@m64]
-  link line: [ "/snap/flutter/current/usr/bin/ld" --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_37ea4 /snap/flutter/current/usr/lib/x86_64-linux-gnu/crt1.o /snap/flutter/current/usr/lib/x86_64-linux-gnu/crti.o /snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9/crtbegin.o -L/snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9 -L/snap/flutter/current/usr/lib/x86_64-linux-gnu -L/snap/flutter/current/lib/x86_64-linux-gnu -L/snap/flutter/current/usr/lib/ -L/snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10 -L/snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../x86_64-linux-gnu -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib64 -L/usr/lib/x86_64-linux-gnu/../../lib64 -L/snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../.. -L/snap/flutter/149/usr/lib/llvm-10/bin/../lib -L/lib -L/usr/lib -L/snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9 -L/snap/flutter/current/usr/lib/x86_64-linux-gnu -L/snap/flutter/current/lib/x86_64-linux-gnu -L/snap/flutter/current/usr/lib -lblkid -lgcrypt -llzma -llz4 -lgpg-error -luuid -lpthread -ldl -lepoxy -lfontconfig CMakeFiles/cmTC_37ea4.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9/crtend.o /snap/flutter/current/usr/lib/x86_64-linux-gnu/crtn.o]
+  link line: [ "/snap/flutter/current/usr/bin/ld" --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_e481d /snap/flutter/current/usr/lib/x86_64-linux-gnu/crt1.o /snap/flutter/current/usr/lib/x86_64-linux-gnu/crti.o /snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9/crtbegin.o -L/snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9 -L/snap/flutter/current/usr/lib/x86_64-linux-gnu -L/snap/flutter/current/lib/x86_64-linux-gnu -L/snap/flutter/current/usr/lib/ -L/snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10 -L/snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../x86_64-linux-gnu -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib64 -L/usr/lib/x86_64-linux-gnu/../../lib64 -L/snap/flutter/current/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../.. -L/snap/flutter/149/usr/lib/llvm-10/bin/../lib -L/lib -L/usr/lib -L/snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9 -L/snap/flutter/current/usr/lib/x86_64-linux-gnu -L/snap/flutter/current/lib/x86_64-linux-gnu -L/snap/flutter/current/usr/lib -lblkid -lgcrypt -llzma -llz4 -lgpg-error -luuid -lpthread -ldl -lepoxy -lfontconfig CMakeFiles/cmTC_e481d.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9/crtend.o /snap/flutter/current/usr/lib/x86_64-linux-gnu/crtn.o]
     arg [/snap/flutter/current/usr/bin/ld] ==> ignore
     arg [--build-id] ==> ignore
     arg [--eh-frame-hdr] ==> ignore
@@ -153,7 +153,7 @@ Parsed CXX implicit link information from above output:
     arg [-dynamic-linker] ==> ignore
     arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_37ea4] ==> ignore
+    arg [cmTC_e481d] ==> ignore
     arg [/snap/flutter/current/usr/lib/x86_64-linux-gnu/crt1.o] ==> ignore
     arg [/snap/flutter/current/usr/lib/x86_64-linux-gnu/crti.o] ==> ignore
     arg [/snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9/crtbegin.o] ==> ignore
@@ -186,7 +186,7 @@ Parsed CXX implicit link information from above output:
     arg [-ldl] ==> lib [dl]
     arg [-lepoxy] ==> lib [epoxy]
     arg [-lfontconfig] ==> lib [fontconfig]
-    arg [CMakeFiles/cmTC_37ea4.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [CMakeFiles/cmTC_e481d.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
     arg [-lstdc++] ==> lib [stdc++]
     arg [-lm] ==> lib [m]
     arg [-lgcc_s] ==> lib [gcc_s]

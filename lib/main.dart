@@ -9,6 +9,7 @@ import 'screens/settings.dart';
 import 'theme/theme_provider.dart';
 import 'theme/theme.dart'; // Import centralized theme definitions
 import 'screens/splash_screen.dart';
+import 'screens/login_screen.dart';
 
 void main() async {
   // Ensure Flutter binding is initialized
@@ -51,20 +52,20 @@ class GlobalClearApp extends StatelessWidget {
       themeMode: themeProvider.themeMode, // Use theme mode from ThemeProvider
       theme: lightTheme, // Centralized light theme
       darkTheme: darkTheme, // Centralized dark theme
-      home: const SplashScreen(),
+      home: const SplashScreen(), // Start with the Splash Screen
       routes: {
-        '/dashboard': (context) => const DashboardScreen(),
-        '/tracking': (context) => const ShipmentTrackingScreen(),
-        '/documents': (context) => const DocumentManagementScreen(),
-        '/compliance': (context) => const ComplianceGuideScreen(),
-        '/settings': (context) => const SettingsScreen(),
+        '/splash': (context) => const SplashScreen(), // Splash Screen route
+        '/login': (context) => const LoginScreen(), // Login Screen route
+        '/dashboard': (context) => const DashboardScreen(), // Dashboard route
+        '/tracking': (context) => const ShipmentTrackingScreen(), // Tracking route
+        '/documents': (context) => const DocumentManagementScreen(), // Documents route
+        '/compliance': (context) => const ComplianceGuideScreen(), // Compliance route
+        '/settings': (context) => const SettingsScreen(), // Settings route
       },
-      onUnknownRoute:
-          (settings) => MaterialPageRoute(
-            builder:
-                (context) =>
-                    const Scaffold(body: Center(child: Text('Page not found'))),
-          ),
+      onUnknownRoute: (settings) => MaterialPageRoute(
+        builder: (context) =>
+            const Scaffold(body: Center(child: Text('Page not found'))),
+      ),
     );
   }
 }

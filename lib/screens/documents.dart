@@ -86,10 +86,10 @@ class DocumentCard extends StatelessWidget {
   final bool isDarkMode;
 
   const DocumentCard({
-    Key? key,
+    super.key,
     required this.document,
     required this.isDarkMode,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
