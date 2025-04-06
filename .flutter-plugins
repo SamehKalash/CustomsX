@@ -1,10 +1,21 @@
 # This is a generated file; do not edit or check into version control.
 cloud_firestore=/home/adel/.pub-cache/hosted/pub.dev/cloud_firestore-5.6.6/
 cloud_firestore_web=/home/adel/.pub-cache/hosted/pub.dev/cloud_firestore_web-4.4.6/
+file_selector_linux=/home/adel/.pub-cache/hosted/pub.dev/file_selector_linux-0.9.3+2/
+file_selector_macos=/home/adel/.pub-cache/hosted/pub.dev/file_selector_macos-0.9.4+2/
+file_selector_windows=/home/adel/.pub-cache/hosted/pub.dev/file_selector_windows-0.9.3+4/
 firebase_auth=/home/adel/.pub-cache/hosted/pub.dev/firebase_auth-5.5.2/
 firebase_auth_web=/home/adel/.pub-cache/hosted/pub.dev/firebase_auth_web-5.14.2/
 firebase_core=/home/adel/.pub-cache/hosted/pub.dev/firebase_core-3.13.0/
 firebase_core_web=/home/adel/.pub-cache/hosted/pub.dev/firebase_core_web-2.22.0/
+flutter_plugin_android_lifecycle=/home/adel/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.27/
+image_picker=/home/adel/.pub-cache/hosted/pub.dev/image_picker-1.1.2/
+image_picker_android=/home/adel/.pub-cache/hosted/pub.dev/image_picker_android-0.8.12+22/
+image_picker_for_web=/home/adel/.pub-cache/hosted/pub.dev/image_picker_for_web-3.0.6/
+image_picker_ios=/home/adel/.pub-cache/hosted/pub.dev/image_picker_ios-0.8.12+2/
+image_picker_linux=/home/adel/.pub-cache/hosted/pub.dev/image_picker_linux-0.2.1+2/
+image_picker_macos=/home/adel/.pub-cache/hosted/pub.dev/image_picker_macos-0.2.1+2/
+image_picker_windows=/home/adel/.pub-cache/hosted/pub.dev/image_picker_windows-0.2.1+1/
 path_provider_linux=/home/adel/.pub-cache/hosted/pub.dev/path_provider_linux-2.2.1/
 path_provider_windows=/home/adel/.pub-cache/hosted/pub.dev/path_provider_windows-2.3.0/
 shared_preferences=/home/adel/.pub-cache/hosted/pub.dev/shared_preferences-2.5.3/

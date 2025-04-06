@@ -6,18 +6,17 @@ import 'screens/tracking.dart';
 import 'screens/documents.dart';
 import 'screens/compliance.dart';
 import 'screens/settings.dart';
-import 'screens/forgot_password_screen.dart'; // Import Forgot Password Screen
-import 'screens/create_account_screen.dart'; // Import Create Account Screen
+import 'screens/forgot_password_screen.dart';
+import 'screens/create_account_screen.dart';
+import 'screens/create_company_screen.dart';
 import 'theme/theme_provider.dart';
-import 'theme/theme.dart'; // Import centralized theme definitions
+import 'theme/theme.dart';
 import 'screens/splash_screen.dart';
 import 'screens/login_screen.dart';
 
 void main() async {
-  // Ensure Flutter binding is initialized
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase with error handling
   try {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
@@ -49,22 +48,23 @@ class GlobalClearApp extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return MaterialApp(
-      title: 'SCCF App',
+      title: 'SCCF',
       debugShowCheckedModeBanner: false,
-      themeMode: themeProvider.themeMode, // Use theme mode from ThemeProvider
-      theme: lightTheme, // Centralized light theme
-      darkTheme: darkTheme, // Centralized dark theme
-      home: const SplashScreen(), // Start with the Splash Screen
+      themeMode: themeProvider.themeMode,
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      initialRoute: '/splash', // Set Splash Screen as the initial route
       routes: {
-        '/splash': (context) => const SplashScreen(), // Splash Screen route
-        '/login': (context) => const LoginScreen(), // Login Screen route
-        '/dashboard': (context) => const DashboardScreen(), // Dashboard route
-        '/tracking': (context) => const ShipmentTrackingScreen(), // Tracking route
-        '/documents': (context) => const DocumentManagementScreen(), // Documents route
-        '/compliance': (context) => const ComplianceGuideScreen(), // Compliance route
-        '/settings': (context) => const SettingsScreen(), // Settings route
-        '/forgot-password': (context) => const ForgotPasswordScreen(), // Forgot Password route
-        '/create-account': (context) => const CreateAccountScreen(), // Create Account route
+        '/splash': (context) => const SplashScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/createCompany': (context) => const CreateCompanyScreen(),
+        '/createAccount': (context) => const CreateAccountScreen(),
+        '/dashboard': (context) => const DashboardScreen(),
+        '/tracking': (context) => const ShipmentTrackingScreen(),
+        '/documents': (context) => const DocumentManagementScreen(),
+        '/compliance': (context) => const ComplianceGuideScreen(),
+        '/settings': (context) => const SettingsScreen(),
+        '/forgot-password': (context) => const ForgotPasswordScreen(),
       },
       onUnknownRoute: (settings) => MaterialPageRoute(
         builder: (context) =>

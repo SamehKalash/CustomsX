@@ -184,6 +184,12 @@ FLUTTER_TARGET_PLATFORM:UNINITIALIZED=linux-x64
 //pkg-config executable
 PKG_CONFIG_EXECUTABLE:FILEPATH=/snap/flutter/current/usr/bin/pkg-config
 
+//Value Computed by CMake
+file_selector_linux_BINARY_DIR:STATIC=/home/adel/Downloads/f2/SCCF/build/linux/x64/debug/plugins/file_selector_linux
+
+//Value Computed by CMake
+file_selector_linux_SOURCE_DIR:STATIC=/home/adel/Downloads/f2/SCCF/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/linux
+
 //Path to a library.
 pkgcfg_lib_GIO_gio-2.0:FILEPATH=/snap/flutter/current/usr/lib/x86_64-linux-gnu/libgio-2.0.so
 
@@ -325,7 +331,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=3
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=4
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

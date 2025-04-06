@@ -18,3 +18,10 @@
 /home/adel/Downloads/f2/SCCF/build/linux/x64/debug/runner/CMakeFiles/rebuild_cache.dir
 /home/adel/Downloads/f2/SCCF/build/linux/x64/debug/runner/CMakeFiles/edit_cache.dir
 /home/adel/Downloads/f2/SCCF/build/linux/x64/debug/runner/CMakeFiles/sccf.dir
+/home/adel/Downloads/f2/SCCF/build/linux/x64/debug/plugins/file_selector_linux/CMakeFiles/install/strip.dir
+/home/adel/Downloads/f2/SCCF/build/linux/x64/debug/plugins/file_selector_linux/CMakeFiles/install/local.dir
+/home/adel/Downloads/f2/SCCF/build/linux/x64/debug/plugins/file_selector_linux/CMakeFiles/install.dir
+/home/adel/Downloads/f2/SCCF/build/linux/x64/debug/plugins/file_selector_linux/CMakeFiles/list_install_components.dir
+/home/adel/Downloads/f2/SCCF/build/linux/x64/debug/plugins/file_selector_linux/CMakeFiles/rebuild_cache.dir
+/home/adel/Downloads/f2/SCCF/build/linux/x64/debug/plugins/file_selector_linux/CMakeFiles/edit_cache.dir
+/home/adel/Downloads/f2/SCCF/build/linux/x64/debug/plugins/file_selector_linux/CMakeFiles/file_selector_linux_plugin.dir

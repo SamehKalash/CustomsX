@@ -182,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/create-account');
+                Navigator.pushNamed(context, '/createCompany'); // Navigate to Create Company Screen
               },
               child: Text(
                 'Create New Account',

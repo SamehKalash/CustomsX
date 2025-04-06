@@ -16,6 +16,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   String? _firstNameError;
   String? _lastNameError;
   String? _emailError;
@@ -100,71 +102,84 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _buildTextField(
-                controller: _firstNameController,
-                labelText: 'First Name',
-                icon: Icons.person,
-                errorText: _firstNameError,
-                isDarkMode: isDarkMode,
-              ),
-              const SizedBox(height: 20),
-              _buildTextField(
-                controller: _lastNameController,
-                labelText: 'Last Name',
-                icon: Icons.person_outline,
-                errorText: _lastNameError,
-                isDarkMode: isDarkMode,
-              ),
-              const SizedBox(height: 20),
-              _buildTextField(
-                controller: _emailController,
-                labelText: 'Email',
-                icon: Icons.email,
-                errorText: _emailError,
-                isDarkMode: isDarkMode,
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const SizedBox(height: 20),
-              _buildPhoneNumberField(
-                controller: _mobileController,
-                errorText: _mobileError,
-                isDarkMode: isDarkMode,
-              ),
-              const SizedBox(height: 20),
-              _buildPasswordField(
-                controller: _passwordController,
-                labelText: 'Password',
-                errorText: _passwordError,
-                isDarkMode: isDarkMode,
-              ),
-              const SizedBox(height: 20),
-              _buildPasswordField(
-                controller: _confirmPasswordController,
-                labelText: 'Confirm Password',
-                errorText: _confirmPasswordError,
-                isDarkMode: isDarkMode,
-              ),
-              const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: _createAccount,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildTextField(
+                  controller: _firstNameController,
+                  labelText: 'First Name',
+                  icon: Icons.person,
+                  errorText: _firstNameError,
+                  isDarkMode: isDarkMode,
+                ),
+                const SizedBox(height: 20),
+                _buildTextField(
+                  controller: _lastNameController,
+                  labelText: 'Last Name',
+                  icon: Icons.person_outline,
+                  errorText: _lastNameError,
+                  isDarkMode: isDarkMode,
+                ),
+                const SizedBox(height: 20),
+                _buildTextField(
+                  controller: _emailController,
+                  labelText: 'Email',
+                  icon: Icons.email,
+                  errorText: _emailError,
+                  isDarkMode: isDarkMode,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 20),
+                _buildPhoneNumberField(
+                  controller: _mobileController,
+                  errorText: _mobileError,
+                  isDarkMode: isDarkMode,
+                ),
+                const SizedBox(height: 20),
+                _buildPasswordField(
+                  controller: _passwordController,
+                  labelText: 'Password',
+                  errorText: _passwordError,
+                  isDarkMode: isDarkMode,
+                ),
+                const SizedBox(height: 20),
+                _buildPasswordField(
+                  controller: _confirmPasswordController,
+                  labelText: 'Confirm Password',
+                  errorText: _confirmPasswordError,
+                  isDarkMode: isDarkMode,
+                ),
+                const SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      Navigator.pushNamed(context, '/dashboard'); // Navigate to Dashboard
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please fill in all required fields.'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    backgroundColor: isDarkMode ? Colors.grey[800] : Colors.blue,
                   ),
-                  backgroundColor: isDarkMode ? Colors.grey[800] : Colors.blue,
-                  foregroundColor: Colors.white, // Text color
-                  elevation: isDarkMode ? 2 : 4,
+                  child: const Text(
+                    'Next',
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
                 ),
-                child: const Text(
-                  'Create Account',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -276,7 +291,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     String? errorText,
     required bool isDarkMode,
   }) {
-    bool _obscureText = true;
+    bool obscureText = true;
 
     return StatefulBuilder(
       builder: (context, setState) {
@@ -292,7 +307,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           ),
           child: TextField(
             controller: controller,
-            obscureText: _obscureText,
+            obscureText: obscureText,
             decoration: InputDecoration(
               labelText: labelText,
               labelStyle: TextStyle(
@@ -304,12 +319,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               ),
               suffixIcon: IconButton(
                 icon: Icon(
-                  _obscureText ? Icons.visibility : Icons.visibility_off,
+                  obscureText ? Icons.visibility : Icons.visibility_off,
                   color: isDarkMode ? Colors.white70 : Colors.grey,
                 ),
                 onPressed: () {
                   setState(() {
-                    _obscureText = !_obscureText;
+                    obscureText = !obscureText;
                   });
                 },
               ),
