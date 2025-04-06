@@ -33,6 +33,9 @@ class _CreateCompanyScreenState extends State<CreateCompanyScreen> {
 
   final ImagePicker _picker = ImagePicker();
 
+  // Define the yellowish color to match the dashboard theme
+  static const Color yellowishColor = Color(0xFFE3B505);
+
   void _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
@@ -100,7 +103,7 @@ class _CreateCompanyScreenState extends State<CreateCompanyScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create a Company'),
-        backgroundColor: isDarkMode ? Colors.grey[900] : Colors.blue,
+        backgroundColor: isDarkMode ? Colors.grey[900] : yellowishColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -219,10 +222,16 @@ class _CreateCompanyScreenState extends State<CreateCompanyScreen> {
                       children: [
                         ElevatedButton(
                           onPressed: _pickImage,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: yellowishColor,
+                          ),
                           child: const Text('Change Image'),
                         ),
                         ElevatedButton(
                           onPressed: _clearImage,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: yellowishColor,
+                          ),
                           child: const Text('Clear Image'),
                         ),
                       ],
@@ -232,6 +241,9 @@ class _CreateCompanyScreenState extends State<CreateCompanyScreen> {
               else
                 ElevatedButton(
                   onPressed: _pickImage,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: yellowishColor,
+                  ),
                   child: const Text('Upload Logo'),
                 ),
               const SizedBox(height: 20),
@@ -263,7 +275,7 @@ class _CreateCompanyScreenState extends State<CreateCompanyScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
-                  backgroundColor: isDarkMode ? Colors.grey[800] : Colors.blue,
+                  backgroundColor: isDarkMode ? Colors.grey[800] : yellowishColor,
                 ),
                 child: const Text(
                   'Next',
@@ -314,7 +326,7 @@ class _CreateCompanyScreenState extends State<CreateCompanyScreen> {
               ),
             ),
             focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.blue),
+              borderSide: BorderSide(color: yellowishColor),
             ),
             errorText: errorText,
             filled: true,

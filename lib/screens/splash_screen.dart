@@ -20,8 +20,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Define the yellowish color to match the dashboard theme
+    const Color yellowishColor = Color(0xFFE3B505);
+
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: yellowishColor, // Set the background color to yellowish
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -29,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Icon(
               Icons.local_shipping,
               size: 100,
-              color: Colors.white,
+              color: Colors.white, // Keep the icon color white for contrast
             ),
             SizedBox(height: 20),
             Text(
@@ -37,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Colors.white, // Keep the text color white for contrast
               ),
             ),
           ],

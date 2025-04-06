@@ -12,6 +12,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
+  // Define the yellowish color to match the dashboard theme
+  static const Color yellowishColor = Color(0xFFE3B505);
+
   void _login() {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
@@ -55,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Icon(
                 Icons.lock_outline,
                 size: 100,
-                color: isDarkMode ? Colors.white70 : Colors.blue,
+                color: isDarkMode ? Colors.white70 : yellowishColor,
               ),
             ),
             const SizedBox(height: 20),
@@ -87,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 prefixIcon: Icon(
                   Icons.email,
-                  color: isDarkMode ? Colors.white70 : Colors.grey,
+                  color: isDarkMode ? Colors.white70 : yellowishColor,
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
@@ -100,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: isDarkMode ? Colors.blue : Colors.blue,
+                    color: yellowishColor,
                   ),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
@@ -120,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 prefixIcon: Icon(
                   Icons.lock,
-                  color: isDarkMode ? Colors.white70 : Colors.grey,
+                  color: isDarkMode ? Colors.white70 : yellowishColor,
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
@@ -133,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: isDarkMode ? Colors.blue : Colors.blue,
+                    color: yellowishColor,
                   ),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
@@ -152,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 backgroundColor: _isLoading
                     ? (isDarkMode ? Colors.grey[800] : Colors.grey)
-                    : Colors.blue,
+                    : yellowishColor,
               ),
               child: _isLoading
                   ? const CircularProgressIndicator(
@@ -176,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Text(
                 'Forgot Password?',
                 style: TextStyle(
-                  color: isDarkMode ? Colors.blue[300] : Colors.blue,
+                  color: isDarkMode ? yellowishColor.withOpacity(0.7) : yellowishColor,
                 ),
               ),
             ),
@@ -187,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Text(
                 'Create New Account',
                 style: TextStyle(
-                  color: isDarkMode ? Colors.blue[300] : Colors.blue,
+                  color: isDarkMode ? yellowishColor.withOpacity(0.7) : yellowishColor,
                 ),
               ),
             ),

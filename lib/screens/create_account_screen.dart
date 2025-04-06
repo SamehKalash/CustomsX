@@ -25,6 +25,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   String? _passwordError;
   String? _confirmPasswordError;
 
+  // Define the yellowish color to match the dashboard theme
+  static const Color yellowishColor = Color(0xFFE3B505);
+
   void _createAccount() {
     final email = _emailController.text.trim();
     final firstName = _firstNameController.text.trim();
@@ -95,7 +98,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             color: isDarkMode ? Colors.white : Colors.black,
           ),
         ),
-        backgroundColor: isDarkMode ? Colors.grey[900] : Colors.blue,
+        backgroundColor: isDarkMode ? Colors.grey[900] : yellowishColor,
         elevation: isDarkMode ? 2 : 4,
         centerTitle: true,
       ),
@@ -171,7 +174,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
-                    backgroundColor: isDarkMode ? Colors.grey[800] : Colors.blue,
+                    backgroundColor: isDarkMode ? Colors.grey[800] : yellowishColor,
                   ),
                   child: const Text(
                     'Next',
@@ -223,7 +226,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.blue),
+            borderSide: BorderSide(color: yellowishColor),
           ),
           errorText: errorText,
           filled: true,
@@ -269,7 +272,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.blue),
+            borderSide: BorderSide(color: yellowishColor),
           ),
           errorText: errorText,
           filled: true,
@@ -335,7 +338,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.blue),
+                borderSide: BorderSide(color: yellowishColor),
               ),
               errorText: errorText,
               filled: true,
