@@ -102,15 +102,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: yellowishColor,
-                  ),
+                  borderSide: BorderSide(color: yellowishColor),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              style: TextStyle(
-                color: isDarkMode ? Colors.white : Colors.black,
-              ),
+              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
             ),
             const SizedBox(height: 16),
             TextField(
@@ -135,15 +131,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: yellowishColor,
-                  ),
+                  borderSide: BorderSide(color: yellowishColor),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              style: TextStyle(
-                color: isDarkMode ? Colors.white : Colors.black,
-              ),
+              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -153,23 +145,26 @@ class _LoginScreenState extends State<LoginScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                backgroundColor: _isLoading
-                    ? (isDarkMode ? Colors.grey[800] : Colors.grey)
-                    : yellowishColor,
+                backgroundColor:
+                    _isLoading
+                        ? (isDarkMode ? Colors.grey[800] : Colors.grey)
+                        : yellowishColor,
               ),
-              child: _isLoading
-                  ? const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    )
-                  : Text(
-                      'Login',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: _isLoading
-                            ? (isDarkMode ? Colors.white70 : Colors.white)
-                            : Colors.white,
+              child:
+                  _isLoading
+                      ? const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      )
+                      : Text(
+                        'Login',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color:
+                              _isLoading
+                                  ? (isDarkMode ? Colors.white70 : Colors.white)
+                                  : Colors.white,
+                        ),
                       ),
-                    ),
             ),
             const SizedBox(height: 20),
             TextButton(
@@ -179,18 +174,27 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Text(
                 'Forgot Password?',
                 style: TextStyle(
-                  color: isDarkMode ? yellowishColor.withOpacity(0.7) : yellowishColor,
+                  color:
+                      isDarkMode
+                          ? yellowishColor.withOpacity(0.7)
+                          : yellowishColor,
                 ),
               ),
             ),
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/createCompany'); // Navigate to Create Company Screen
+                Navigator.pushNamed(
+                  context,
+                  '/createCompany',
+                ); // Navigate to Create Company Screen
               },
               child: Text(
                 'Create New Account',
                 style: TextStyle(
-                  color: isDarkMode ? yellowishColor.withOpacity(0.7) : yellowishColor,
+                  color:
+                      isDarkMode
+                          ? yellowishColor.withOpacity(0.7)
+                          : yellowishColor,
                 ),
               ),
             ),

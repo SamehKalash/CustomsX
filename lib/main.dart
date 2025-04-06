@@ -9,6 +9,7 @@ import 'screens/settings.dart';
 import 'screens/forgot_password_screen.dart';
 import 'screens/create_account_screen.dart';
 import 'screens/create_company_screen.dart';
+import 'screens/chooselang.dart';
 import 'theme/theme_provider.dart';
 import 'theme/theme.dart';
 import 'screens/splash_screen.dart';
@@ -53,8 +54,9 @@ class GlobalClearApp extends StatelessWidget {
       themeMode: themeProvider.themeMode,
       theme: lightTheme,
       darkTheme: darkTheme,
-      initialRoute: '/splash', // Set Splash Screen as the initial route
+      initialRoute: '/chooseLang',
       routes: {
+        '/chooseLang': (context) => LanguageSelector(),
         '/splash': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),
         '/createCompany': (context) => const CreateCompanyScreen(),
@@ -66,10 +68,12 @@ class GlobalClearApp extends StatelessWidget {
         '/settings': (context) => const SettingsScreen(),
         '/forgot-password': (context) => const ForgotPasswordScreen(),
       },
-      onUnknownRoute: (settings) => MaterialPageRoute(
-        builder: (context) =>
-            const Scaffold(body: Center(child: Text('Page not found'))),
-      ),
+      onUnknownRoute:
+          (settings) => MaterialPageRoute(
+            builder:
+                (context) =>
+                    const Scaffold(body: Center(child: Text('Page not found'))),
+          ),
     );
   }
 }
