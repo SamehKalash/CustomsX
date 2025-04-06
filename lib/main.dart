@@ -6,6 +6,8 @@ import 'screens/tracking.dart';
 import 'screens/documents.dart';
 import 'screens/compliance.dart';
 import 'screens/settings.dart';
+import 'screens/forgot_password_screen.dart'; // Import Forgot Password Screen
+import 'screens/create_account_screen.dart'; // Import Create Account Screen
 import 'theme/theme_provider.dart';
 import 'theme/theme.dart'; // Import centralized theme definitions
 import 'screens/splash_screen.dart';
@@ -61,6 +63,8 @@ class GlobalClearApp extends StatelessWidget {
         '/documents': (context) => const DocumentManagementScreen(), // Documents route
         '/compliance': (context) => const ComplianceGuideScreen(), // Compliance route
         '/settings': (context) => const SettingsScreen(), // Settings route
+        '/forgot-password': (context) => const ForgotPasswordScreen(), // Forgot Password route
+        '/create-account': (context) => const CreateAccountScreen(), // Create Account route
       },
       onUnknownRoute: (settings) => MaterialPageRoute(
         builder: (context) =>

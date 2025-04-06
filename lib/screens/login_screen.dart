@@ -17,7 +17,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = _passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      // Show a SnackBar if fields are empty
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('Please enter both email and password'),
@@ -28,16 +27,14 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     setState(() {
-      _isLoading = true; // Show loading indicator
+      _isLoading = true;
     });
 
-    // Simulate a login process
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
-        _isLoading = false; // Hide loading indicator
+        _isLoading = false;
       });
 
-      // Navigate to the Dashboard Screen
       Navigator.pushReplacementNamed(context, '/dashboard');
     });
   }
@@ -108,7 +105,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+              style: TextStyle(
+                color: isDarkMode ? Colors.white : Colors.black,
+              ),
             ),
             const SizedBox(height: 16),
             TextField(
@@ -139,37 +138,58 @@ class _LoginScreenState extends State<LoginScreen> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+              style: TextStyle(
+                color: isDarkMode ? Colors.white : Colors.black,
+              ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed:
-                  _isLoading ? null : _login, // Disable button while loading
+              onPressed: _isLoading ? null : _login,
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                backgroundColor:
-                    _isLoading
-                        ? (isDarkMode ? Colors.grey[800] : Colors.grey)
-                        : Colors.blue,
+                backgroundColor: _isLoading
+                    ? (isDarkMode ? Colors.grey[800] : Colors.grey)
+                    : Colors.blue,
               ),
-              child:
-                  _isLoading
-                      ? const CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      )
-                      : Text(
-                        'Login',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color:
-                              _isLoading
-                                  ? (isDarkMode ? Colors.white70 : Colors.white)
-                                  : Colors.white,
-                        ),
+              child: _isLoading
+                  ? const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    )
+                  : Text(
+                      'Login',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: _isLoading
+                            ? (isDarkMode ? Colors.white70 : Colors.white)
+                            : Colors.white,
                       ),
+                    ),
+            ),
+            const SizedBox(height: 20),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/forgot-password');
+              },
+              child: Text(
+                'Forgot Password?',
+                style: TextStyle(
+                  color: isDarkMode ? Colors.blue[300] : Colors.blue,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/create-account');
+              },
+              child: Text(
+                'Create New Account',
+                style: TextStyle(
+                  color: isDarkMode ? Colors.blue[300] : Colors.blue,
+                ),
+              ),
             ),
           ],
         ),
