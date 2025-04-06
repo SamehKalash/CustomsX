@@ -13,17 +13,23 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _mobileController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   String? _firstNameError;
   String? _lastNameError;
   String? _emailError;
   String? _mobileError;
+  String? _passwordError;
+  String? _confirmPasswordError;
 
   void _createAccount() {
     final email = _emailController.text.trim();
     final firstName = _firstNameController.text.trim();
     final lastName = _lastNameController.text.trim();
     final mobile = _mobileController.text.trim();
+    final password = _passwordController.text.trim();
+    final confirmPassword = _confirmPasswordController.text.trim();
 
     setState(() {
       _firstNameError =
@@ -45,12 +51,22 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           mobile.isEmpty || !RegExp(r'^\+20\d{10}$').hasMatch(mobile)
               ? 'Phone number must start with +20 and contain exactly 10 digits'
               : null;
+
+      _passwordError = password.isEmpty || password.length < 8
+          ? 'Password must be at least 8 characters'
+          : null;
+
+      _confirmPasswordError = password != confirmPassword
+          ? 'Passwords do not match'
+          : null;
     });
 
     if (_firstNameError == null &&
         _lastNameError == null &&
         _emailError == null &&
-        _mobileError == null) {
+        _mobileError == null &&
+        _passwordError == null &&
+        _confirmPasswordError == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Account created successfully!'),
@@ -117,6 +133,20 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 errorText: _mobileError,
                 isDarkMode: isDarkMode,
               ),
+              const SizedBox(height: 20),
+              _buildPasswordField(
+                controller: _passwordController,
+                labelText: 'Password',
+                errorText: _passwordError,
+                isDarkMode: isDarkMode,
+              ),
+              const SizedBox(height: 20),
+              _buildPasswordField(
+                controller: _confirmPasswordController,
+                labelText: 'Confirm Password',
+                errorText: _confirmPasswordError,
+                isDarkMode: isDarkMode,
+              ),
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: _createAccount,
@@ -125,12 +155,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
-                  backgroundColor: Colors.blue,
-                  elevation: 4,
+                  backgroundColor: isDarkMode ? Colors.grey[800] : Colors.blue,
+                  foregroundColor: Colors.white, // Text color
+                  elevation: isDarkMode ? 2 : 4,
                 ),
                 child: const Text(
                   'Create Account',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
             ],
@@ -236,6 +267,69 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           LengthLimitingTextInputFormatter(13),
         ],
       ),
+    );
+  }
+
+  Widget _buildPasswordField({
+    required TextEditingController controller,
+    required String labelText,
+    String? errorText,
+    required bool isDarkMode,
+  }) {
+    bool _obscureText = true;
+
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: isDarkMode ? Colors.black26 : Colors.grey.withOpacity(0.2),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: TextField(
+            controller: controller,
+            obscureText: _obscureText,
+            decoration: InputDecoration(
+              labelText: labelText,
+              labelStyle: TextStyle(
+                color: isDarkMode ? Colors.white70 : Colors.black,
+              ),
+              prefixIcon: Icon(
+                Icons.lock,
+                color: isDarkMode ? Colors.white70 : Colors.grey,
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _obscureText ? Icons.visibility : Icons.visibility_off,
+                  color: isDarkMode ? Colors.white70 : Colors.grey,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+              ),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: isDarkMode ? Colors.white70 : Colors.grey,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.blue),
+              ),
+              errorText: errorText,
+              filled: true,
+              fillColor: isDarkMode ? Colors.grey[850] : Colors.white,
+            ),
+            style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+          ),
+        );
+      },
     );
   }
 }
