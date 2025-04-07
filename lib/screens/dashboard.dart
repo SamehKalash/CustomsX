@@ -49,19 +49,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             _buildWelcomeBanner(context, isDarkMode, yellowishColor),
             const SizedBox(height: 20),
-            _buildSectionTitle(context, 'Quick Actions'),
+            _buildSectionTitle(context, 'Quick Actions', isDarkMode),
             const SizedBox(height: 10),
-            _buildQuickActions(context, yellowishColor),
+            _buildQuickActions(context, yellowishColor, isDarkMode),
             const SizedBox(height: 20),
-            _buildSectionTitle(context, 'Status Overview'),
+            _buildSectionTitle(context, 'Status Overview', isDarkMode),
             const SizedBox(height: 10),
-            _buildStatusSection(context),
+            _buildStatusSection(context, isDarkMode),
             const SizedBox(height: 20),
-            _buildSectionTitle(context, 'Compliance Updates'),
+            _buildSectionTitle(context, 'Compliance Updates', isDarkMode),
             const SizedBox(height: 10),
-            _buildComplianceUpdates(context),
+            _buildComplianceUpdates(context, isDarkMode),
             const SizedBox(height: 20),
-            _buildExchangeRateSection(context),
+            _buildSectionTitle(context, 'Exchange Rates', isDarkMode),
+            const SizedBox(height: 10),
+            _buildExchangeRateSection(context, isDarkMode),
           ],
         ),
       ),
@@ -136,21 +138,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           Text(
             'Welcome Back,',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            style: TextStyle(
+              fontSize: 18,
               color: isDarkMode ? Colors.white70 : Colors.white,
             ),
           ),
           Text(
             'Sam!',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
+              fontSize: 24,
               color: isDarkMode ? Colors.white : Colors.white,
             ),
           ),
           const SizedBox(height: 10),
           Text(
             'Last login: 2 hours ago',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            style: TextStyle(
+              fontSize: 14,
               color: isDarkMode ? Colors.white70 : Colors.white70,
             ),
           ),
@@ -159,17 +164,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildSectionTitle(BuildContext context, String title) {
+  Widget _buildSectionTitle(BuildContext context, String title, bool isDarkMode) {
     return Text(
       title,
-      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+      style: TextStyle(
         fontWeight: FontWeight.bold,
-        color: Theme.of(context).textTheme.titleLarge?.color,
+        fontSize: 20,
+        color: isDarkMode ? Colors.white : Colors.black,
       ),
     );
   }
 
-  Widget _buildQuickActions(BuildContext context, Color yellowishColor) {
+  Widget _buildQuickActions(BuildContext context, Color yellowishColor, bool isDarkMode) {
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -184,6 +190,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           'Calculator',
           '/calculator',
           yellowishColor,
+          isDarkMode,
         ),
         _buildActionButton(
           context,
@@ -191,6 +198,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           'Tracking',
           '/tracking',
           Colors.green,
+          isDarkMode,
         ),
         _buildActionButton(
           context,
@@ -198,6 +206,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           'Upload',
           '/documents',
           Colors.orange,
+          isDarkMode,
         ),
       ],
     );
@@ -209,10 +218,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     String label,
     String route,
     Color color,
+    bool isDarkMode,
   ) {
     return Card(
       elevation: 4,
-      color: Theme.of(context).cardColor,
+      color: isDarkMode ? Colors.grey[700] : Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: InkWell(
         borderRadius: BorderRadius.circular(15),
@@ -231,8 +241,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             const SizedBox(height: 10),
             Text(
               label,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              style: TextStyle(
                 fontWeight: FontWeight.w500,
+                color: isDarkMode ? Colors.white : Colors.black,
               ),
             ),
           ],
@@ -241,29 +252,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildStatusSection(BuildContext context) {
+  Widget _buildStatusSection(BuildContext context, bool isDarkMode) {
     return Column(
       children: [
-        const StatusCard(
+        StatusCard(
           icon: Icons.pending_actions,
           title: 'Pending Shipments',
           value: '3 Items',
           subText: '2 in Customs Review',
           alertLevel: 2,
+          isDarkMode: isDarkMode,
         ),
         const SizedBox(height: 10),
-        const StatusCard(
+        StatusCard(
           icon: Icons.description,
           title: 'Recent Documents',
           value: '5 Files',
           subText: 'Last upload: 2h ago',
           alertLevel: 0,
+          isDarkMode: isDarkMode,
         ),
       ],
     );
   }
 
-  Widget _buildComplianceUpdates(BuildContext context) {
+  Widget _buildComplianceUpdates(BuildContext context, bool isDarkMode) {
     return Column(
       children: [
         _buildUpdateItem(
@@ -271,18 +284,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
           'Egypt Customs Regulations',
           'New tariff codes effective March 2024',
           Icons.gavel,
+          isDarkMode,
         ),
         _buildUpdateItem(
           context,
           'Egypt Import Restrictions',
           'Updated restricted items list',
           Icons.block,
+          isDarkMode,
         ),
         _buildUpdateItem(
           context,
           'Global Trade News',
           'Latest international trade agreements',
           Icons.public,
+          isDarkMode,
         ),
       ],
     );
@@ -293,11 +309,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     String title,
     String subtitle,
     IconData icon,
+    bool isDarkMode,
   ) {
     return Card(
       elevation: 2,
       margin: const EdgeInsets.only(bottom: 10),
-      color: Theme.of(context).cardColor,
+      color: isDarkMode ? Colors.grey[700] : Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: ListTile(
         contentPadding: const EdgeInsets.all(10),
@@ -311,21 +328,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         title: Text(
           title,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          style: TextStyle(
             fontWeight: FontWeight.w500,
+            color: isDarkMode ? Colors.white : Colors.black,
           ),
         ),
-        subtitle: Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(
+            color: isDarkMode ? Colors.white70 : Colors.black54,
+          ),
+        ),
         onTap: () => Navigator.pushNamed(context, '/compliance'),
       ),
     );
   }
 
-  Widget _buildExchangeRateSection(BuildContext context) {
+  Widget _buildExchangeRateSection(BuildContext context, bool isDarkMode) {
     return Card(
       elevation: 4,
       margin: const EdgeInsets.only(bottom: 15),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      color: isDarkMode ? Colors.grey[700] : Theme.of(context).cardColor,
       child: ListTile(
         contentPadding: const EdgeInsets.all(10),
         leading: Container(
@@ -336,11 +360,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           child: const Icon(Icons.currency_exchange, color: Color(0xFFE3B505)),
         ),
-        title: const Text(
+        title: Text(
           'Exchange Rates',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: isDarkMode ? Colors.white : Colors.black,
+          ),
         ),
-        subtitle: const Text('View current exchange rates'),
+        subtitle: Text(
+          'View current exchange rates',
+          style: TextStyle(
+            color: isDarkMode ? Colors.white70 : Colors.black54,
+          ),
+        ),
         onTap: () {
           Navigator.push(
             context,

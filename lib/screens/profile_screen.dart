@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme_provider.dart';
-import 'settings.dart';
 import './dashboard.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -21,11 +20,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: const Text(
+          'Profile',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         backgroundColor: isDarkMode ? Colors.grey[900] : const Color(0xFFE3B505), // Yellowish color
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header Section
             Container(
@@ -37,6 +40,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   bottomLeft: Radius.circular(30),
                   bottomRight: Radius.circular(30),
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -76,41 +86,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 20),
 
             // Options Section
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text('Profile details'),
-              onTap: () {
-                // Add functionality for profile details
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Profile details tapped')),
-                );
-              },
-            ),
-            const Divider(),
-
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Settings'),
-              onTap: () {
-                // Navigate to settings screen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SettingsScreen()),
-                );
-              },
-            ),
-            const Divider(),
-
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Log out'),
-              onTap: () {
-                // Add functionality for logging out
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Logged out')),
-                );
-              },
-            ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildSectionTitle(context, 'Account Options', isDarkMode),
+                    const SizedBox(height: 10),
+                    _buildOption(
+                      context,
+                      icon: Icons.person,
+                      label: 'Profile details',
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Profile details tapped')),
+                        );
+                      },
+                      isDarkMode: isDarkMode,
+                    ),
+                    const Divider(),
+                    _buildOption(
+                      context,
+                      icon: Icons.settings,
+                      label: 'Settings',
+                      onTap: () {
+                        Navigator.pushNamed(context, '/settings'); // Navigate to SettingsScreen
+                      },
+                      isDarkMode: isDarkMode,
+                    ),
+                    const Divider(),
+                    _buildOption(
+                      context,
+                      icon: Icons.logout,
+                      label: 'Log out',
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Logged out')),
+                        );
+                      },
+                      isDarkMode: isDarkMode,
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),
@@ -155,10 +173,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
               label: 'Profile',
             ),
           ],
-          selectedItemColor: Color(0xFFE3B505), // Yellowish color
+          selectedItemColor: const Color(0xFFE3B505), // Yellowish color
           unselectedItemColor: Colors.grey,
         ),
       ),
+    );
+  }
+
+  Widget _buildSectionTitle(BuildContext context, String title, bool isDarkMode) {
+    return Text(
+      title,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 18,
+        color: isDarkMode ? Colors.white : Colors.black,
+      ),
+    );
+  }
+
+  Widget _buildOption(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    required bool isDarkMode,
+  }) {
+    return ListTile(
+      leading: Icon(icon, color: isDarkMode ? Colors.white70 : Colors.black54),
+      title: Text(
+        label,
+        style: TextStyle(
+          fontSize: 16,
+          color: isDarkMode ? Colors.white : Colors.black,
+        ),
+      ),
+      onTap: onTap,
     );
   }
 }
