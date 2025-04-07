@@ -5,7 +5,7 @@ import 'screens/dashboard.dart';
 import 'screens/tracking.dart';
 import 'screens/documents.dart';
 import 'screens/compliance.dart';
-import 'screens/settings.dart';
+import 'screens/settings_screen.dart';
 import 'screens/forgot_password_screen.dart';
 import 'screens/create_account_screen.dart';
 import 'screens/create_company_screen.dart';

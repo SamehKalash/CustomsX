@@ -2,34 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme_provider.dart';
 import '../widgets/status_card.dart';
-import './settings.dart';
-import '../widgets/exhannge_rate.dart';
+import './profile_screen.dart'; // Import Profile Screen
+import './exchange_rate_screen.dart'; // Import Exchange Rate Screen
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  int _currentIndex = 0;
+
+  final List<Widget> _screens = [
+    const DashboardScreen(), // Home Screen
+    const ProfileScreen(), // Profile Screen
+  ];
 
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDarkMode = themeProvider.themeMode == ThemeMode.dark;
 
+    // Define the yellowish color for branding consistency
+    const Color yellowishColor = Color(0xFFE3B505);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dashboard'),
+        title: const Text(
+          'Dashboard',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: isDarkMode ? Colors.grey[900] : yellowishColor,
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications),
             onPressed: () => _showNotifications(context),
-          ),
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed:
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SettingsScreen(),
-                  ),
-                ),
           ),
         ],
       ),
@@ -38,11 +47,11 @@ class DashboardScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildWelcomeBanner(context, isDarkMode),
+            _buildWelcomeBanner(context, isDarkMode, yellowishColor),
             const SizedBox(height: 20),
             _buildSectionTitle(context, 'Quick Actions'),
             const SizedBox(height: 10),
-            _buildQuickActions(context),
+            _buildQuickActions(context, yellowishColor),
             const SizedBox(height: 20),
             _buildSectionTitle(context, 'Status Overview'),
             const SizedBox(height: 10),
@@ -57,21 +66,62 @@ class DashboardScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, '/help'),
-        child: const Icon(Icons.help),
+        onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Floating Action Button Pressed')),
+          );
+        },
+        backgroundColor: yellowishColor,
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8.0,
+        child: SizedBox(
+          height: 70, // Increase height to avoid overflow
+          child: BottomNavigationBar(
+            currentIndex: _currentIndex,
+            onTap: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+              if (index == 0) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const DashboardScreen()),
+                );
+              } else if (index == 1) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                );
+              }
+            },
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Profile',
+              ),
+            ],
+            selectedItemColor: yellowishColor,
+            unselectedItemColor: Colors.grey,
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildWelcomeBanner(BuildContext context, bool isDarkMode) {
+  Widget _buildWelcomeBanner(BuildContext context, bool isDarkMode, Color yellowishColor) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color:
-            isDarkMode
-                ? Theme.of(context).colorScheme.secondary.withOpacity(0.2)
-                : Theme.of(context).primaryColor,
+        color: isDarkMode ? Colors.grey[800] : yellowishColor,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
@@ -119,7 +169,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildQuickActions(BuildContext context) {
+  Widget _buildQuickActions(BuildContext context, Color yellowishColor) {
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -133,7 +183,7 @@ class DashboardScreen extends StatelessWidget {
           Icons.calculate,
           'Calculator',
           '/calculator',
-          Colors.blueAccent,
+          yellowishColor,
         ),
         _buildActionButton(
           context,
@@ -162,7 +212,7 @@ class DashboardScreen extends StatelessWidget {
   ) {
     return Card(
       elevation: 4,
-      color: Theme.of(context).cardColor, // Adapts to dark mode
+      color: Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: InkWell(
         borderRadius: BorderRadius.circular(15),
@@ -181,9 +231,9 @@ class DashboardScreen extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               label,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ],
         ),
@@ -247,7 +297,7 @@ class DashboardScreen extends StatelessWidget {
     return Card(
       elevation: 2,
       margin: const EdgeInsets.only(bottom: 10),
-      color: Theme.of(context).cardColor, // Adapts to light/dark mode
+      color: Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: ListTile(
         contentPadding: const EdgeInsets.all(10),
@@ -261,9 +311,9 @@ class DashboardScreen extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.w500,
+          ),
         ),
         subtitle: Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
         onTap: () => Navigator.pushNamed(context, '/compliance'),
@@ -272,41 +322,68 @@ class DashboardScreen extends StatelessWidget {
   }
 
   Widget _buildExchangeRateSection(BuildContext context) {
-    return const ExchangeRateWidget();
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.only(bottom: 15),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(10),
+        leading: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: const Color(0xFFE3B505).withOpacity(0.2), // Yellowish background
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: const Icon(Icons.currency_exchange, color: Color(0xFFE3B505)),
+        ),
+        title: const Text(
+          'Exchange Rates',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        subtitle: const Text('View current exchange rates'),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ExchangeRateScreen(),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   void _showNotifications(BuildContext context) {
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            backgroundColor: Theme.of(context).cardColor, // Adapts to dark mode
-            title: const Text('Notifications'),
-            content: SizedBox(
-              width: double.maxFinite,
-              child: ListView(
-                shrinkWrap: true,
-                children: const [
-                  ListTile(
-                    leading: Icon(Icons.check_circle, color: Colors.green),
-                    title: Text('Document Approved'),
-                    subtitle: Text('Invoice_123.pdf has been cleared'),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.warning, color: Colors.orange),
-                    title: Text('Customs Hold'),
-                    subtitle: Text('Shipment #456 requires additional docs'),
-                  ),
-                ],
+      builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).cardColor,
+        title: const Text('Notifications'),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView(
+            shrinkWrap: true,
+            children: const [
+              ListTile(
+                leading: Icon(Icons.check_circle, color: Colors.green),
+                title: Text('Document Approved'),
+                subtitle: Text('Invoice_123.pdf has been cleared'),
               ),
-            ),
-            actions: [
-              TextButton(
-                child: const Text('Dismiss All'),
-                onPressed: () => Navigator.pop(context),
+              ListTile(
+                leading: Icon(Icons.warning, color: Colors.orange),
+                title: Text('Customs Hold'),
+                subtitle: Text('Shipment #456 requires additional docs'),
               ),
             ],
           ),
+        ),
+        actions: [
+          TextButton(
+            child: const Text('Dismiss All'),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      ),
     );
   }
 }

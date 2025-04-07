@@ -19,6 +19,10 @@ class _LoginScreenState extends State<LoginScreen> {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
+    setState(() {
+      _isLoading = true;
+    });
+
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -26,13 +30,13 @@ class _LoginScreenState extends State<LoginScreen> {
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
+      setState(() {
+        _isLoading = false;
+      });
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
-
+    // Simulate a login process
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         _isLoading = false;
@@ -54,6 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // App Icon
             Center(
               child: Icon(
                 Icons.lock_outline,
@@ -62,6 +67,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 20),
+
+            // Welcome Text
             Text(
               'Welcome Back!',
               textAlign: TextAlign.center,
@@ -72,6 +79,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 10),
+
+            // Subheading Text
             Text(
               'Please log in to continue',
               textAlign: TextAlign.center,
@@ -81,6 +90,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 40),
+
+            // Email Input Field
             TextField(
               controller: _emailController,
               decoration: InputDecoration(
@@ -111,8 +122,11 @@ class _LoginScreenState extends State<LoginScreen> {
               style: TextStyle(
                 color: isDarkMode ? Colors.white : Colors.black,
               ),
+              keyboardType: TextInputType.emailAddress,
             ),
             const SizedBox(height: 16),
+
+            // Password Input Field
             TextField(
               controller: _passwordController,
               obscureText: true,
@@ -146,6 +160,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 20),
+
+            // Login Button
             ElevatedButton(
               onPressed: _isLoading ? null : _login,
               style: ElevatedButton.styleFrom(
@@ -161,17 +177,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   ? const CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     )
-                  : Text(
+                  : const Text(
                       'Login',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: _isLoading
-                            ? (isDarkMode ? Colors.white70 : Colors.white)
-                            : Colors.white,
-                      ),
+                      style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
             ),
             const SizedBox(height: 20),
+
+            // Forgot Password Button
             TextButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/forgot-password');
@@ -183,6 +196,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
+
+            // Create New Account Button
             TextButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/createCompany'); // Navigate to Create Company Screen

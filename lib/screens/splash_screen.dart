@@ -35,13 +35,10 @@ class _SplashScreenState extends State<SplashScreen> {
               color: Colors.white, // Keep the icon color white for contrast
             ),
             SizedBox(height: 20),
-            Text(
-              'SCCF App',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.white, // Keep the text color white for contrast
-              ),
+
+            CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              
             ),
           ],
         ),
