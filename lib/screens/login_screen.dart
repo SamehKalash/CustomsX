@@ -19,10 +19,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
-    setState(() {
-      _isLoading = true;
-    });
-
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -30,13 +26,13 @@ class _LoginScreenState extends State<LoginScreen> {
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
-      setState(() {
-        _isLoading = false;
-      });
       return;
     }
 
-    // Simulate a login process
+    setState(() {
+      _isLoading = true;
+    });
+
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         _isLoading = false;
@@ -58,7 +54,6 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // App Icon
             Center(
               child: Icon(
                 Icons.lock_outline,
@@ -67,8 +62,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 20),
-
-            // Welcome Text
             Text(
               'Welcome Back!',
               textAlign: TextAlign.center,
@@ -79,8 +72,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 10),
-
-            // Subheading Text
             Text(
               'Please log in to continue',
               textAlign: TextAlign.center,
@@ -90,8 +81,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 40),
-
-            // Email Input Field
             TextField(
               controller: _emailController,
               decoration: InputDecoration(
@@ -113,20 +102,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: yellowishColor,
-                  ),
+                  borderSide: BorderSide(color: yellowishColor),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              style: TextStyle(
-                color: isDarkMode ? Colors.white : Colors.black,
-              ),
-              keyboardType: TextInputType.emailAddress,
+              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
             ),
             const SizedBox(height: 16),
-
-            // Password Input Field
             TextField(
               controller: _passwordController,
               obscureText: true,
@@ -149,19 +131,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: yellowishColor,
-                  ),
+                  borderSide: BorderSide(color: yellowishColor),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              style: TextStyle(
-                color: isDarkMode ? Colors.white : Colors.black,
-              ),
+              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
             ),
             const SizedBox(height: 20),
-
-            // Login Button
             ElevatedButton(
               onPressed: _isLoading ? null : _login,
               style: ElevatedButton.styleFrom(
@@ -169,22 +145,28 @@ class _LoginScreenState extends State<LoginScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                backgroundColor: _isLoading
-                    ? (isDarkMode ? Colors.grey[800] : Colors.grey)
-                    : yellowishColor,
+                backgroundColor:
+                    _isLoading
+                        ? (isDarkMode ? Colors.grey[800] : Colors.grey)
+                        : yellowishColor,
               ),
-              child: _isLoading
-                  ? const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    )
-                  : const Text(
-                      'Login',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
+              child:
+                  _isLoading
+                      ? const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      )
+                      : Text(
+                        'Login',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color:
+                              _isLoading
+                                  ? (isDarkMode ? Colors.white70 : Colors.white)
+                                  : Colors.white,
+                        ),
+                      ),
             ),
             const SizedBox(height: 20),
-
-            // Forgot Password Button
             TextButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/forgot-password');
@@ -192,20 +174,27 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Text(
                 'Forgot Password?',
                 style: TextStyle(
-                  color: isDarkMode ? yellowishColor.withOpacity(0.7) : yellowishColor,
+                  color:
+                      isDarkMode
+                          ? yellowishColor.withOpacity(0.7)
+                          : yellowishColor,
                 ),
               ),
             ),
-
-            // Create New Account Button
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/createCompany'); // Navigate to Create Company Screen
+                Navigator.pushNamed(
+                  context,
+                  '/createCompany',
+                ); // Navigate to Create Company Screen
               },
               child: Text(
                 'Create New Account',
                 style: TextStyle(
-                  color: isDarkMode ? yellowishColor.withOpacity(0.7) : yellowishColor,
+                  color:
+                      isDarkMode
+                          ? yellowishColor.withOpacity(0.7)
+                          : yellowishColor,
                 ),
               ),
             ),

@@ -79,7 +79,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         shape: const CircularNotchedRectangle(),
         notchMargin: 8.0,
         child: SizedBox(
-          height: 70, // Increase height to avoid overflow
+          height: 75, // Adjusted height to avoid overflow
           child: BottomNavigationBar(
             currentIndex: _currentIndex,
             onTap: (index) {
