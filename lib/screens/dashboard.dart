@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme_provider.dart';
 import '../widgets/status_card.dart';
-import './profile_screen.dart'; // Import Profile Screen
-import './exchange_rate_screen.dart'; // Import Exchange Rate Screen
+import './profile_screen.dart';
+import './exchange_rate_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -14,122 +16,183 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
-
-  final List<Widget> _screens = [
-    const DashboardScreen(), // Home Screen
-    const ProfileScreen(), // Profile Screen
-  ];
+  final Color _primaryColor = const Color(0xFFD4A373);
+  final Color _darkBackground = const Color(0xFF1A120B);
 
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDarkMode = themeProvider.themeMode == ThemeMode.dark;
-
-    // Define the yellowish color for branding consistency
-    const Color yellowishColor = Color(0xFFE3B505);
+    final iconColor = isDarkMode ? const Color(0xFFF5F5DC) : _darkBackground;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Dashboard',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: isDarkMode ? Colors.grey[900] : yellowishColor,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () => _showNotifications(context),
+      appBar: _buildAppBar(context, isDarkMode, iconColor),
+      body: Container(
+        decoration: _buildBackgroundGradient(isDarkMode),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(16.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildWelcomeBanner(isDarkMode),
+              SizedBox(height: 20.h),
+              _buildSectionTitle('Quick Actions', isDarkMode),
+              SizedBox(height: 10.h),
+              _buildQuickActions(context, isDarkMode),
+              SizedBox(height: 20.h),
+              _buildStatusSection(context, isDarkMode),
+              SizedBox(height: 20.h),
+              _buildComplianceUpdates(context, isDarkMode),
+              SizedBox(height: 20.h),
+              _buildExchangeRateSection(context, isDarkMode),
+            ],
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildWelcomeBanner(context, isDarkMode, yellowishColor),
-            const SizedBox(height: 20),
-            _buildSectionTitle(context, 'Quick Actions', isDarkMode),
-            const SizedBox(height: 10),
-            _buildQuickActions(context, yellowishColor, isDarkMode),
-            const SizedBox(height: 20),
-            _buildSectionTitle(context, 'Status Overview', isDarkMode),
-            const SizedBox(height: 10),
-            _buildStatusSection(context, isDarkMode),
-            const SizedBox(height: 20),
-            _buildSectionTitle(context, 'Compliance Updates', isDarkMode),
-            const SizedBox(height: 10),
-            _buildComplianceUpdates(context, isDarkMode),
-            const SizedBox(height: 20),
-            _buildSectionTitle(context, 'Exchange Rates', isDarkMode),
-            const SizedBox(height: 10),
-            _buildExchangeRateSection(context, isDarkMode),
-          ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Floating Action Button Pressed')),
-          );
-        },
-        backgroundColor: yellowishColor,
-        child: const Icon(Icons.add, color: Colors.white),
+      floatingActionButton: _buildFloatingActionButton(),
+      bottomNavigationBar: _buildBottomNavBar(isDarkMode),
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context, bool isDarkMode, Color iconColor) {
+    return AppBar(
+      title: Text(
+        'Dashboard',
+        style: TextStyle(
+          fontWeight: FontWeight.w700,
+          fontSize: 24.sp,
+          color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
+        ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 8.0,
-        child: SizedBox(
-          height: 75, // Adjusted height to avoid overflow
-          child: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-              if (index == 0) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const DashboardScreen()),
-                );
-              } else if (index == 1) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ProfileScreen()),
-                );
-              }
-            },
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
+      backgroundColor: isDarkMode ? _darkBackground : Colors.white,
+      elevation: 4,
+      automaticallyImplyLeading: false,
+      iconTheme: IconThemeData(color: iconColor),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.logout_rounded, size: 24.w, color: iconColor),
+          onPressed: () => _confirmExit(context),
+        ),
+        SizedBox(width: 8.w),
+        _buildNotificationIcon(context, isDarkMode, iconColor),
+        SizedBox(width: 12.w),
+      ],
+    );
+  }
+
+  void _confirmExit(BuildContext context) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            backgroundColor: Theme.of(context).cardColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.r),
+            ),
+            title: Text(
+              'Log Out',
+              style: TextStyle(
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w700,
+                color: _primaryColor,
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: 'Profile',
+            ),
+            content: Text(
+              'Are you sure you want to return to login?',
+              style: TextStyle(fontSize: 16.sp),
+            ),
+            actions: [
+              TextButton(
+                child: Text('Cancel', style: TextStyle(color: Colors.grey)),
+                onPressed: () => Navigator.pop(context),
+              ),
+              TextButton(
+                child: Text('Log Out', style: TextStyle(color: _primaryColor)),
+                onPressed: () {
+                  Navigator.pop(context); // Close dialog
+                  Navigator.pushReplacementNamed(
+                    context,
+                    '/login',
+                  ); // Navigate to login
+                },
               ),
             ],
-            selectedItemColor: yellowishColor,
-            unselectedItemColor: Colors.grey,
+          ),
+    );
+  }
+
+  Widget _buildNotificationIcon(
+    BuildContext context,
+    bool isDarkMode,
+    Color iconColor,
+  ) {
+    return Stack(
+      children: [
+        IconButton(
+          icon: Icon(
+            Icons.notifications_outlined,
+            size: 24.w,
+            color: iconColor,
+          ),
+          onPressed: () => _showNotifications(context, isDarkMode),
+        ),
+        Positioned(
+          right: 8.w,
+          top: 8.h,
+          child: Container(
+            padding: EdgeInsets.all(4.w),
+            decoration: BoxDecoration(
+              color: _primaryColor,
+              shape: BoxShape.circle,
+            ),
+            child: Text(
+              '2',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 10.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ),
+      ],
+    );
+  }
+
+  BoxDecoration _buildBackgroundGradient(bool isDarkMode) {
+    return BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors:
+            isDarkMode
+                ? [
+                  _darkBackground,
+                  Color(0xFF3C2A21),
+                  Color(0xFFD4A373).withOpacity(0.2),
+                ]
+                : [
+                  Colors.white,
+                  Color(0xFFF5F5DC).withOpacity(0.6),
+                  Color(0xFFD4A373).withOpacity(0.1),
+                ],
+        stops: const [0.0, 0.5, 1.0],
       ),
     );
   }
 
-  Widget _buildWelcomeBanner(BuildContext context, bool isDarkMode, Color yellowishColor) {
+  Widget _buildWelcomeBanner(bool isDarkMode) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: isDarkMode ? Colors.grey[800] : yellowishColor,
-        borderRadius: BorderRadius.circular(15),
+        color: isDarkMode ? Color(0xFF3C2A21) : _primaryColor,
+        borderRadius: BorderRadius.circular(15.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
             blurRadius: 10,
-            offset: const Offset(0, 5),
+            offset: Offset(0, 5.h),
           ),
         ],
       ),
@@ -139,24 +202,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Text(
             'Welcome Back,',
             style: TextStyle(
-              fontSize: 18,
-              color: isDarkMode ? Colors.white70 : Colors.white,
+              fontSize: 18.sp,
+              color: isDarkMode ? Color(0xFFF5F5DC) : Colors.white,
             ),
           ),
           Text(
             'Sam!',
             style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-              color: isDarkMode ? Colors.white : Colors.white,
+              fontWeight: FontWeight.w700,
+              fontSize: 24.sp,
+              color: isDarkMode ? Color(0xFFF5F5DC) : Colors.white,
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
           Text(
             'Last login: 2 hours ago',
             style: TextStyle(
-              fontSize: 14,
-              color: isDarkMode ? Colors.white70 : Colors.white70,
+              fontSize: 14.sp,
+              color:
+                  isDarkMode
+                      ? Color(0xFFF5F5DC).withOpacity(0.7)
+                      : Colors.white70,
             ),
           ),
         ],
@@ -164,32 +230,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildSectionTitle(BuildContext context, String title, bool isDarkMode) {
-    return Text(
-      title,
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 20,
-        color: isDarkMode ? Colors.white : Colors.black,
+  Widget _buildSectionTitle(String title, bool isDarkMode) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontWeight: FontWeight.w700,
+          fontSize: 20.sp,
+          color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
+        ),
       ),
     );
   }
 
-  Widget _buildQuickActions(BuildContext context, Color yellowishColor, bool isDarkMode) {
+  Widget _buildQuickActions(BuildContext context, bool isDarkMode) {
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: 3,
-      childAspectRatio: 0.8,
-      mainAxisSpacing: 15,
-      crossAxisSpacing: 15,
+      childAspectRatio: 0.9,
+      mainAxisSpacing: 12.w,
+      crossAxisSpacing: 12.w,
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
       children: [
         _buildActionButton(
           context,
           Icons.calculate,
           'Calculator',
           '/calculator',
-          yellowishColor,
           isDarkMode,
         ),
         _buildActionButton(
@@ -197,7 +266,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Icons.track_changes,
           'Tracking',
           '/tracking',
-          Colors.green,
           isDarkMode,
         ),
         _buildActionButton(
@@ -205,7 +273,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Icons.upload_file,
           'Upload',
           '/documents',
-          Colors.orange,
           isDarkMode,
         ),
       ],
@@ -217,36 +284,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
     IconData icon,
     String label,
     String route,
-    Color color,
     bool isDarkMode,
   ) {
-    return Card(
+    return Material(
+      borderRadius: BorderRadius.circular(15.r),
+      color: isDarkMode ? Color(0xFF3C2A21) : Colors.white,
       elevation: 4,
-      color: isDarkMode ? Colors.grey[700] : Theme.of(context).cardColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: InkWell(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(15.r),
         onTap: () => Navigator.pushNamed(context, route),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.2),
-                shape: BoxShape.circle,
+        child: Padding(
+          padding: EdgeInsets.all(12.w),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: EdgeInsets.all(12.w),
+                decoration: BoxDecoration(
+                  color: _primaryColor.withOpacity(0.2),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, color: _primaryColor, size: 28.w),
               ),
-              child: Icon(icon, color: color, size: 28),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              label,
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                color: isDarkMode ? Colors.white : Colors.black,
+              SizedBox(height: 10.h),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14.sp,
+                  color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -263,7 +334,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           alertLevel: 2,
           isDarkMode: isDarkMode,
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 12.h),
         StatusCard(
           icon: Icons.description,
           title: 'Recent Documents',
@@ -286,6 +357,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Icons.gavel,
           isDarkMode,
         ),
+        SizedBox(height: 12.h),
         _buildUpdateItem(
           context,
           'Egypt Import Restrictions',
@@ -293,6 +365,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Icons.block,
           isDarkMode,
         ),
+        SizedBox(height: 12.h),
         _buildUpdateItem(
           context,
           'Global Trade News',
@@ -311,112 +384,287 @@ class _DashboardScreenState extends State<DashboardScreen> {
     IconData icon,
     bool isDarkMode,
   ) {
-    return Card(
+    return Material(
+      color: isDarkMode ? Color(0xFF3C2A21) : Colors.white,
+      borderRadius: BorderRadius.circular(12.r),
       elevation: 2,
-      margin: const EdgeInsets.only(bottom: 10),
-      color: isDarkMode ? Colors.grey[700] : Theme.of(context).cardColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: ListTile(
-        contentPadding: const EdgeInsets.all(10),
+        contentPadding: EdgeInsets.all(12.w),
         leading: Container(
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.all(10.w),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(10),
+            color: _primaryColor.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(10.r),
           ),
-          child: Icon(icon, color: Theme.of(context).colorScheme.secondary),
+          child: Icon(icon, color: _primaryColor, size: 24.w),
         ),
         title: Text(
           title,
           style: TextStyle(
-            fontWeight: FontWeight.w500,
-            color: isDarkMode ? Colors.white : Colors.black,
+            fontWeight: FontWeight.w600,
+            fontSize: 16.sp,
+            color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
           ),
         ),
         subtitle: Text(
           subtitle,
           style: TextStyle(
-            color: isDarkMode ? Colors.white70 : Colors.black54,
+            fontSize: 14.sp,
+            color:
+                isDarkMode
+                    ? Color(0xFFF5F5DC).withOpacity(0.7)
+                    : _darkBackground.withOpacity(0.6),
           ),
         ),
+        trailing: Icon(Icons.chevron_right, color: _primaryColor),
         onTap: () => Navigator.pushNamed(context, '/compliance'),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
+        ),
       ),
     );
   }
 
   Widget _buildExchangeRateSection(BuildContext context, bool isDarkMode) {
-    return Card(
-      elevation: 4,
-      margin: const EdgeInsets.only(bottom: 15),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      color: isDarkMode ? Colors.grey[700] : Theme.of(context).cardColor,
+    return Material(
+      color: isDarkMode ? Color(0xFF3C2A21) : Colors.white,
+      borderRadius: BorderRadius.circular(12.r),
+      elevation: 2,
       child: ListTile(
-        contentPadding: const EdgeInsets.all(10),
+        contentPadding: EdgeInsets.all(12.w),
         leading: Container(
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.all(10.w),
           decoration: BoxDecoration(
-            color: const Color(0xFFE3B505).withOpacity(0.2), // Yellowish background
-            borderRadius: BorderRadius.circular(10),
+            color: _primaryColor.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(10.r),
           ),
-          child: const Icon(Icons.currency_exchange, color: Color(0xFFE3B505)),
+          child: Icon(
+            Icons.currency_exchange,
+            color: _primaryColor,
+            size: 24.w,
+          ),
         ),
         title: Text(
           'Exchange Rates',
           style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: isDarkMode ? Colors.white : Colors.black,
+            fontWeight: FontWeight.w600,
+            fontSize: 16.sp,
+            color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
           ),
         ),
         subtitle: Text(
           'View current exchange rates',
           style: TextStyle(
-            color: isDarkMode ? Colors.white70 : Colors.black54,
+            fontSize: 14.sp,
+            color:
+                isDarkMode
+                    ? Color(0xFFF5F5DC).withOpacity(0.7)
+                    : _darkBackground.withOpacity(0.6),
           ),
         ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ExchangeRateScreen(),
+        trailing: Icon(Icons.chevron_right, color: _primaryColor),
+        onTap:
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ExchangeRateScreen(),
+              ),
             ),
-          );
-        },
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
+        ),
       ),
     );
   }
 
-  void _showNotifications(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Theme.of(context).cardColor,
-        title: const Text('Notifications'),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: ListView(
-            shrinkWrap: true,
-            children: const [
-              ListTile(
-                leading: Icon(Icons.check_circle, color: Colors.green),
-                title: Text('Document Approved'),
-                subtitle: Text('Invoice_123.pdf has been cleared'),
-              ),
-              ListTile(
-                leading: Icon(Icons.warning, color: Colors.orange),
-                title: Text('Customs Hold'),
-                subtitle: Text('Shipment #456 requires additional docs'),
-              ),
-            ],
+  Widget _buildFloatingActionButton() {
+    return FloatingActionButton(
+      onPressed: () => _showFABAction(context),
+      backgroundColor: _primaryColor,
+      child: Icon(Icons.add, color: Colors.white, size: 28.w),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+    );
+  }
+
+  Widget _buildBottomNavBar(bool isDarkMode) {
+    return Container(
+      decoration: BoxDecoration(
+        color: isDarkMode ? _darkBackground : Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: Offset(0, -2.h),
           ),
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 8.h),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavItem(Icons.home, 'Home', 0, isDarkMode),
+            _buildNavItem(Icons.person, 'Profile', 1, isDarkMode),
+          ],
         ),
-        actions: [
-          TextButton(
-            child: const Text('Dismiss All'),
-            onPressed: () => Navigator.pop(context),
+      ),
+    );
+  }
+
+  Widget _buildNavItem(
+    IconData icon,
+    String label,
+    int index,
+    bool isDarkMode,
+  ) {
+    final isSelected = _currentIndex == index;
+    return GestureDetector(
+      onTap: () => _updateIndex(index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 28.w,
+            color:
+                isSelected
+                    ? _primaryColor
+                    : (isDarkMode
+                        ? Color(0xFFF5F5DC).withOpacity(0.6)
+                        : _darkBackground.withOpacity(0.6)),
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12.sp,
+              color:
+                  isSelected
+                      ? _primaryColor
+                      : (isDarkMode
+                          ? Color(0xFFF5F5DC).withOpacity(0.6)
+                          : _darkBackground.withOpacity(0.6)),
+            ),
           ),
         ],
       ),
     );
+  }
+
+  void _updateIndex(int index) {
+    setState(() => _currentIndex = index);
+    if (index == 0)
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const DashboardScreen()),
+      );
+    if (index == 1)
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const ProfileScreen()),
+      );
+  }
+
+  void _showNotifications(BuildContext context, bool isDarkMode) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder:
+          (context) => Container(
+            decoration: BoxDecoration(
+              color: isDarkMode ? Color(0xFF3C2A21) : Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+            ),
+            padding: EdgeInsets.all(16.w),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 40.w,
+                  height: 4.h,
+                  decoration: BoxDecoration(
+                    color: _primaryColor.withOpacity(0.4),
+                    borderRadius: BorderRadius.circular(2.r),
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                Text(
+                  'Notifications',
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w700,
+                    color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                _buildNotificationItem(
+                  context,
+                  Icons.check_circle,
+                  'Document Approved',
+                  'Invoice_123.pdf has been cleared',
+                  Colors.green,
+                  isDarkMode,
+                ),
+                _buildNotificationItem(
+                  context,
+                  Icons.warning,
+                  'Customs Hold',
+                  'Shipment #456 requires additional docs',
+                  Colors.orange,
+                  isDarkMode,
+                ),
+                SizedBox(height: 16.h),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    'Dismiss All',
+                    style: TextStyle(color: _primaryColor),
+                  ),
+                ),
+              ],
+            ),
+          ),
+    );
+  }
+
+  Widget _buildNotificationItem(
+    BuildContext context,
+    IconData icon,
+    String title,
+    String subtitle,
+    Color iconColor,
+    bool isDarkMode,
+  ) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: Container(
+        padding: EdgeInsets.all(8.w),
+        decoration: BoxDecoration(
+          color: iconColor.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(8.r),
+        ),
+        child: Icon(icon, color: iconColor, size: 24.w),
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: TextStyle(
+          color:
+              isDarkMode
+                  ? Color(0xFFF5F5DC).withOpacity(0.7)
+                  : _darkBackground.withOpacity(0.6),
+        ),
+      ),
+    );
+  }
+
+  void _showFABAction(BuildContext context) {
+    // Add FAB action logic here
   }
 }
