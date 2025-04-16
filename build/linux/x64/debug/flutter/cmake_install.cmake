@@ -1,8 +1,8 @@
-# Install script for directory: /home/sam/SCCF-1/linux/flutter
+# Install script for directory: /home/ziad/Documents/ziad/repos/SCCF-2/linux/flutter
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/sam/SCCF-1/build/linux/x64/debug/bundle")
+  set(CMAKE_INSTALL_PREFIX "/home/ziad/Documents/ziad/repos/SCCF-2/build/linux/x64/debug/bundle")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -35,5 +35,10 @@ endif()
 # Is this installation the result of a crosscompile?
 if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "FALSE")
+endif()
+
+# Set default install directory permissions.
+if(NOT DEFINED CMAKE_OBJDUMP)
+  set(CMAKE_OBJDUMP "/usr/bin/objdump")
 endif()
 

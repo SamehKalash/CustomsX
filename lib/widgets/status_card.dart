@@ -8,7 +8,8 @@ class StatusCard extends StatelessWidget {
   final int alertLevel; // 0 = normal, 1 = warning, 2 = alert
   final VoidCallback? onTap;
   final bool showChevron; // New parameter to control chevron visibility
-  final double borderRadius; // New parameter for customizable border radius
+  final double borderRadius; 
+  final bool isDarkMode;
 
   const StatusCard({
     super.key,
@@ -16,6 +17,7 @@ class StatusCard extends StatelessWidget {
     required this.title,
     required this.value,
     required this.subText,
+    required this.isDarkMode,
     this.alertLevel = 0,
     this.onTap,
     this.showChevron = true, // Default to true

@@ -1,89 +1,126 @@
 import 'package:flutter/material.dart';
 
-class LanguageSelector extends StatelessWidget {
+class LanguageSelector extends StatefulWidget {
   const LanguageSelector({super.key});
 
   @override
+  State<LanguageSelector> createState() => _LanguageSelectorState();
+}
+
+class _LanguageSelectorState extends State<LanguageSelector> {
+  final List<Map<String, String>> _languages = [
+    {'flag': '🇬🇧', 'name': 'English'},
+    {'flag': '🇪🇬', 'name': 'Arabic'},
+    {'flag': '🇩🇪', 'name': 'German'},
+    {'flag': '🇮🇹', 'name': 'Italian'},
+    {'flag': '🇰🇷', 'name': 'Korean'},
+    {'flag': '🇳🇴', 'name': 'Norwegian'},
+    {'flag': '🇵🇱', 'name': 'Polish'},
+  ];
+
+  String _selectedLanguage = 'English';
+  String _searchQuery = '';
+
+  @override
   Widget build(BuildContext context) {
+    final filteredLanguages = _languages
+        .where((lang) =>
+            lang['name']!.toLowerCase().contains(_searchQuery.toLowerCase()))
+        .toList();
+
     return Scaffold(
-      body: Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 20,
-                spreadRadius: 2,
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Choose Language',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueGrey[800],
-                ),
-              ),
-              const SizedBox(height: 32),
-              _buildLanguageCard(
-                context,
-                flag: '🇪🇬',
-                language: 'Arabic',
-                onTap: () => Navigator.pushReplacementNamed(context, '/splash'),
-              ),
-              const SizedBox(height: 16),
-              _buildLanguageCard(
-                context,
-                flag: '🇬🇧',
-                language: 'English',
-                onTap: () => Navigator.pushReplacementNamed(context, '/splash'),
-              ),
-            ],
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          'Choose the language',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildLanguageCard(
-    BuildContext context, {
-    required String flag,
-    required String language,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.blueGrey[50],
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.blueGrey[100]!),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(flag, style: const TextStyle(fontSize: 32)),
-            const SizedBox(width: 16),
-            Text(
-              language,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Colors.blueGrey[800],
+      body: Column(
+        children: [
+          // Search Bar
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: TextField(
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
+              decoration: InputDecoration(
+                hintText: 'Find a language',
+                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                filled: true,
+                fillColor: Colors.grey[200],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+
+          // Language List
+          Expanded(
+            child: ListView.builder(
+              itemCount: filteredLanguages.length,
+              itemBuilder: (context, index) {
+                final language = filteredLanguages[index];
+                return ListTile(
+                  leading: Text(
+                    language['flag']!,
+                    style: const TextStyle(fontSize: 24),
+                  ),
+                  title: Text(
+                    language['name']!,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  trailing: _selectedLanguage == language['name']
+                      ? const Icon(Icons.check_circle, color: Colors.blue)
+                      : null,
+                  onTap: () {
+                    setState(() {
+                      _selectedLanguage = language['name']!;
+                    });
+                  },
+                );
+              },
+            ),
+          ),
+
+          // Continue Button
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/splash');
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                minimumSize: const Size(double.infinity, 50),
+              ),
+              child: const Text(
+                'Keep going',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

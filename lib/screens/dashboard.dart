@@ -2,34 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme_provider.dart';
 import '../widgets/status_card.dart';
-import './settings.dart';
-import '../widgets/exhannge_rate.dart';
+import './profile_screen.dart'; // Import Profile Screen
+import './exchange_rate_screen.dart'; // Import Exchange Rate Screen
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  int _currentIndex = 0;
+
+  final List<Widget> _screens = [
+    const DashboardScreen(), // Home Screen
+    const ProfileScreen(), // Profile Screen
+  ];
 
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDarkMode = themeProvider.themeMode == ThemeMode.dark;
 
+    // Define the yellowish color for branding consistency
+    const Color yellowishColor = Color(0xFFE3B505);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dashboard'),
+        title: const Text(
+          'Dashboard',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: isDarkMode ? Colors.grey[900] : yellowishColor,
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications),
             onPressed: () => _showNotifications(context),
-          ),
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed:
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SettingsScreen(),
-                  ),
-                ),
           ),
         ],
       ),
@@ -38,40 +47,83 @@ class DashboardScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildWelcomeBanner(context, isDarkMode),
+            _buildWelcomeBanner(context, isDarkMode, yellowishColor),
             const SizedBox(height: 20),
-            _buildSectionTitle(context, 'Quick Actions'),
+            _buildSectionTitle(context, 'Quick Actions', isDarkMode),
             const SizedBox(height: 10),
-            _buildQuickActions(context),
+            _buildQuickActions(context, yellowishColor, isDarkMode),
             const SizedBox(height: 20),
-            _buildSectionTitle(context, 'Status Overview'),
+            _buildSectionTitle(context, 'Status Overview', isDarkMode),
             const SizedBox(height: 10),
-            _buildStatusSection(context),
+            _buildStatusSection(context, isDarkMode),
             const SizedBox(height: 20),
-            _buildSectionTitle(context, 'Compliance Updates'),
+            _buildSectionTitle(context, 'Compliance Updates', isDarkMode),
             const SizedBox(height: 10),
-            _buildComplianceUpdates(context),
+            _buildComplianceUpdates(context, isDarkMode),
             const SizedBox(height: 20),
-            _buildExchangeRateSection(context),
+            _buildSectionTitle(context, 'Exchange Rates', isDarkMode),
+            const SizedBox(height: 10),
+            _buildExchangeRateSection(context, isDarkMode),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, '/help'),
-        child: const Icon(Icons.help),
+        onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Floating Action Button Pressed')),
+          );
+        },
+        backgroundColor: yellowishColor,
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8.0,
+        child: SizedBox(
+          height: 75, // Adjusted height to avoid overflow
+          child: BottomNavigationBar(
+            currentIndex: _currentIndex,
+            onTap: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+              if (index == 0) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const DashboardScreen()),
+                );
+              } else if (index == 1) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                );
+              }
+            },
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Profile',
+              ),
+            ],
+            selectedItemColor: yellowishColor,
+            unselectedItemColor: Colors.grey,
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildWelcomeBanner(BuildContext context, bool isDarkMode) {
+  Widget _buildWelcomeBanner(BuildContext context, bool isDarkMode, Color yellowishColor) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color:
-            isDarkMode
-                ? Theme.of(context).colorScheme.secondary.withOpacity(0.2)
-                : Theme.of(context).primaryColor,
+        color: isDarkMode ? Colors.grey[800] : yellowishColor,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
@@ -86,21 +138,24 @@ class DashboardScreen extends StatelessWidget {
         children: [
           Text(
             'Welcome Back,',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            style: TextStyle(
+              fontSize: 18,
               color: isDarkMode ? Colors.white70 : Colors.white,
             ),
           ),
           Text(
             'Sam!',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
+              fontSize: 24,
               color: isDarkMode ? Colors.white : Colors.white,
             ),
           ),
           const SizedBox(height: 10),
           Text(
             'Last login: 2 hours ago',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            style: TextStyle(
+              fontSize: 14,
               color: isDarkMode ? Colors.white70 : Colors.white70,
             ),
           ),
@@ -109,17 +164,18 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(BuildContext context, String title) {
+  Widget _buildSectionTitle(BuildContext context, String title, bool isDarkMode) {
     return Text(
       title,
-      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+      style: TextStyle(
         fontWeight: FontWeight.bold,
-        color: Theme.of(context).textTheme.titleLarge?.color,
+        fontSize: 20,
+        color: isDarkMode ? Colors.white : Colors.black,
       ),
     );
   }
 
-  Widget _buildQuickActions(BuildContext context) {
+  Widget _buildQuickActions(BuildContext context, Color yellowishColor, bool isDarkMode) {
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -133,7 +189,8 @@ class DashboardScreen extends StatelessWidget {
           Icons.calculate,
           'Calculator',
           '/calculator',
-          Colors.blueAccent,
+          yellowishColor,
+          isDarkMode,
         ),
         _buildActionButton(
           context,
@@ -141,6 +198,7 @@ class DashboardScreen extends StatelessWidget {
           'Tracking',
           '/tracking',
           Colors.green,
+          isDarkMode,
         ),
         _buildActionButton(
           context,
@@ -148,6 +206,7 @@ class DashboardScreen extends StatelessWidget {
           'Upload',
           '/documents',
           Colors.orange,
+          isDarkMode,
         ),
       ],
     );
@@ -159,10 +218,11 @@ class DashboardScreen extends StatelessWidget {
     String label,
     String route,
     Color color,
+    bool isDarkMode,
   ) {
     return Card(
       elevation: 4,
-      color: Theme.of(context).cardColor, // Adapts to dark mode
+      color: isDarkMode ? Colors.grey[700] : Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: InkWell(
         borderRadius: BorderRadius.circular(15),
@@ -181,9 +241,10 @@ class DashboardScreen extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               label,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: isDarkMode ? Colors.white : Colors.black,
+              ),
             ),
           ],
         ),
@@ -191,29 +252,31 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusSection(BuildContext context) {
+  Widget _buildStatusSection(BuildContext context, bool isDarkMode) {
     return Column(
       children: [
-        const StatusCard(
+        StatusCard(
           icon: Icons.pending_actions,
           title: 'Pending Shipments',
           value: '3 Items',
           subText: '2 in Customs Review',
           alertLevel: 2,
+          isDarkMode: isDarkMode,
         ),
         const SizedBox(height: 10),
-        const StatusCard(
+        StatusCard(
           icon: Icons.description,
           title: 'Recent Documents',
           value: '5 Files',
           subText: 'Last upload: 2h ago',
           alertLevel: 0,
+          isDarkMode: isDarkMode,
         ),
       ],
     );
   }
 
-  Widget _buildComplianceUpdates(BuildContext context) {
+  Widget _buildComplianceUpdates(BuildContext context, bool isDarkMode) {
     return Column(
       children: [
         _buildUpdateItem(
@@ -221,18 +284,21 @@ class DashboardScreen extends StatelessWidget {
           'Egypt Customs Regulations',
           'New tariff codes effective March 2024',
           Icons.gavel,
+          isDarkMode,
         ),
         _buildUpdateItem(
           context,
           'Egypt Import Restrictions',
           'Updated restricted items list',
           Icons.block,
+          isDarkMode,
         ),
         _buildUpdateItem(
           context,
           'Global Trade News',
           'Latest international trade agreements',
           Icons.public,
+          isDarkMode,
         ),
       ],
     );
@@ -243,11 +309,12 @@ class DashboardScreen extends StatelessWidget {
     String title,
     String subtitle,
     IconData icon,
+    bool isDarkMode,
   ) {
     return Card(
       elevation: 2,
       margin: const EdgeInsets.only(bottom: 10),
-      color: Theme.of(context).cardColor, // Adapts to light/dark mode
+      color: isDarkMode ? Colors.grey[700] : Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: ListTile(
         contentPadding: const EdgeInsets.all(10),
@@ -261,52 +328,95 @@ class DashboardScreen extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: isDarkMode ? Colors.white : Colors.black,
+          ),
         ),
-        subtitle: Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(
+            color: isDarkMode ? Colors.white70 : Colors.black54,
+          ),
+        ),
         onTap: () => Navigator.pushNamed(context, '/compliance'),
       ),
     );
   }
 
-  Widget _buildExchangeRateSection(BuildContext context) {
-    return const ExchangeRateWidget();
+  Widget _buildExchangeRateSection(BuildContext context, bool isDarkMode) {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.only(bottom: 15),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      color: isDarkMode ? Colors.grey[700] : Theme.of(context).cardColor,
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(10),
+        leading: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: const Color(0xFFE3B505).withOpacity(0.2), // Yellowish background
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: const Icon(Icons.currency_exchange, color: Color(0xFFE3B505)),
+        ),
+        title: Text(
+          'Exchange Rates',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: isDarkMode ? Colors.white : Colors.black,
+          ),
+        ),
+        subtitle: Text(
+          'View current exchange rates',
+          style: TextStyle(
+            color: isDarkMode ? Colors.white70 : Colors.black54,
+          ),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ExchangeRateScreen(),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   void _showNotifications(BuildContext context) {
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            backgroundColor: Theme.of(context).cardColor, // Adapts to dark mode
-            title: const Text('Notifications'),
-            content: SizedBox(
-              width: double.maxFinite,
-              child: ListView(
-                shrinkWrap: true,
-                children: const [
-                  ListTile(
-                    leading: Icon(Icons.check_circle, color: Colors.green),
-                    title: Text('Document Approved'),
-                    subtitle: Text('Invoice_123.pdf has been cleared'),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.warning, color: Colors.orange),
-                    title: Text('Customs Hold'),
-                    subtitle: Text('Shipment #456 requires additional docs'),
-                  ),
-                ],
+      builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).cardColor,
+        title: const Text('Notifications'),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView(
+            shrinkWrap: true,
+            children: const [
+              ListTile(
+                leading: Icon(Icons.check_circle, color: Colors.green),
+                title: Text('Document Approved'),
+                subtitle: Text('Invoice_123.pdf has been cleared'),
               ),
-            ),
-            actions: [
-              TextButton(
-                child: const Text('Dismiss All'),
-                onPressed: () => Navigator.pop(context),
+              ListTile(
+                leading: Icon(Icons.warning, color: Colors.orange),
+                title: Text('Customs Hold'),
+                subtitle: Text('Shipment #456 requires additional docs'),
               ),
             ],
           ),
+        ),
+        actions: [
+          TextButton(
+            child: const Text('Dismiss All'),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      ),
     );
   }
 }
