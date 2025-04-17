@@ -6,8 +6,6 @@ import 'package:window_size/window_size.dart';
 
 // Screen imports
 import 'screens/welcome_screen.dart';
-import 'screens/chooselang.dart';
-import 'screens/splash_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/create_company_screen.dart';
 import 'screens/create_account_screen.dart';

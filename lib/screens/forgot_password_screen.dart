@@ -1,4 +1,7 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -10,28 +13,28 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
   String? _emailError;
-
-  // Define the yellowish color to match the dashboard theme
-  static const Color yellowishColor = Color(0xFFE3B505);
+  final Color _primaryColor = const Color(0xFFD4A373);
+  final Color _darkBackground = const Color(0xFF1A120B);
 
   void _resetPassword() {
     final email = _emailController.text.trim();
-
     setState(() {
-      _emailError = email.isEmpty || !RegExp(r'^[^@]+@[^@]+\.[^@]+$').hasMatch(email)
-          ? 'Enter a valid email address'
-          : null;
+      _emailError =
+          email.isEmpty || !RegExp(r'^[^@]+@[^@]+\.[^@]+$').hasMatch(email)
+              ? 'Enter a valid email address'
+              : null;
     });
 
     if (_emailError == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Password reset link sent!'),
-          backgroundColor: Colors.green,
+        SnackBar(
+          content: Text(
+            'Password reset link sent!',
+            style: TextStyle(fontSize: 14.sp),
+          ),
+          backgroundColor: _primaryColor,
         ),
       );
-
-      // Simulate sending a password reset email
       Navigator.pop(context);
     }
   }
@@ -42,69 +45,111 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Forgot Password'),
-        backgroundColor: isDarkMode ? Colors.grey[900] : yellowishColor,
+        title: Text(
+          'Forgot Password',
+          style: TextStyle(
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w700,
+            color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
+          ),
+        ),
+        backgroundColor: isDarkMode ? _darkBackground : Colors.white,
+        elevation: 4,
+        iconTheme: IconThemeData(
+          color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Enter your email to reset your password',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: isDarkMode ? Colors.white : Colors.black,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors:
+                isDarkMode
+                    ? [
+                      _darkBackground,
+                      Color(0xFF3C2A21),
+                      Color(0xFFD4A373).withOpacity(0.2),
+                    ]
+                    : [
+                      Colors.white,
+                      Color(0xFFF5F5DC).withOpacity(0.6),
+                      Color(0xFFD4A373).withOpacity(0.1),
+                    ],
+            stops: const [0.0, 0.5, 1.0],
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(20.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Enter your email to reset password',
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
+                  height: 1.5,
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            TextFormField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
-                labelStyle: TextStyle(
-                  color: isDarkMode ? Colors.white70 : Colors.black,
+              SizedBox(height: 30.h),
+              TextFormField(
+                controller: _emailController,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
                 ),
-                prefixIcon: Icon(
-                  Icons.email,
-                  color: isDarkMode ? Colors.white70 : yellowishColor,
+                decoration: InputDecoration(
+                  labelText: 'Email Address',
+                  labelStyle: TextStyle(
+                    fontSize: 14.sp,
+                    color:
+                        isDarkMode
+                            ? Color(0xFFF5F5DC).withOpacity(0.7)
+                            : _darkBackground.withOpacity(0.6),
+                  ),
+                  prefixIcon: Icon(
+                    Icons.email_rounded,
+                    color: _primaryColor,
+                    size: 24.w,
+                  ),
+                  filled: true,
+                  fillColor: isDarkMode ? Color(0xFF3C2A21) : Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide(color: _primaryColor, width: 1.w),
+                  ),
+                  errorText: _emailError,
+                  errorStyle: TextStyle(fontSize: 12.sp),
                 ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.0),
+                keyboardType: TextInputType.emailAddress,
+              ),
+              SizedBox(height: 40.h),
+              ElevatedButton(
+                onPressed: _resetPassword,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _primaryColor,
+                  foregroundColor: Colors.white,
+                  minimumSize: Size(double.infinity, 50.h),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  elevation: 4,
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: isDarkMode ? Colors.white70 : Colors.grey,
+                child: Text(
+                  'Send Link',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: yellowishColor),
-                ),
-                errorText: _emailError,
-                filled: true,
-                fillColor: isDarkMode ? Colors.grey[850] : Colors.white,
               ),
-              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            const SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: _resetPassword,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                backgroundColor: isDarkMode ? Colors.grey[800] : yellowishColor,
-                foregroundColor: Colors.white, // Text color
-              ),
-              child: const Text(
-                'Reset Password',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

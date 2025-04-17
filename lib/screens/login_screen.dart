@@ -1,8 +1,11 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme_provider.dart';
 import 'dashboard.dart'; // Make sure this import exists
+import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -118,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Welcome Back',
+                    'Welcome',
                     style: TextStyle(
                       fontSize: 32.sp,
                       fontWeight: FontWeight.w700,
@@ -204,7 +207,11 @@ class _LoginScreenState extends State<LoginScreen>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextButton(
-                        onPressed: () {},
+                        onPressed:
+                            () => Navigator.pushNamed(
+                              context,
+                              '/forgot-password',
+                            ),
                         child: Text(
                           'Forgot Password?',
                           style: TextStyle(
@@ -218,7 +225,9 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                       SizedBox(width: 20.w),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/createAccount');
+                        },
                         child: Text(
                           'Create Account',
                           style: TextStyle(

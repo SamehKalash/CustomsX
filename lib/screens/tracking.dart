@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import '../widgets/shipment_timeline.dart';
 import '../models/shipment.dart';
@@ -50,19 +52,28 @@ class ShipmentTrackingScreen extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: 'Enter tracking number',
                 hintStyle: TextStyle(
-                  color: isDarkMode ? Colors.white70 : Colors.grey, // Adjust hint text color
+                  color:
+                      isDarkMode
+                          ? Colors.white70
+                          : Colors.grey, // Adjust hint text color
                 ),
                 suffixIcon: IconButton(
                   icon: Icon(
                     Icons.qr_code_scanner,
-                    color: isDarkMode ? Colors.white : yellowishColor, // Adjust icon color
+                    color:
+                        isDarkMode
+                            ? Colors.white
+                            : yellowishColor, // Adjust icon color
                   ),
                   onPressed: () => _scanBarcode(context),
                 ),
                 border: const OutlineInputBorder(),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: isDarkMode ? Colors.white70 : Colors.grey, // Adjust border color
+                    color:
+                        isDarkMode
+                            ? Colors.white70
+                            : Colors.grey, // Adjust border color
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
@@ -72,15 +83,14 @@ class ShipmentTrackingScreen extends StatelessWidget {
                 ),
               ),
               style: TextStyle(
-                color: isDarkMode ? Colors.white : Colors.black, // Adjust input text color
+                color:
+                    isDarkMode
+                        ? Colors.white
+                        : Colors.black, // Adjust input text color
               ),
             ),
           ),
-          Expanded(
-            child: ShipmentTimeline(
-              statuses: _statuses,
-            ),
-          ),
+          Expanded(child: ShipmentTimeline(statuses: _statuses)),
         ],
       ),
     );
@@ -94,32 +104,45 @@ class ShipmentTrackingScreen extends StatelessWidget {
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white, // Adjust dialog background
-        title: Text(
-          'Barcode Scanning',
-          style: TextStyle(
-            color: isDarkMode ? Colors.white : Colors.black, // Adjust title color
-          ),
-        ),
-        content: Text(
-          'Scanner functionality to be implemented',
-          style: TextStyle(
-            color: isDarkMode ? Colors.white70 : Colors.grey, // Adjust content color
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              'OK',
+      builder:
+          (context) => AlertDialog(
+            backgroundColor:
+                isDarkMode
+                    ? Colors.grey[900]
+                    : Colors.white, // Adjust dialog background
+            title: Text(
+              'Barcode Scanning',
               style: TextStyle(
-                color: isDarkMode ? yellowishColor.withOpacity(0.8) : yellowishColor, // Adjust button color
+                color:
+                    isDarkMode
+                        ? Colors.white
+                        : Colors.black, // Adjust title color
               ),
             ),
+            content: Text(
+              'Scanner functionality to be implemented',
+              style: TextStyle(
+                color:
+                    isDarkMode
+                        ? Colors.white70
+                        : Colors.grey, // Adjust content color
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  'OK',
+                  style: TextStyle(
+                    color:
+                        isDarkMode
+                            ? yellowishColor.withOpacity(0.8)
+                            : yellowishColor, // Adjust button color
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 }
