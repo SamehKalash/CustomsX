@@ -27,6 +27,8 @@ dependencies:
   cached_network_image: ^3.3.0 # For optimized image loading
   window_size: ^0.1.0
   simple_shadow: ^0.3.0 # For better shadows
+  http: ^1.1.0  # For API calls
+  flutter_dotenv: ^5.1.0  # For environment variables
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -53,6 +55,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+  - .env  # For environment variables
+  
     #- assets/countries.json
   # To add assets to your application, add an assets section, like this:
   # assets:

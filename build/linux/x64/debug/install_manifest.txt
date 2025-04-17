@@ -11,5 +11,5 @@
 /home/sam/SCCF-1/build/linux/x64/debug/bundle/data/flutter_assets/shaders/ink_sparkle.frag
 /home/sam/SCCF-1/build/linux/x64/debug/bundle/data/flutter_assets/AssetManifest.bin
 /home/sam/SCCF-1/build/linux/x64/debug/bundle/data/flutter_assets/fonts/MaterialIcons-Regular.otf
-/home/sam/SCCF-1/build/linux/x64/debug/bundle/data/flutter_assets/assets/countries.json
 /home/sam/SCCF-1/build/linux/x64/debug/bundle/data/flutter_assets/NOTICES.Z
+/home/sam/SCCF-1/build/linux/x64/debug/bundle/data/flutter_assets/.env

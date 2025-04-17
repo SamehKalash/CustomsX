@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:window_size/window_size.dart';
 
 // Screen imports
@@ -23,17 +23,25 @@ import 'theme/theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Load environment variables with error handling
+  try {
+    await dotenv.load(fileName: ".env");
+    print('Environment variables loaded successfully');
+    print('API URL: ${dotenv.env['API_URL']}');
+  } catch (e) {
+    print('Error loading .env file: $e');
+    // Set default fallback values
+    dotenv.env['API_URL'] = 'http://localhost:5000';
+  }
+
   // Configure window for Linux desktop
   if (Platform.isLinux) {
     _configureLinuxWindow();
   }
 
-  // Initialize Firebase
-  await _initializeFirebase();
-
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
+    MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => ThemeProvider())],
       child: const GlobalClearApp(),
     ),
   );
@@ -46,28 +54,11 @@ void _configureLinuxWindow() {
       0,
       0,
       414, // iPhone 14 Pro width
-      640, // iPhone 14 Pro height
+      896, // iPhone 14 Pro height
     ),
   );
-  setWindowMinSize(const Size(360, 640)); // Minimum phone size
-  setWindowMaxSize(const Size(414, 896)); // Maximum phone size
-}
-
-Future<void> _initializeFirebase() async {
-  try {
-    await Firebase.initializeApp(
-      options: const FirebaseOptions(
-        apiKey: "YOUR_API_KEY",
-        appId: "YOUR_APP_ID",
-        messagingSenderId: "YOUR_SENDER_ID",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-      ),
-    );
-    debugPrint("Firebase initialized successfully");
-  } catch (e) {
-    debugPrint("Firebase initialization error: $e");
-  }
+  setWindowMinSize(const Size(360, 640));
+  setWindowMaxSize(const Size(414, 896));
 }
 
 class GlobalClearApp extends StatelessWidget {
@@ -85,12 +76,14 @@ class GlobalClearApp extends StatelessWidget {
       darkTheme: darkTheme,
       initialRoute: '/welcome',
       routes: _appRoutes(),
-      onUnknownRoute:
-          (settings) => MaterialPageRoute(
-            builder:
-                (context) =>
-                    const Scaffold(body: Center(child: Text('Page not found'))),
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaleFactor: 1.0, // Disable system text scaling
           ),
+          child: child!,
+        );
+      },
     );
   }
 

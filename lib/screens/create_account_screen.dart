@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
 import '../theme/theme_provider.dart';
+import '../services/api_service.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -43,17 +44,27 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   Future<void> _loadCountryData() async {
     try {
-      final data = await rootBundle.loadString('/assets/countries.json');
-      final jsonList = json.decode(data) as List<dynamic>;
+      final countries = await ApiService.getCountries();
       setState(() {
-        _countries = jsonList;
-        _countryCodes = _processCountryCodes(jsonList);
+        _countries = countries;
+        _countryCodes = _processCountryCodes(countries);
         if (_countryCodes.isNotEmpty) {
           _countryCode = _countryCodes.first['code'];
         }
       });
     } catch (e) {
-      print('Error loading country data: $e');
+      print('Error loading countries: $e');
+      // Fallback to local file if needed
+      try {
+        final data = await rootBundle.loadString('assets/countries.json');
+        final jsonList = json.decode(data) as List<dynamic>;
+        setState(() {
+          _countries = jsonList;
+          _countryCodes = _processCountryCodes(jsonList);
+        });
+      } catch (e) {
+        print('Local country data error: $e');
+      }
     }
   }
 
@@ -127,11 +138,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
                   // Contact Information Section
                   _buildSectionTitle('Contact Information', isDarkMode),
-                  _buildAddressField(isDarkMode),
-                  SizedBox(height: 16.h),
                   _buildCountryDropdown(isDarkMode),
                   SizedBox(height: 16.h),
-                  _buildLandlineField(isDarkMode),
+                  _buildAddressField(isDarkMode),
                   SizedBox(height: 16.h),
                   _buildMobileNumberField(isDarkMode),
 
@@ -227,7 +236,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         );
         if (date != null) {
           _dobController.text =
-              "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}";
+              date.toIso8601String().split('T')[0]; // YYYY-MM-DD format
         }
       },
       validator: (value) {
@@ -246,16 +255,29 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         isDarkMode: isDarkMode,
       ),
       items:
-          ['Male', 'Female', 'Other']
-              .map(
-                (gender) => DropdownMenuItem(
-                  value: gender,
-                  child: Text(gender, style: TextStyle(fontSize: 14.sp)),
+          ['Male', 'Female', 'Other'].map((gender) {
+            return DropdownMenuItem(
+              value: gender,
+              child: Text(
+                gender,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color:
+                      isDarkMode
+                          ? Color(0xFFF5F5DC)
+                          : Color(0xFF1A120B), // Fixed color
                 ),
-              )
-              .toList(),
+              ),
+            );
+          }).toList(),
       onChanged: (value) => setState(() => _gender = value),
       validator: (value) => value == null ? 'Please select gender' : null,
+      dropdownColor: isDarkMode ? Color(0xFF3C2A21) : Colors.white, // Add this
+      style: TextStyle(
+        // Add this
+        color: isDarkMode ? Color(0xFFF5F5DC) : Color(0xFF1A120B),
+        fontSize: 14.sp,
+      ),
     );
   }
 
@@ -274,17 +296,17 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   }
 
   Widget _buildCountryDropdown(bool isDarkMode) {
-    return DropdownButtonFormField<String>(
-      value: _country,
+    return DropdownButtonFormField<Map<String, dynamic>>(
+      value: _countries.isNotEmpty ? _countries.first : null,
       decoration: _inputDecoration(
         label: 'Country',
         icon: Icons.flag,
         isDarkMode: isDarkMode,
       ),
       items:
-          _countries.map<DropdownMenuItem<String>>((country) {
+          _countries.map<DropdownMenuItem<Map<String, dynamic>>>((country) {
             return DropdownMenuItem(
-              value: country['name'],
+              value: country,
               child: Row(
                 children: [
                   Text(country['emoji'], style: TextStyle(fontSize: 20.sp)),
@@ -292,7 +314,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   Text(
                     country['name'],
                     style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: 12.sp,
                       color: isDarkMode ? Color(0xFFF5F5DC) : Color(0xFF1A120B),
                     ),
                   ),
@@ -300,24 +322,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               ),
             );
           }).toList(),
-      onChanged: (value) => setState(() => _country = value),
+      onChanged:
+          (value) => setState(() {
+            _country = value?['name'];
+            _countryCode = value?['dialCodes']?.first;
+          }),
       validator: (value) => value == null ? 'Please select country' : null,
-    );
-  }
-
-  Widget _buildLandlineField(bool isDarkMode) {
-    return _buildTextField(
-      controller: _landlineController,
-      label: 'Landline Number',
-      hint: 'Enter landline number',
-      icon: Icons.phone,
-      isDarkMode: isDarkMode,
-      keyboardType: TextInputType.phone,
-      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      validator: (value) {
-        if (value == null || value.isEmpty) return 'Required field';
-        return null;
-      },
     );
   }
 
@@ -496,34 +506,110 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   }
 
   Widget _buildSubmitButton(bool isDarkMode) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () {
-          if (_formKey.currentState!.validate() && _termsAccepted) {
-            // Handle form submission
-            Navigator.pushReplacementNamed(context, '/login');
-          } else if (!_termsAccepted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Please accept the terms & conditions'),
-                backgroundColor: Colors.red,
+    return StatefulBuilder(
+      builder: (context, setState) {
+        bool _isLoading = false;
+
+        return SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed:
+                _isLoading
+                    ? null
+                    : () async {
+                      if (_formKey.currentState!.validate() && _termsAccepted) {
+                        setState(() => _isLoading = true);
+
+                        try {
+                          // Prepare user data map
+                          final userData = {
+                            'firstName': _firstNameController.text,
+                            'lastName': _lastNameController.text,
+                            'email': _emailController.text,
+                            'password': _passwordController.text,
+                            'dob':
+                                _dobController
+                                    .text, // Should be in ISO 8601 format
+                            'gender': _gender,
+                            'address': _addressController.text,
+                            'country': _country,
+                            'countryCode': _countryCode,
+                            'mobile': '$_countryCode${_mobileController.text}',
+                          };
+
+                          // Send registration request
+                          final response = await ApiService.registerUser(
+                            userData,
+                          );
+
+                          // Show success message
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                response['message'] ??
+                                    'Registration successful!',
+                              ),
+                              backgroundColor: Colors.green,
+                              duration: const Duration(seconds: 3),
+                            ),
+                          );
+
+                          // Navigate to login screen
+                          Navigator.pushReplacementNamed(context, '/login');
+                        } catch (e) {
+                          // Show error message
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                e.toString().replaceAll('Exception: ', ''),
+                              ),
+                              backgroundColor: Colors.red,
+                              duration: const Duration(seconds: 3),
+                            ),
+                          );
+                        } finally {
+                          setState(() => _isLoading = false);
+                        }
+                      } else if (!_termsAccepted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Please accept the terms & conditions',
+                            ),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: _primaryColor,
+              padding: EdgeInsets.symmetric(vertical: 16.h),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.r),
               ),
-            );
-          }
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: _primaryColor,
-          padding: EdgeInsets.symmetric(vertical: 16.h),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
+              disabledBackgroundColor: _primaryColor.withOpacity(0.6),
+            ),
+            child:
+                _isLoading
+                    ? SizedBox(
+                      height: 24.h,
+                      width: 24.h,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 3.w,
+                      ),
+                    )
+                    : Text(
+                      'Create Account',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
           ),
-        ),
-        child: Text(
-          'Create Account',
-          style: TextStyle(fontSize: 16.sp, color: Colors.white),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -616,6 +702,18 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         borderSide: BorderSide(color: _primaryColor, width: 1.w),
       ),
       contentPadding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+      // Add these to remove blue highlights
+      focusColor: _primaryColor,
+      hoverColor: _primaryColor,
+      labelStyle: TextStyle(
+        color: isDarkMode ? Color(0xFFF5F5DC) : Color(0xFF1A120B),
+      ),
+      hintStyle: TextStyle(
+        color:
+            isDarkMode
+                ? Color(0xFFF5F5DC).withOpacity(0.7)
+                : Color(0xFF1A120B).withOpacity(0.7),
+      ),
     );
   }
 }
