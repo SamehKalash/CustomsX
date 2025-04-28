@@ -20,6 +20,8 @@ import 'screens/forgot_password_screen.dart';
 import 'theme/theme_provider.dart';
 import 'theme/theme.dart';
 
+import 'providers/user_provider.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -41,7 +43,10 @@ void main() async {
 
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => ThemeProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+      ],
       child: const GlobalClearApp(),
     ),
   );

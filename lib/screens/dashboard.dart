@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import '../theme/theme_provider.dart';
 import '../widgets/status_card.dart';
 import './profile_screen.dart';
 import './exchange_rate_screen.dart';
+import '../providers/user_provider.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -109,11 +111,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               TextButton(
                 child: Text('Log Out', style: TextStyle(color: _primaryColor)),
                 onPressed: () {
-                  Navigator.pop(context); // Close dialog
-                  Navigator.pushReplacementNamed(
-                    context,
-                    '/login',
-                  ); // Navigate to login
+                  Navigator.pop(context);
+                  Navigator.pushReplacementNamed(context, '/login');
                 },
               ),
             ],
@@ -182,6 +181,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildWelcomeBanner(bool isDarkMode) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final user = userProvider.user;
+    final lastLogin = userProvider.lastLogin;
+
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(20.w),
@@ -207,7 +210,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
           Text(
-            'Sam!',
+            // Display actual user name or guest fallback
+            user != null ? '${user['firstName']} ${user['lastName']}' : 'Guest',
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 24.sp,
@@ -216,18 +220,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           SizedBox(height: 10.h),
           Text(
-            'Last login: 2 hours ago',
+            _getLastLoginText(lastLogin),
             style: TextStyle(
               fontSize: 14.sp,
               color:
                   isDarkMode
-                      ? Color(0xFFF5F5DC).withOpacity(0.7)
+                      ? const Color(0xFFF5F5DC).withOpacity(0.7)
                       : Colors.white70,
             ),
           ),
         ],
       ),
     );
+  }
+
+  String _getLastLoginText(DateTime? lastLogin) {
+    if (lastLogin == null) return 'First time login!';
+
+    final now = DateTime.now();
+    final difference = now.difference(lastLogin);
+
+    if (difference.inSeconds < 60) return 'Last login: Just now';
+    if (difference.inMinutes < 60)
+      return 'Last login: ${difference.inMinutes}m ago';
+    if (difference.inHours < 24)
+      return 'Last login: ${difference.inHours}h ago';
+    if (difference.inDays < 7) return 'Last login: ${difference.inDays}d ago';
+
+    return 'Last login: ${DateFormat('MMM dd, yyyy - hh:mm a').format(lastLogin)}';
   }
 
   Widget _buildSectionTitle(String title, bool isDarkMode) {

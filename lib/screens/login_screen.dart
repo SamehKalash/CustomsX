@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import '../services/api_service.dart'; // Adjust path based on your project structure
+import '../services/api_service.dart';
+import '../providers/user_provider.dart';
 import '../theme/theme_provider.dart';
 import 'dashboard.dart';
 import 'create_account_screen.dart';
@@ -151,8 +152,9 @@ class _LoginScreenState extends State<LoginScreen>
                       isDarkMode: isDarkMode,
                       controller: _emailController,
                       validator: (value) {
-                        if (value == null || value.isEmpty)
+                        if (value == null || value.isEmpty) {
                           return 'Email is required';
+                        }
                         if (!RegExp(
                           r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
                         ).hasMatch(value)) {
@@ -169,8 +171,9 @@ class _LoginScreenState extends State<LoginScreen>
                       isDarkMode: isDarkMode,
                       controller: _passwordController,
                       validator: (value) {
-                        if (value == null || value.isEmpty)
+                        if (value == null || value.isEmpty) {
                           return 'Password is required';
+                        }
                         return null;
                       },
                     ),
@@ -208,7 +211,13 @@ class _LoginScreenState extends State<LoginScreen>
                     ),
                     SizedBox(height: 20.h),
                     OutlinedButton(
-                      onPressed: () => _navigateToDashboard(context),
+                      onPressed: () {
+                        Provider.of<UserProvider>(
+                          context,
+                          listen: false,
+                        ).clearUser();
+                        _navigateToDashboard(context);
+                      },
                       style: OutlinedButton.styleFrom(
                         foregroundColor:
                             isDarkMode
@@ -311,6 +320,13 @@ class _LoginScreenState extends State<LoginScreen>
 
         _emailController.clear();
         _passwordController.clear();
+
+        if (response['user'] != null) {
+          Provider.of<UserProvider>(
+            context,
+            listen: false,
+          ).setUser(response['user']);
+        }
 
         _navigateToDashboard(context);
       } catch (e) {
