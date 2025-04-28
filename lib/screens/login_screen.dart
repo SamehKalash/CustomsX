@@ -1,10 +1,10 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import '../services/api_service.dart'; // Adjust path based on your project structure
 import '../theme/theme_provider.dart';
-import 'dashboard.dart'; // Make sure this import exists
+import 'dashboard.dart';
+import 'create_account_screen.dart';
 import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -19,6 +19,10 @@ class _LoginScreenState extends State<LoginScreen>
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
   late Animation<Offset> _slideAnimation;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -51,6 +55,8 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   void dispose() {
     _controller.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -81,11 +87,15 @@ class _LoginScreenState extends State<LoginScreen>
           end: Alignment.bottomCenter,
           colors:
               isDarkMode
-                  ? [Color(0xFF1A120B), Color(0xFF3C2A21), Color(0xFFD4A373)]
+                  ? [
+                    const Color(0xFF1A120B),
+                    const Color(0xFF3C2A21),
+                    const Color(0xFFD4A373),
+                  ]
                   : [
                     Colors.white,
-                    Color(0xFFF5F5DC),
-                    Color(0xFFD4A373).withOpacity(0.4),
+                    const Color(0xFFF5F5DC),
+                    const Color(0xFFD4A373).withOpacity(0.4),
                   ],
           stops: const [0.1, 0.5, 0.9],
         ),
@@ -110,142 +120,211 @@ class _LoginScreenState extends State<LoginScreen>
               size: 100.w,
               color:
                   isDarkMode
-                      ? Color(0xFFD4A373).withOpacity(0.2)
-                      : Color(0xFFD4A373).withOpacity(0.1),
+                      ? const Color(0xFFD4A373).withOpacity(0.2)
+                      : const Color(0xFFD4A373).withOpacity(0.1),
             ),
           ),
           Center(
             child: SingleChildScrollView(
               padding: EdgeInsets.all(24.w),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Welcome',
-                    style: TextStyle(
-                      fontSize: 32.sp,
-                      fontWeight: FontWeight.w700,
-                      color: isDarkMode ? Color(0xFFF5F5DC) : Color(0xFF1A120B),
-                      letterSpacing: 1.5,
-                    ),
-                  ),
-                  SizedBox(height: 40.h),
-                  _buildInputField(
-                    hintText: 'Email Address',
-                    icon: Icons.email_rounded,
-                    isDarkMode: isDarkMode,
-                  ),
-                  SizedBox(height: 20.h),
-                  _buildInputField(
-                    hintText: 'Password',
-                    icon: Icons.lock_rounded,
-                    isPassword: true,
-                    isDarkMode: isDarkMode,
-                  ),
-                  SizedBox(height: 30.h),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFD4A373),
-                      foregroundColor: Colors.black,
-                      minimumSize: Size(double.infinity, 50.h),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.r),
-                      ),
-                      elevation: 5,
-                    ),
-                    child: Text(
-                      'LOGIN',
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Welcome',
                       style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 1.2,
+                        fontSize: 32.sp,
+                        fontWeight: FontWeight.w700,
+                        color:
+                            isDarkMode
+                                ? const Color(0xFFF5F5DC)
+                                : const Color(0xFF1A120B),
+                        letterSpacing: 1.5,
                       ),
                     ),
-                  ),
-                  SizedBox(height: 20.h),
-                  OutlinedButton(
-                    onPressed: () => _navigateToDashboard(context),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor:
-                          isDarkMode ? Color(0xFFF5F5DC) : Color(0xFF1A120B),
-                      side: BorderSide(
-                        color: Color(0xFFD4A373).withOpacity(0.8),
-                        width: 1.w,
+                    SizedBox(height: 40.h),
+                    _buildInputField(
+                      hintText: 'Email Address',
+                      icon: Icons.email_rounded,
+                      isDarkMode: isDarkMode,
+                      controller: _emailController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty)
+                          return 'Email is required';
+                        if (!RegExp(
+                          r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                        ).hasMatch(value)) {
+                          return 'Invalid email format';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 20.h),
+                    _buildInputField(
+                      hintText: 'Password',
+                      icon: Icons.lock_rounded,
+                      isPassword: true,
+                      isDarkMode: isDarkMode,
+                      controller: _passwordController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty)
+                          return 'Password is required';
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 30.h),
+                    ElevatedButton(
+                      onPressed:
+                          _isLoading ? null : () => _handleLogin(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFD4A373),
+                        foregroundColor: Colors.black,
+                        minimumSize: Size(double.infinity, 50.h),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.r),
+                        ),
+                        elevation: 5,
                       ),
-                      minimumSize: Size(double.infinity, 50.h),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.r),
+                      child:
+                          _isLoading
+                              ? SizedBox(
+                                height: 24.h,
+                                width: 24.h,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 3.w,
+                                ),
+                              )
+                              : Text(
+                                'LOGIN',
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                    ),
+                    SizedBox(height: 20.h),
+                    OutlinedButton(
+                      onPressed: () => _navigateToDashboard(context),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor:
+                            isDarkMode
+                                ? const Color(0xFFF5F5DC)
+                                : const Color(0xFF1A120B),
+                        side: BorderSide(
+                          color: const Color(0xFFD4A373).withOpacity(0.8),
+                          width: 1.w,
+                        ),
+                        minimumSize: Size(double.infinity, 50.h),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.r),
+                        ),
                       ),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 40.w,
-                        vertical: 16.h,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.person_outline,
+                            size: 20.w,
+                            color: const Color(0xFFD4A373),
+                          ),
+                          SizedBox(width: 10.w),
+                          Text(
+                            'CONTINUE AS GUEST',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    child: Row(
+                    SizedBox(height: 20.h),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.person_outline,
-                          size: 20.w,
-                          color: Color(0xFFD4A373),
+                        TextButton(
+                          onPressed:
+                              () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => const ForgotPasswordScreen(),
+                                ),
+                              ),
+                          child: Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                              color:
+                                  isDarkMode
+                                      ? const Color(0xFFF5F5DC).withOpacity(0.8)
+                                      : const Color(
+                                        0xFF1A120B,
+                                      ).withOpacity(0.6),
+                              fontSize: 14.sp,
+                            ),
+                          ),
                         ),
-                        SizedBox(width: 10.w),
-                        Text(
-                          'CONTINUE AS GUEST',
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 1.2,
+                        SizedBox(width: 20.w),
+                        TextButton(
+                          onPressed:
+                              () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => const CreateAccountScreen(),
+                                ),
+                              ),
+                          child: Text(
+                            'Create Account',
+                            style: TextStyle(
+                              color: const Color(0xFFD4A373),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14.sp,
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  SizedBox(height: 20.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                        onPressed:
-                            () => Navigator.pushNamed(
-                              context,
-                              '/forgot-password',
-                            ),
-                        child: Text(
-                          'Forgot Password?',
-                          style: TextStyle(
-                            color:
-                                isDarkMode
-                                    ? Color(0xFFF5F5DC).withOpacity(0.8)
-                                    : Color(0xFF1A120B).withOpacity(0.6),
-                            fontSize: 14.sp,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 20.w),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/createAccount');
-                        },
-                        child: Text(
-                          'Create Account',
-                          style: TextStyle(
-                            color: Color(0xFFD4A373),
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14.sp,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _handleLogin(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      setState(() => _isLoading = true);
+      try {
+        final response = await ApiService.loginUser(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        );
+
+        _emailController.clear();
+        _passwordController.clear();
+
+        _navigateToDashboard(context);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString().replaceAll('Exception: ', '')),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      } finally {
+        setState(() => _isLoading = false);
+      }
+    }
   }
 
   void _navigateToDashboard(BuildContext context) {
@@ -258,12 +337,10 @@ class _LoginScreenState extends State<LoginScreen>
           const begin = Offset(1.0, 0.0);
           const end = Offset.zero;
           const curve = Curves.easeInOutQuart;
-
-          var tween = Tween(
+          final tween = Tween(
             begin: begin,
             end: end,
           ).chain(CurveTween(curve: curve));
-
           return SlideTransition(
             position: animation.drive(tween),
             child: child,
@@ -287,11 +364,15 @@ class _LoginScreenState extends State<LoginScreen>
     required IconData icon,
     bool isPassword = false,
     required bool isDarkMode,
+    required TextEditingController controller,
+    required String? Function(String?) validator,
   }) {
     return TextFormField(
+      controller: controller,
       obscureText: isPassword,
+      validator: validator,
       style: TextStyle(
-        color: isDarkMode ? Color(0xFFF5F5DC) : Color(0xFF1A120B),
+        color: isDarkMode ? const Color(0xFFF5F5DC) : const Color(0xFF1A120B),
         fontSize: 16.sp,
       ),
       decoration: InputDecoration(
@@ -304,13 +385,13 @@ class _LoginScreenState extends State<LoginScreen>
         hintStyle: TextStyle(
           color:
               isDarkMode
-                  ? Color(0xFFF5F5DC).withOpacity(0.6)
-                  : Color(0xFF1A120B).withOpacity(0.4),
+                  ? const Color(0xFFF5F5DC).withOpacity(0.6)
+                  : const Color(0xFF1A120B).withOpacity(0.4),
           fontSize: 16.sp,
         ),
         prefixIcon: Icon(
           icon,
-          color: Color(0xFFD4A373).withOpacity(0.8),
+          color: const Color(0xFFD4A373).withOpacity(0.8),
           size: 24.w,
         ),
         border: OutlineInputBorder(
@@ -320,7 +401,7 @@ class _LoginScreenState extends State<LoginScreen>
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.r),
           borderSide: BorderSide(
-            color: Color(0xFFD4A373).withOpacity(0.5),
+            color: const Color(0xFFD4A373).withOpacity(0.5),
             width: 1.w,
           ),
         ),
