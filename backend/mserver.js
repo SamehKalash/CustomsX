@@ -10,13 +10,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('MongoDB Connected'))
-.catch(err => console.error('MongoDB Connection Error:', err));
+// MongoDB Connection
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.error('MongoDB Connection Error:', err));
+
 
 // Schemas
 const countrySchema = new mongoose.Schema({
@@ -39,7 +37,8 @@ const userSchema = new mongoose.Schema({
   country: { type: String, required: true },
   mobile: { type: String, required: true },
   countryCode: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  lastLogin: { type: Date, default: null }
 });
 
 // Models
@@ -60,16 +59,13 @@ app.post('/register', async (req, res) => {
   try {
     const { firstName, lastName, email, password, dob, gender, address, country, mobile, countryCode } = req.body;
 
-    // Check if user exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: 'Email already registered' });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user
     const newUser = new User({
       firstName,
       lastName,
@@ -100,38 +96,36 @@ app.post('/register', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Available endpoints:`);
-  console.log(`- GET  http://localhost:${PORT}/countries`);
-  console.log(`- POST http://localhost:${PORT}/register`);
-});
-
 app.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ error: 'Account not found' });
     }
 
-    // Compare passwords
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Return user data (excluding password)
+    user.lastLogin = Date.now();
+    await user.save();
+
     res.json({
       message: 'Login successful',
       user: {
         id: user._id,
         firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
-        country: user.country
+        country: user.country,
+        address: user.address,
+        mobile: user.mobile,
+        dob: user.dob,
+        createdAt: user.createdAt,
+        lastLogin: user.lastLogin,
       }
     });
 
@@ -140,3 +134,60 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ error: 'Server error during login' });
   }
 });
+
+// New: Update Profile
+app.post('/updateProfile', async (req, res) => {
+  try {
+    const { email, firstName, lastName, address, country, mobile } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    user.firstName = firstName ?? user.firstName;
+    user.lastName = lastName ?? user.lastName;
+    user.address = address ?? user.address;
+    user.country = country ?? user.country;
+    user.mobile = mobile ?? user.mobile;
+
+    await user.save();
+
+    res.json({ message: 'Profile updated successfully' });
+  } catch (error) {
+    console.error('Profile update error:', error);
+    res.status(500).json({ error: 'Server error during profile update' });
+  }
+});
+
+// New: Change Password
+app.post('/changePassword', async (req, res) => {
+  try {
+    const { email, oldPassword, newPassword } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ error: 'Old password is incorrect' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    res.json({ message: 'Password changed successfully' });
+  } catch (error) {
+    console.error('Password change error:', error);
+    res.status(500).json({ error: 'Server error during password change' });
+  }
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+

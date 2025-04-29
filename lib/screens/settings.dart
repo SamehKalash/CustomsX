@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme_provider.dart';
 import './payment_method.dart';
@@ -9,269 +10,269 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.themeMode == ThemeMode.dark;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(
+          'Settings',
+          style: TextStyle(
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w700,
+            color:
+                isDarkMode ? const Color(0xFFF5F5DC) : const Color(0xFF1A120B),
+          ),
+        ),
+        backgroundColor:
+            isDarkMode ? const Color(0xFF3C2A21) : const Color(0xFFD4A373),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back_rounded, size: 24.w),
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          _buildSectionHeader(context, 'Appearance'),
-          SwitchListTile(
-            title: Text(
-              'Dark Mode',
-              style: TextStyle(
-                color:
-                    Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
-                        : Colors.black, // Adjust color based on theme
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16.w),
+        child: Column(
+          children: [
+            _buildSectionHeader('Appearance', isDarkMode),
+            _buildSettingsCard(
+              context,
+              icon: Icons.dark_mode_rounded,
+              title: 'Dark Mode',
+              trailing: Switch(
+                value: isDarkMode,
+                onChanged: (value) => themeProvider.toggleTheme(value),
+                activeColor: const Color(0xFFD4A373),
               ),
             ),
-            value: themeProvider.themeMode == ThemeMode.dark,
-            onChanged: (value) => themeProvider.toggleTheme(value),
-            secondary: Icon(
-              Icons.dark_mode,
-              color:
-                  Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white
-                      : Colors.black, // Adjust icon color
-            ),
-          ),
-          const Divider(
-            color: Colors.grey, // Use a lighter color for better visibility
-            thickness: 1,
-          ),
+            _buildDivider(isDarkMode),
 
-          _buildSectionHeader(context, 'Language & Region'),
-          ListTile(
-            leading: Icon(
-              Icons.language,
-              color:
-                  Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white
-                      : Colors.black, // Adjust color based on theme
+            _buildSectionHeader('Language & Region', isDarkMode),
+            _buildSettingsCard(
+              context,
+              icon: Icons.language_rounded,
+              title: 'App Language',
+              subtitle: 'English (United States)',
+              onTap: () => _showLanguageSelector(context),
             ),
-            title: Text(
-              'App Language',
-              style: TextStyle(
-                color:
-                    Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
-                        : Colors.black, // Adjust color based on theme
-              ),
+            _buildSettingsCard(
+              context,
+              icon: Icons.flag_rounded,
+              title: 'Country/Region',
+              subtitle: 'Egypt',
+              onTap: () => _showRegionSelector(context),
             ),
-            subtitle: Text(
-              'English (United States)',
-              style: TextStyle(
-                color:
-                    Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white70
-                        : Colors.grey, // Adjust color based on theme
-              ),
-            ),
-            onTap: () => _showLanguageSelector(context),
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.flag,
-              color:
-                  Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white
-                      : Colors.black, // Adjust color based on theme
-            ),
-            title: Text(
-              'Country/Region',
-              style: TextStyle(
-                color:
-                    Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
-                        : Colors.black, // Adjust color based on theme
-              ),
-            ),
-            subtitle: Text(
-              'Egypt',
-              style: TextStyle(
-                color:
-                    Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white70
-                        : Colors.grey, // Adjust color based on theme
-              ),
-            ),
-            onTap: () => _showRegionSelector(context),
-          ),
-          const Divider(
-            color: Colors.grey, // Use a lighter color for better visibility
-            thickness: 1,
-          ),
+            _buildDivider(isDarkMode),
 
-          _buildSectionHeader(context, 'Account'),
-          ListTile(
-            leading: Icon(
-              Icons.security,
-              color:
-                  Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white
-                      : Colors.black, // Adjust color
+            _buildSectionHeader('Account', isDarkMode),
+            _buildSettingsCard(
+              context,
+              icon: Icons.security_rounded,
+              title: 'Security',
+              onTap: () => _navigateToSecurity(context),
             ),
-            title: Text(
-              'Security',
-              style: TextStyle(
-                color:
-                    Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
-                        : Colors.black, // Adjust color
-              ),
+            _buildSettingsCard(
+              context,
+              icon: Icons.payment_rounded,
+              title: 'Payment Methods',
+              onTap: () => _navigateToPayments(context),
             ),
-            onTap: () => _navigateToSecurity(context),
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.payment,
-              color:
-                  Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white
-                      : Colors.black, // Adjust color
-            ),
-            title: Text(
-              'Payment Methods',
-              style: TextStyle(
-                color:
-                    Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
-                        : Colors.black, // Adjust color
-              ),
-            ),
-            onTap: () => _navigateToPayments(context),
-          ),
-          const Divider(
-            color: Colors.grey, // Use a lighter color for better visibility
-            thickness: 1,
-          ),
+            _buildDivider(isDarkMode),
 
-          _buildSectionHeader(context, 'Support'),
-          ListTile(
-            leading: Icon(
-              Icons.help,
-              color:
-                  Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white
-                      : Colors.black, // Adjust color
+            _buildSectionHeader('Support', isDarkMode),
+            _buildSettingsCard(
+              context,
+              icon: Icons.help_rounded,
+              title: 'Help Center',
+              onTap: () => _openHelpCenter(context),
             ),
-            title: Text(
-              'Help Center',
-              style: TextStyle(
-                color:
-                    Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
-                        : Colors.black, // Adjust color
-              ),
+            _buildSettingsCard(
+              context,
+              icon: Icons.description_rounded,
+              title: 'Terms of Service',
+              onTap: () => _openTerms(context),
             ),
-            onTap: () => _openHelpCenter(context),
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.description,
-              color:
-                  Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white
-                      : Colors.black, // Adjust color
-            ),
-            title: Text(
-              'Terms of Service',
-              style: TextStyle(
-                color:
-                    Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
-                        : Colors.black, // Adjust color
-              ),
-            ),
-            onTap: () => _openTerms(context),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildSectionHeader(BuildContext context, String title) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: isDarkMode ? Colors.white : Colors.grey, // Adjust color
+  Widget _buildSectionHeader(String title, bool isDarkMode) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 12.h),
+        child: Text(
+          title,
+          style: TextStyle(
+            fontSize: 18.sp,
+            fontWeight: FontWeight.w600,
+            color:
+                isDarkMode ? const Color(0xFFF5F5DC) : const Color(0xFF1A120B),
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSettingsCard(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    String? subtitle,
+    Widget? trailing,
+    VoidCallback? onTap,
+  }) {
+    final isDarkMode =
+        Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark;
+
+    return Card(
+      margin: EdgeInsets.only(bottom: 8.h),
+      color: isDarkMode ? const Color(0xFF3C2A21) : Colors.white,
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+      child: ListTile(
+        contentPadding: EdgeInsets.all(16.w),
+        leading: Icon(icon, size: 24.w, color: const Color(0xFFD4A373)),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+            color:
+                isDarkMode ? const Color(0xFFF5F5DC) : const Color(0xFF1A120B),
+          ),
+        ),
+        subtitle:
+            subtitle != null
+                ? Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color:
+                        isDarkMode
+                            ? const Color(0xFFF5F5DC).withOpacity(0.6)
+                            : const Color(0xFF1A120B).withOpacity(0.6),
+                  ),
+                )
+                : null,
+        trailing:
+            trailing ??
+            Icon(
+              Icons.chevron_right_rounded,
+              color:
+                  isDarkMode
+                      ? const Color(0xFFF5F5DC).withOpacity(0.4)
+                      : const Color(0xFF1A120B).withOpacity(0.4),
+            ),
+        onTap: onTap,
+      ),
+    );
+  }
+
+  Widget _buildDivider(bool isDarkMode) {
+    return Divider(
+      height: 32.h,
+      color: isDarkMode ? Colors.white12 : Colors.grey.withOpacity(0.1),
+      thickness: 1,
     );
   }
 
   void _showLanguageSelector(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final isDarkMode =
+        Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark;
 
-    showDialog(
+    showModalBottomSheet(
       context: context,
+      backgroundColor: Colors.transparent,
       builder:
-          (context) => AlertDialog(
-            backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
-            title: Text(
-              'Select Language',
-              style: TextStyle(
-                color: isDarkMode ? Colors.white : Colors.black, // Adjust color
+          (context) => Container(
+            decoration: BoxDecoration(
+              color: isDarkMode ? const Color(0xFF3C2A21) : Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(24.r),
+                topRight: Radius.circular(24.r),
               ),
             ),
-            content: SizedBox(
-              width: double.maxFinite,
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  _buildLanguageOption(context, 'English', 'US'),
-                  _buildLanguageOption(context, 'Español', 'ES'),
-                  _buildLanguageOption(context, 'Français', 'FR'),
-                  _buildLanguageOption(context, '日本語', 'JP'),
-                ],
-              ),
+            padding: EdgeInsets.all(24.w),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Center(
+                  child: Container(
+                    width: 48.w,
+                    height: 4.h,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 24.h),
+                Text(
+                  'Select Language',
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w700,
+                    color:
+                        isDarkMode
+                            ? const Color(0xFFF5F5DC)
+                            : const Color(0xFF1A120B),
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                _buildLanguageOption(context, 'English', 'US', isDarkMode),
+                _buildLanguageOption(context, 'العربية', 'AR', isDarkMode),
+                _buildLanguageOption(context, 'Français', 'FR', isDarkMode),
+                _buildLanguageOption(context, 'Español', 'ES', isDarkMode),
+                SizedBox(height: 24.h),
+              ],
             ),
           ),
     );
   }
 
-  ListTile _buildLanguageOption(
+  Widget _buildLanguageOption(
     BuildContext context,
     String language,
     String code,
+    bool isDarkMode,
   ) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
     return ListTile(
-      leading: Text(
-        code,
-        style: TextStyle(
-          color: isDarkMode ? Colors.white : Colors.black, // Adjust color
+      contentPadding: EdgeInsets.zero,
+      leading: Container(
+        width: 40.w,
+        height: 40.w,
+        decoration: BoxDecoration(
+          color: const Color(0xFFD4A373).withOpacity(0.2),
+          borderRadius: BorderRadius.circular(8.r),
+        ),
+        child: Center(
+          child: Text(
+            code,
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
+              color: const Color(0xFFD4A373),
+            ),
+          ),
         ),
       ),
       title: Text(
         language,
         style: TextStyle(
-          color: isDarkMode ? Colors.white : Colors.black, // Adjust color
+          fontSize: 16.sp,
+          fontWeight: FontWeight.w500,
+          color: isDarkMode ? const Color(0xFFF5F5DC) : const Color(0xFF1A120B),
         ),
       ),
-      onTap: () {
-        Navigator.pop(context);
-        // Add language change logic here
-      },
+      onTap: () => Navigator.pop(context),
     );
   }
 
   void _showRegionSelector(BuildContext context) {
-    // Add region selection logic here
+    // Implement region selector
   }
 
   void _navigateToSecurity(BuildContext context) {
@@ -280,7 +281,14 @@ class SettingsScreen extends StatelessWidget {
       MaterialPageRoute(
         builder:
             (context) => Scaffold(
-              appBar: AppBar(title: const Text('Security Settings')),
+              appBar: AppBar(
+                title: const Text('Security Settings'),
+                backgroundColor:
+                    Provider.of<ThemeProvider>(context).themeMode ==
+                            ThemeMode.dark
+                        ? const Color(0xFF3C2A21)
+                        : const Color(0xFFD4A373),
+              ),
               body: const Center(child: Text('Security settings content')),
             ),
       ),
@@ -295,10 +303,10 @@ class SettingsScreen extends StatelessWidget {
   }
 
   void _openHelpCenter(BuildContext context) {
-    // Add help center navigation logic here
+    // Implement help center
   }
 
   void _openTerms(BuildContext context) {
-    // Add terms of service navigation logic here
+    // Implement terms of service
   }
 }
