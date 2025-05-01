@@ -1,0 +1,13 @@
+C:/Users/sameh/Desktop/CustomsX/build/windows/x64/runner/Debug/data/icudtl.dat
+C:/Users/sameh/Desktop/CustomsX/build/windows/x64/runner/Debug/flutter_windows.dll
+C:/Users/sameh/Desktop/CustomsX/build/windows/x64/runner/Debug/file_selector_windows_plugin.dll
+C:/Users/sameh/Desktop/CustomsX/build/windows/x64/runner/Debug/window_size_plugin.dll
+C:/Users/sameh/Desktop/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/.env
+C:/Users/sameh/Desktop/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/AssetManifest.bin
+C:/Users/sameh/Desktop/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/AssetManifest.json
+C:/Users/sameh/Desktop/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/FontManifest.json
+C:/Users/sameh/Desktop/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/fonts/MaterialIcons-Regular.otf
+C:/Users/sameh/Desktop/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/kernel_blob.bin
+C:/Users/sameh/Desktop/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/NativeAssetsManifest.json
+C:/Users/sameh/Desktop/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/NOTICES.Z
+C:/Users/sameh/Desktop/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/shaders/ink_sparkle.frag
