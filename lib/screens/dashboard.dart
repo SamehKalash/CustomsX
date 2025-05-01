@@ -210,7 +210,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
           Text(
-            // Display actual user name or guest fallback
             user != null ? '${user['firstName']} ${user['lastName']}' : 'Guest',
             style: TextStyle(
               fontWeight: FontWeight.w700,
@@ -225,7 +224,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               fontSize: 14.sp,
               color:
                   isDarkMode
-                      ? const Color(0xFFF5F5DC).withOpacity(0.7)
+                      ? Color(0xFFF5F5DC).withOpacity(0.7)
                       : Colors.white70,
             ),
           ),
@@ -573,16 +572,50 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void _updateIndex(int index) {
     setState(() => _currentIndex = index);
-    if (index == 0)
+    if (index == 0) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const DashboardScreen()),
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => const DashboardScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(-1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOutQuart;
+
+            var tween = Tween(
+              begin: begin,
+              end: end,
+            ).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(position: offsetAnimation, child: child);
+          },
+          transitionDuration: const Duration(milliseconds: 500),
+        ),
       );
-    if (index == 1)
+    }
+    if (index == 1) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const ProfileScreen()),
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => const ProfileScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOutQuart;
+
+            var tween = Tween(
+              begin: begin,
+              end: end,
+            ).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(position: offsetAnimation, child: child);
+          },
+          transitionDuration: const Duration(milliseconds: 500),
+        ),
       );
+    }
   }
 
   void _showNotifications(BuildContext context, bool isDarkMode) {
@@ -592,7 +625,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       builder:
           (context) => Container(
             decoration: BoxDecoration(
-              color: isDarkMode ? Color(0xFF3C2A21) : Colors.white,
+              color: isDarkMode ? const Color(0xFF3C2A21) : Colors.white,
               borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
             ),
             padding: EdgeInsets.all(16.w),
@@ -613,32 +646,51 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   style: TextStyle(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
-                    color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
+                    color:
+                        isDarkMode ? const Color(0xFFF5F5DC) : _darkBackground,
                   ),
                 ),
-                SizedBox(height: 16.h),
-                _buildNotificationItem(
-                  context,
-                  Icons.check_circle,
-                  'Document Approved',
-                  'Invoice_123.pdf has been cleared',
-                  Colors.green,
-                  isDarkMode,
+                SizedBox(height: 12.h),
+                ListTile(
+                  leading: Icon(Icons.gavel, color: _primaryColor),
+                  title: Text(
+                    'New Customs Update',
+                    style: TextStyle(
+                      color:
+                          isDarkMode
+                              ? const Color(0xFFF5F5DC)
+                              : _darkBackground,
+                    ),
+                  ),
+                  subtitle: Text(
+                    'Egypt updated tariff codes.',
+                    style: TextStyle(
+                      color:
+                          isDarkMode
+                              ? const Color(0xFFF5F5DC).withOpacity(0.7)
+                              : _darkBackground.withOpacity(0.6),
+                    ),
+                  ),
                 ),
-                _buildNotificationItem(
-                  context,
-                  Icons.warning,
-                  'Customs Hold',
-                  'Shipment #456 requires additional docs',
-                  Colors.orange,
-                  isDarkMode,
-                ),
-                SizedBox(height: 16.h),
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(
-                    'Dismiss All',
-                    style: TextStyle(color: _primaryColor),
+                ListTile(
+                  leading: Icon(Icons.block, color: _primaryColor),
+                  title: Text(
+                    'Restricted Items Notice',
+                    style: TextStyle(
+                      color:
+                          isDarkMode
+                              ? const Color(0xFFF5F5DC)
+                              : _darkBackground,
+                    ),
+                  ),
+                  subtitle: Text(
+                    'Check latest import bans.',
+                    style: TextStyle(
+                      color:
+                          isDarkMode
+                              ? const Color(0xFFF5F5DC).withOpacity(0.7)
+                              : _darkBackground.withOpacity(0.6),
+                    ),
                   ),
                 ),
               ],

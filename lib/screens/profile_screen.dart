@@ -15,8 +15,42 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen>
+    with SingleTickerProviderStateMixin {
   int _currentIndex = 1;
+  final Color _primaryColor = const Color(0xFFD4A373);
+  final Color _darkBackground = const Color(0xFF1A120B);
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.5),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutQuad),
+    );
+
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,212 +60,286 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final user = userProvider.user;
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        backgroundColor:
-            isDarkMode ? const Color(0xFF3C2A21) : const Color(0xFFD4A373),
-        title: Text(
-          'Profile',
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 20.sp,
-            color:
-                isDarkMode ? const Color(0xFFF5F5DC) : const Color(0xFF1A120B),
-          ),
-        ),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Profile Header
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(vertical: 40.h),
-                decoration: BoxDecoration(
-                  color:
-                      isDarkMode
-                          ? const Color(0xFF3C2A21)
-                          : const Color(0xFFD4A373),
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30.r),
-                    bottomRight: Radius.circular(30.r),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 10,
-                      offset: Offset(0, 5.h),
-                    ),
-                  ],
+      body: Container(
+        decoration: _buildBackgroundGradient(isDarkMode),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(
+                  left: 16.w,
+                  right: 16.w,
+                  top: 40.h,
+                  bottom: 80.h,
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CircleAvatar(
-                      radius: 50.r,
-                      backgroundColor: Colors.white.withOpacity(0.1),
-                      child: Icon(
-                        Icons.person_outline_rounded,
-                        size: 40.w,
-                        color: Colors.white,
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: Text(
+                        'Profile',
+                        style: TextStyle(
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.w800,
+                          color:
+                              isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
+                        ),
                       ),
                     ),
-                    SizedBox(height: 16.h),
-                    Text(
-                      user != null
-                          ? '${user['firstName']} ${user['lastName']}'
-                          : 'Guest User',
-                      style: TextStyle(
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.w700,
-                        color:
-                            isDarkMode ? const Color(0xFFF5F5DC) : Colors.white,
+                    SizedBox(height: 20.h),
+                    FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: SlideTransition(
+                        position: _slideAnimation,
+                        child: _buildProfileHeader(isDarkMode, user),
                       ),
                     ),
-                    SizedBox(height: 8.h),
-                    Text(
-                      user?['mobile']?.toString() ?? '+20 123 456 7890',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        color: (isDarkMode
-                                ? const Color(0xFFF5F5DC)
-                                : Colors.white)
-                            .withOpacity(0.9),
-                      ),
-                    ),
-                    SizedBox(height: 4.h),
-                    Text(
-                      user?['email'] ?? 'user@example.com',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        color: (isDarkMode
-                                ? const Color(0xFFF5F5DC)
-                                : Colors.white)
-                            .withOpacity(0.7),
+                    SizedBox(height: 30.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildSectionTitle('Account Management', isDarkMode),
+                          SizedBox(height: 12.h),
+                          _buildAnimatedOption(
+                            context,
+                            Icons.person_2_outlined,
+                            'Profile Details',
+                            'View personal information',
+                            () => _navigateWithSlide(
+                              context,
+                              const ProfileEditScreen(),
+                            ),
+                            isDarkMode,
+                          ),
+                          _buildAnimatedOption(
+                            context,
+                            Icons.settings_outlined,
+                            'App Settings',
+                            'Customize app preferences',
+                            () => _navigateWithSlide(
+                              context,
+                              const SettingsScreen(),
+                            ),
+                            isDarkMode,
+                          ),
+                          _buildAnimatedOption(
+                            context,
+                            Icons.logout_rounded,
+                            'Sign Out',
+                            'Secure account logout',
+                            () => _confirmLogout(context),
+                            isDarkMode,
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 24.h),
-
-              // Account Options
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
-                child: Column(
-                  children: [
-                    _buildSectionTitle('Account Management', isDarkMode),
-                    SizedBox(height: 12.h),
-                    _buildOptionTile(
-                      context,
-                      icon: Icons.person_2_outlined,
-                      title: 'Profile Details',
-                      subtitle: 'View personal information',
-                      onTap:
-                          () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ProfileEditScreen(),
-                            ),
-                          ),
-                      isDarkMode: isDarkMode,
-                    ),
-                    _buildOptionTile(
-                      context,
-                      icon: Icons.settings_outlined,
-                      title: 'App Settings',
-                      subtitle: 'Customize app preferences',
-                      onTap:
-                          () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SettingsScreen(),
-                            ),
-                          ),
-                      isDarkMode: isDarkMode,
-                    ),
-                    _buildOptionTile(
-                      context,
-                      icon: Icons.logout_rounded,
-                      title: 'Sign Out',
-                      subtitle: 'Secure account logout',
-                      onTap: () => _confirmLogout(context),
-                      isDarkMode: isDarkMode,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: _buildBottomNavBar(isDarkMode),
     );
   }
 
-  Widget _buildSectionTitle(String text, bool isDarkMode) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 12.h),
+  void _navigateWithSlide(BuildContext context, Widget page) {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => page,
+        transitionsBuilder:
+            (_, animation, __, child) => SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(1, 0),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            ),
+      ),
+    );
+  }
+
+  AppBar _buildAppBar(bool isDarkMode) {
+    return AppBar(
+      title: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
         child: Text(
-          text,
+          'Profile',
+          key: ValueKey<bool>(isDarkMode),
           style: TextStyle(
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w600,
-            color:
-                isDarkMode ? const Color(0xFFF5F5DC) : const Color(0xFF1A120B),
+            fontWeight: FontWeight.w700,
+            fontSize: 8.sp,
+            color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
           ),
+        ),
+      ),
+      backgroundColor: isDarkMode ? _darkBackground : Colors.white,
+      elevation: 4,
+      automaticallyImplyLeading: false,
+      iconTheme: IconThemeData(
+        color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
+      ),
+    );
+  }
+
+  BoxDecoration _buildBackgroundGradient(bool isDarkMode) {
+    return BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors:
+            isDarkMode
+                ? [
+                  _darkBackground,
+                  Color(0xFF3C2A21),
+                  Color(0xFFD4A373).withOpacity(0.2),
+                ]
+                : [
+                  Colors.white,
+                  Color(0xFFF5F5DC).withOpacity(0.6),
+                  Color(0xFFD4A373).withOpacity(0.1),
+                ],
+        stops: const [0.0, 0.5, 1.0],
+      ),
+    );
+  }
+
+  Widget _buildProfileHeader(bool isDarkMode, dynamic user) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(20.w),
+      decoration: BoxDecoration(
+        color: isDarkMode ? Color(0xFF3C2A21) : _primaryColor,
+        borderRadius: BorderRadius.circular(15.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: Offset(0, 5.h),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOutBack,
+            child: CircleAvatar(
+              radius: 50.r,
+              backgroundColor: Colors.white.withOpacity(0.1),
+              child: Icon(
+                Icons.person_outline_rounded,
+                size: 40.w,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          SizedBox(height: 16.h),
+          Text(
+            user != null ? '${user['firstName']} ${user['lastName']}' : 'Guest',
+            style: TextStyle(
+              fontSize: 24.sp,
+              fontWeight: FontWeight.w700,
+              color: isDarkMode ? Color(0xFFF5F5DC) : Colors.white,
+            ),
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            user?['mobile']?.toString() ?? '+00 123 456 7890',
+            style: TextStyle(
+              fontSize: 16.sp,
+              color: (isDarkMode ? Color(0xFFF5F5DC) : Colors.white)
+                  .withOpacity(0.9),
+            ),
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            user?['email'] ?? 'user@example.com',
+            style: TextStyle(
+              fontSize: 16.sp,
+              color: (isDarkMode ? Color(0xFFF5F5DC) : Colors.white)
+                  .withOpacity(0.7),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title, bool isDarkMode) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontWeight: FontWeight.w700,
+          fontSize: 20.sp,
+          color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
         ),
       ),
     );
   }
 
-  Widget _buildOptionTile(
-    BuildContext context, {
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required VoidCallback onTap,
-    required bool isDarkMode,
-  }) {
-    return Card(
-      margin: EdgeInsets.only(bottom: 12.h),
-      color: isDarkMode ? const Color(0xFF3C2A21) : Colors.white,
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-      child: ListTile(
-        contentPadding: EdgeInsets.all(16.w),
-        leading: Icon(icon, size: 28.w, color: const Color(0xFFD4A373)),
-        title: Text(
-          title,
-          style: TextStyle(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
-            color:
-                isDarkMode ? const Color(0xFFF5F5DC) : const Color(0xFF1A120B),
+  Widget _buildAnimatedOption(
+    BuildContext context,
+    IconData icon,
+    String title,
+    String subtitle,
+    VoidCallback onTap,
+    bool isDarkMode,
+  ) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 12.h),
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: Material(
+          key: ValueKey<String>(title),
+          color: isDarkMode ? Color(0xFF3C2A21) : Colors.white,
+          borderRadius: BorderRadius.circular(12.r),
+          elevation: 2,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(12.r),
+            onTap: onTap,
+            hoverColor: _primaryColor.withOpacity(0.1),
+            splashColor: _primaryColor.withOpacity(0.2),
+            child: ListTile(
+              contentPadding: EdgeInsets.all(12.w),
+              leading: Container(
+                padding: EdgeInsets.all(10.w),
+                decoration: BoxDecoration(
+                  color: _primaryColor.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+                child: Icon(icon, color: _primaryColor, size: 24.w),
+              ),
+              title: Text(
+                title,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16.sp,
+                  color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
+                ),
+              ),
+              subtitle: Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: (isDarkMode ? Color(0xFFF5F5DC) : _darkBackground)
+                      .withOpacity(0.6),
+                ),
+              ),
+              trailing: Icon(Icons.chevron_right, color: _primaryColor),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+            ),
           ),
         ),
-        subtitle: Text(
-          subtitle,
-          style: TextStyle(
-            fontSize: 14.sp,
-            color: (isDarkMode
-                    ? const Color(0xFFF5F5DC)
-                    : const Color(0xFF1A120B))
-                .withOpacity(0.6),
-          ),
-        ),
-        trailing: Icon(
-          Icons.chevron_right_rounded,
-          color: (isDarkMode
-                  ? const Color(0xFFF5F5DC)
-                  : const Color(0xFF1A120B))
-              .withOpacity(0.4),
-        ),
-        onTap: onTap,
       ),
     );
   }
@@ -241,9 +349,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder:
           (context) => AlertDialog(
+            backgroundColor: Theme.of(context).cardColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.r),
+            ),
             title: Text(
-              'Confirm Logout',
-              style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+              'Log Out',
+              style: TextStyle(
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w700,
+                color: _primaryColor,
+              ),
             ),
             content: Text(
               'Are you sure you want to sign out?',
@@ -251,10 +367,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             actions: [
               TextButton(
+                child: Text('Cancel', style: TextStyle(color: Colors.grey)),
                 onPressed: () => Navigator.pop(context),
-                child: Text('Cancel', style: TextStyle(fontSize: 16.sp)),
               ),
               TextButton(
+                child: Text('Log Out', style: TextStyle(color: _primaryColor)),
                 onPressed: () {
                   Provider.of<UserProvider>(context, listen: false).clearUser();
                   Navigator.pushAndRemoveUntil(
@@ -265,14 +382,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     (route) => false,
                   );
                 },
-                child: Text(
-                  'Logout',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    color: Colors.red,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
               ),
             ],
           ),
@@ -280,38 +389,96 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildBottomNavBar(bool isDarkMode) {
-    return BottomNavigationBar(
-      currentIndex: _currentIndex,
-      onTap: (index) {
-        setState(() => _currentIndex = index);
-        if (index == 0) {
-          Navigator.pushReplacement(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (_, __, ___) => const DashboardScreen(),
-              transitionsBuilder:
-                  (_, animation, __, child) =>
-                      FadeTransition(opacity: animation, child: child),
-            ),
-          );
-        }
-      },
-      backgroundColor: isDarkMode ? const Color(0xFF3C2A21) : Colors.white,
-      selectedItemColor: const Color(0xFFD4A373),
-      unselectedItemColor: isDarkMode ? Colors.white54 : Colors.grey,
-      showSelectedLabels: false,
-      showUnselectedLabels: false,
-      type: BottomNavigationBarType.fixed,
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home_rounded, size: 28.w),
-          label: '',
+    return Container(
+      decoration: BoxDecoration(
+        color: isDarkMode ? _darkBackground : Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: Offset(0, -2.h),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 24.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavItem(Icons.home, 'Home', 0, isDarkMode),
+              _buildNavItem(Icons.person, 'Profile', 1, isDarkMode),
+            ],
+          ),
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person_rounded, size: 28.w),
-          label: '',
-        ),
-      ],
+      ),
     );
+  }
+
+  Widget _buildNavItem(
+    IconData icon,
+    String label,
+    int index,
+    bool isDarkMode,
+  ) {
+    final isSelected = _currentIndex == index;
+    return GestureDetector(
+      onTap: () => _updateIndex(index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 28.w,
+            color:
+                isSelected
+                    ? _primaryColor
+                    : (isDarkMode
+                        ? Color(0xFFF5F5DC).withOpacity(0.6)
+                        : _darkBackground.withOpacity(0.6)),
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12.sp,
+              color:
+                  isSelected
+                      ? _primaryColor
+                      : (isDarkMode
+                          ? Color(0xFFF5F5DC).withOpacity(0.6)
+                          : _darkBackground.withOpacity(0.6)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _updateIndex(int index) {
+    setState(() => _currentIndex = index);
+    if (index == 0) {
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          pageBuilder:
+              (context, animation, secondaryAnimation) =>
+                  const DashboardScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(-1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOutQuart;
+
+            var tween = Tween(
+              begin: begin,
+              end: end,
+            ).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(position: offsetAnimation, child: child);
+          },
+          transitionDuration: const Duration(milliseconds: 500),
+        ),
+      );
+    }
   }
 }

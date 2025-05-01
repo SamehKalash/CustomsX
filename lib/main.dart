@@ -84,9 +84,7 @@ class GlobalClearApp extends StatelessWidget {
       routes: _appRoutes(),
       builder: (context, child) {
         return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaleFactor: 1.0, // Disable system text scaling
-          ),
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
           child: child!,
         );
       },
