@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 class ComplianceGuideScreen extends StatefulWidget {
   const ComplianceGuideScreen({super.key});
@@ -16,50 +14,26 @@ class _ComplianceGuideScreenState extends State<ComplianceGuideScreen> {
   bool _isLoading = true;
   bool _isDropdownLoading = true;
   String _errorMessage = '';
-  bool _firebaseReady = false;
 
   @override
   void initState() {
     super.initState();
-    _initializeFirebaseAndLoadData();
-  }
-
-  Future<void> _initializeFirebaseAndLoadData() async {
-    try {
-      Firebase.app();
-      _firebaseReady = true;
-
-      await _loadCountries();
-      await _loadProhibitedItems();
-    } catch (e) {
-      setState(() {
-        _firebaseReady = false;
-        _errorMessage = 'Firebase initialization failed: ${e.toString()}';
-        _isLoading = false;
-      });
-    }
+    _loadCountries();
+    _loadProhibitedItems();
   }
 
   Future<void> _loadCountries() async {
-    if (!_firebaseReady) return;
-
     setState(() {
       _isDropdownLoading = true;
     });
 
     try {
-      final snapshot =
-          await FirebaseFirestore.instance
-              .collection('compliance')
-              .doc('countries')
-              .get();
-
-      if (snapshot.exists) {
-        setState(() {
-          _countries = List<String>.from(snapshot.data()?['list'] ?? ['Egypt']);
-          _selectedCountry = _countries.first;
-        });
-      }
+      // Simulate loading countries
+      await Future.delayed(const Duration(seconds: 1));
+      setState(() {
+        _countries = ['Egypt', 'USA', 'Canada'];
+        _selectedCountry = _countries.first;
+      });
     } catch (e) {
       setState(() {
         _errorMessage = 'Failed to load countries: ${e.toString()}';
@@ -72,24 +46,16 @@ class _ComplianceGuideScreenState extends State<ComplianceGuideScreen> {
   }
 
   Future<void> _loadProhibitedItems() async {
-    if (!_firebaseReady) return;
-
     setState(() {
       _isLoading = true;
       _errorMessage = '';
     });
 
     try {
-      final querySnapshot =
-          await FirebaseFirestore.instance
-              .collection('compliance')
-              .doc('prohibited_items')
-              .collection(_selectedCountry)
-              .get();
-
+      // Simulate loading prohibited items
+      await Future.delayed(const Duration(seconds: 1));
       setState(() {
-        _prohibitedItems =
-            querySnapshot.docs.map((doc) => doc['name'] as String).toList();
+        _prohibitedItems = ['Item 1', 'Item 2', 'Item 3'];
       });
     } catch (e) {
       setState(() {
@@ -154,7 +120,8 @@ class _ComplianceGuideScreenState extends State<ComplianceGuideScreen> {
                         _errorMessage = '';
                         _isLoading = true;
                       });
-                      await _initializeFirebaseAndLoadData();
+                      _loadCountries();
+                      _loadProhibitedItems();
                     },
                     child: const Text('Retry'),
                   ),
