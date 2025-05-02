@@ -189,3 +189,34 @@ class _CustomsFeeScreenState extends State<CustomsFeeScreen> {
     );
   }
 }
+
+class CustomsFeeScreen extends StatefulWidget {
+
+  @override
+  _CustomsFeeScreenState createState() => _CustomsFeeScreenState();
+}
+
+class _CustomsFeeScreenState extends State<CustomsFeeScreen> {
+  final TextEditingController _hsCodeController = TextEditingController();
+  final TextEditingController _customsValueController = TextEditingController();
+  String _description = ''; // To store the description of the selected HS code
+  double _tariffRate = 0.0; // To store the tariff rate of the selected HS code
+  String _result = ''; // To display the calculated customs duty
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTariffData();
+  }
+
+  Future<void> _loadTariffData() async {
+    await TariffService.loadHsCodes();
+  }
+
+  
+  }
+
+  
+    );
+  }
+}
