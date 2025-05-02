@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme_provider.dart';
-import '../services/tariff_service.dart';
+import 'vehicle_tariff_entry_screen.dart';
+import 'customs_fee_screen.dart';
 
 class CustomsFeeSelectionScreen extends StatelessWidget {
   const CustomsFeeSelectionScreen({super.key});
@@ -36,6 +37,7 @@ class CustomsFeeSelectionScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Button to navigate to Customs Fee Screen
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -60,9 +62,15 @@ class CustomsFeeSelectionScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20.h),
+            // Button to navigate to Vehicle Tariff Entry Screen
             ElevatedButton(
               onPressed: () {
-                // Add logic for another option if needed
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const VehicleTariffEntryScreen(),
+                  ),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: buttonColor,
@@ -73,7 +81,7 @@ class CustomsFeeSelectionScreen extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
                 child: Text(
-                  'Other Option',
+                  'Calculate Vehicle Tariff',
                   style: TextStyle(fontSize: 16.sp, color: Colors.white),
                 ),
               ),
@@ -85,138 +93,6 @@ class CustomsFeeSelectionScreen extends StatelessWidget {
   }
 }
 
-class CustomsFeeScreen extends StatefulWidget {
-  const CustomsFeeScreen({super.key});
 
-  @override
-  _CustomsFeeScreenState createState() => _CustomsFeeScreenState();
-}
 
-class _CustomsFeeScreenState extends State<CustomsFeeScreen> {
-  final TextEditingController _hsCodeController = TextEditingController();
-  final TextEditingController _customsValueController = TextEditingController();
-  String _description = ''; // To store the description of the selected HS code
-  double _tariffRate = 0.0; // To store the tariff rate of the selected HS code
-  String _result = ''; // To display the calculated customs duty
 
-  @override
-  void initState() {
-    super.initState();
-    _loadTariffData();
-  }
-
-  Future<void> _loadTariffData() async {
-    await TariffService.loadHsCodes();
-  }
-
-  void _searchHsCode() {
-    String hsCode = _hsCodeController.text.trim();
-    TariffData? tariff = TariffService.findTariffByHsCode(hsCode);
-
-    if (tariff != null && tariff.hsCode != 'N/A') {
-      setState(() {
-        _description = tariff.description;
-        _tariffRate = tariff.tariffRate;
-        _result = ''; // Clear previous result
-      });
-    } else {
-      setState(() {
-        _description = 'HS Code not found!';
-        _tariffRate = 0.0;
-        _result = '';
-      });
-    }
-  }
-
-  void _calculateCustomsFee() {
-    double customsValue = double.tryParse(_customsValueController.text) ?? 0.0;
-
-    if (_tariffRate > 0) {
-      double duty = customsValue * (_tariffRate / 100);
-      setState(() {
-        _result = 'Customs Duty: \$${duty.toStringAsFixed(2)}';
-      });
-    } else {
-      setState(() {
-        _result = 'Please search and select a valid HS Code first.';
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Calculate Customs Fees')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              controller: _hsCodeController,
-              decoration: const InputDecoration(
-                labelText: 'Enter HS Code',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _searchHsCode,
-              child: const Text('Search'),
-            ),
-            const SizedBox(height: 16),
-            Text('Description: $_description'),
-            Text('Tariff Rate: $_tariffRate%'),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _customsValueController,
-              decoration: const InputDecoration(
-                labelText: 'Enter Customs Value (\$)',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _calculateCustomsFee,
-              child: const Text('Calculate'),
-            ),
-            const SizedBox(height: 16),
-            Text(_result),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CustomsFeeScreen extends StatefulWidget {
-
-  @override
-  _CustomsFeeScreenState createState() => _CustomsFeeScreenState();
-}
-
-class _CustomsFeeScreenState extends State<CustomsFeeScreen> {
-  final TextEditingController _hsCodeController = TextEditingController();
-  final TextEditingController _customsValueController = TextEditingController();
-  String _description = ''; // To store the description of the selected HS code
-  double _tariffRate = 0.0; // To store the tariff rate of the selected HS code
-  String _result = ''; // To display the calculated customs duty
-
-  @override
-  void initState() {
-    super.initState();
-    _loadTariffData();
-  }
-
-  Future<void> _loadTariffData() async {
-    await TariffService.loadHsCodes();
-  }
-
-  
-  }
-
-  
-    );
-  }
-}

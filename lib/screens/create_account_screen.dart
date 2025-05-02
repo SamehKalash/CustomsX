@@ -19,7 +19,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _lastNameController = TextEditingController();
   final _dobController = TextEditingController();
   final _addressController = TextEditingController();
-  final _landlineController = TextEditingController();
   final _mobileController = TextEditingController();
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -518,6 +517,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           child: ElevatedButton(
             onPressed:
                 isLoading
+                    // ignore: dead_code
                     ? null
                     : () async {
                       if (_formKey.currentState!.validate() && _termsAccepted) {
