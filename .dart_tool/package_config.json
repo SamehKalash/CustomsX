@@ -122,6 +122,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "file_picker",
+      "rootUri": "file:///home/adel/.pub-cache/hosted/pub.dev/file_picker-5.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "file_selector_linux",
       "rootUri": "file:///home/adel/.pub-cache/hosted/pub.dev/file_selector_linux-0.9.3+2",
       "packageUri": "lib/",
@@ -650,6 +656,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "win32",
+      "rootUri": "file:///home/adel/.pub-cache/hosted/pub.dev/win32-5.12.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
       "name": "window_size",
       "rootUri": "file:///home/adel/.pub-cache/hosted/pub.dev/window_size-0.1.0",
       "packageUri": "lib/",
@@ -674,7 +686,7 @@
       "languageVersion": "3.7"
     }
   ],
-  "generated": "2025-05-02T09:58:38.118854Z",
+  "generated": "2025-05-02T12:55:42.867082Z",
   "generator": "pub",
   "generatorVersion": "3.7.2",
   "flutterRoot": "file:///home/adel/snap/flutter/common/flutter",

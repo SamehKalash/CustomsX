@@ -1,6 +1,7 @@
 # This is a generated file; do not edit or check into version control.
 cloud_firestore=/home/adel/.pub-cache/hosted/pub.dev/cloud_firestore-5.6.6/
 cloud_firestore_web=/home/adel/.pub-cache/hosted/pub.dev/cloud_firestore_web-4.4.6/
+file_picker=/home/adel/.pub-cache/hosted/pub.dev/file_picker-5.5.0/
 file_selector_linux=/home/adel/.pub-cache/hosted/pub.dev/file_selector_linux-0.9.3+2/
 file_selector_macos=/home/adel/.pub-cache/hosted/pub.dev/file_selector_macos-0.9.4+2/
 file_selector_windows=/home/adel/.pub-cache/hosted/pub.dev/file_selector_windows-0.9.3+4/
