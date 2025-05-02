@@ -29,6 +29,7 @@ dependencies:
   simple_shadow: ^0.3.0 # For better shadows
   http: ^1.1.0  # For API calls
   flutter_dotenv: ^5.1.0  # For environment variables
+  csv: ^5.0.0 # Add this line for CSV parsing
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -55,7 +56,9 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-  - .env  # For environment variables
+    - .env  # For environment variables
+    # - assets/hs_codes_vehicles.json # For vehicle HS codes
+    - lib/hs_codes_vehicles.json
   
     #- assets/countries.json
   # To add assets to your application, add an assets section, like this:

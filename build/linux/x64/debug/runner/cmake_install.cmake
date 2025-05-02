@@ -1,8 +1,8 @@
-# Install script for directory: /home/sam/SCCF-1/linux/runner
+# Install script for directory: /home/adel/Documents/FinTech/CustomsX/CustomsX/linux/runner
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/sam/SCCF-1/build/linux/x64/debug/bundle")
+  set(CMAKE_INSTALL_PREFIX "/home/adel/Documents/FinTech/CustomsX/CustomsX/build/linux/x64/debug/bundle")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
