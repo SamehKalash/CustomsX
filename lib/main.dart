@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:window_size/window_size.dart';
 
-// Screen imports
+// Screens
 import 'screens/welcome_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/create_company_screen.dart';
@@ -15,39 +15,30 @@ import 'screens/documents.dart';
 import 'screens/compliance.dart';
 import 'screens/settings.dart';
 import 'screens/forgot_password_screen.dart';
+import 'screens/support_screen.dart';
+import 'screens/contact_us.dart';
 
-// Theme management
+// Theme
 import 'theme/theme_provider.dart';
 import 'theme/theme.dart';
 
-import 'providers/user_provider.dart';
+// Providers
+import 'providers/user_provider.dart'; // Add this import
+
+// Navigation Bar
+import 'screens/navigation_bar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Load environment variables with error handling
-  try {
-    await dotenv.load(fileName: ".env");
-    print('Environment variables loaded successfully');
-    print('API URL: ${dotenv.env['API_URL']}');
-  } catch (e) {
-    print('Error loading .env file: $e');
-    // Set default fallback values
-    dotenv.env['API_URL'] = 'http://localhost:5000';
-  }
-
-  // Configure window for Linux and Windows desktop
-  if (Platform.isLinux) {
-    _configureLinuxWindow();
-  } else if (Platform.isWindows) {
-    _configureWindowsWindow();
-  }
+  if (Platform.isLinux) _configureLinuxWindow();
+  await _initializeFirebase();
 
   runApp(
-    MultiProvider(
+    MultiProvider(  // Changed from ChangeNotifierProvider to MultiProvider
       providers: [
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()), // Added UserProvider
       ],
       child: const GlobalClearApp(),
     ),
@@ -56,30 +47,26 @@ void main() async {
 
 void _configureLinuxWindow() {
   setWindowTitle('Customs Clearance App');
-  setWindowFrame(
-    const Rect.fromLTWH(
-      0,
-      0,
-      414, // iPhone 14 Pro width
-      896, // iPhone 14 Pro height
-    ),
-  );
+  setWindowFrame(const Rect.fromLTWH(0, 0, 414, 640));
   setWindowMinSize(const Size(360, 640));
   setWindowMaxSize(const Size(414, 896));
 }
 
-void _configureWindowsWindow() {
-  setWindowTitle('Customs Clearance App');
-  setWindowFrame(
-    const Rect.fromLTWH(
-      0,
-      0,
-      414, // iPhone 14 Pro width
-      896, // iPhone 14 Pro height
-    ),
-  );
-  setWindowMinSize(const Size(360, 640));
-  setWindowMaxSize(const Size(414, 896));
+Future<void> _initializeFirebase() async {
+  try {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey: "YOUR_API_KEY",
+        appId: "YOUR_APP_ID",
+        messagingSenderId: "YOUR_SENDER_ID",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+      ),
+    );
+    debugPrint("Firebase initialized successfully");
+  } catch (e) {
+    debugPrint("Firebase initialization error: $e");
+  }
 }
 
 class GlobalClearApp extends StatelessWidget {
@@ -97,12 +84,10 @@ class GlobalClearApp extends StatelessWidget {
       darkTheme: darkTheme,
       initialRoute: '/welcome',
       routes: _appRoutes(),
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-          child: child!,
-        );
-      },
+      onUnknownRoute: (settings) => MaterialPageRoute(
+        builder: (context) =>
+            const Scaffold(body: Center(child: Text('Page not found'))),
+      ),
     );
   }
 
@@ -112,7 +97,18 @@ class GlobalClearApp extends StatelessWidget {
       '/login': (context) => LoginScreen(),
       '/createCompany': (context) => const CreateCompanyScreen(),
       '/createAccount': (context) => const CreateAccountScreen(),
-      '/dashboard': (context) => const DashboardScreen(),
+      '/dashboard': (context) => Scaffold(
+            body: const DashboardScreen(),
+            bottomNavigationBar: CustomNavigationBar(),
+          ),
+      '/support': (context) => Scaffold(
+            body: SupportScreen(),
+            bottomNavigationBar: CustomNavigationBar(),
+          ),
+      '/contact_us': (context) => Scaffold(
+            body: ContactUsScreen(),
+            bottomNavigationBar: CustomNavigationBar(),
+          ),
       '/tracking': (context) => const ShipmentTrackingScreen(),
       '/documents': (context) => const DocumentManagementScreen(),
       '/compliance': (context) => const ComplianceGuideScreen(),

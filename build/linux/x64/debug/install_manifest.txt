@@ -1,0 +1,16 @@
+/home/hadeel/Desktop/CustomsX/build/linux/x64/debug/bundle/sccf
+/home/hadeel/Desktop/CustomsX/build/linux/x64/debug/bundle/data/icudtl.dat
+/home/hadeel/Desktop/CustomsX/build/linux/x64/debug/bundle/lib/libflutter_linux_gtk.so
+/home/hadeel/Desktop/CustomsX/build/linux/x64/debug/bundle/lib/libfile_selector_linux_plugin.so
+/home/hadeel/Desktop/CustomsX/build/linux/x64/debug/bundle/lib/liburl_launcher_linux_plugin.so
+/home/hadeel/Desktop/CustomsX/build/linux/x64/debug/bundle/lib/libwindow_size_plugin.so
+/home/hadeel/Desktop/CustomsX/build/linux/x64/debug/bundle/data/flutter_assets/AssetManifest.json
+/home/hadeel/Desktop/CustomsX/build/linux/x64/debug/bundle/data/flutter_assets/NativeAssetsManifest.json
+/home/hadeel/Desktop/CustomsX/build/linux/x64/debug/bundle/data/flutter_assets/.env
+/home/hadeel/Desktop/CustomsX/build/linux/x64/debug/bundle/data/flutter_assets/FontManifest.json
+/home/hadeel/Desktop/CustomsX/build/linux/x64/debug/bundle/data/flutter_assets/AssetManifest.bin
+/home/hadeel/Desktop/CustomsX/build/linux/x64/debug/bundle/data/flutter_assets/kernel_blob.bin
+/home/hadeel/Desktop/CustomsX/build/linux/x64/debug/bundle/data/flutter_assets/NOTICES.Z
+/home/hadeel/Desktop/CustomsX/build/linux/x64/debug/bundle/data/flutter_assets/fonts/MaterialIcons-Regular.otf
+/home/hadeel/Desktop/CustomsX/build/linux/x64/debug/bundle/data/flutter_assets/shaders/ink_sparkle.frag
+/home/hadeel/Desktop/CustomsX/build/linux/x64/debug/bundle/data/flutter_assets/version.json
