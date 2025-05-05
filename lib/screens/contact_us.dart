@@ -28,31 +28,31 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
 
       // 🚨 REPLACE WITH YOUR BACKEND URL
       var uri = Uri.parse('https://your-api-domain.com/contact');
-      
-      var request = http.MultipartRequest('POST', uri)
-        ..fields['name'] = _name!
-        ..fields['email'] = _email!
-        ..fields['message'] = _message!
-        ..fields['inquiryType'] = _inquiryType!;
+
+      var request =
+          http.MultipartRequest('POST', uri)
+            ..fields['name'] = _name!
+            ..fields['email'] = _email!
+            ..fields['message'] = _message!
+            ..fields['inquiryType'] = _inquiryType!;
 
       if (_attachment != null) {
-        request.files.add(await http.MultipartFile.fromPath(
-          'attachment', 
-          _attachment!.path,
-        ));
+        request.files.add(
+          await http.MultipartFile.fromPath('attachment', _attachment!.path),
+        );
       }
 
       final response = await request.send();
 
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Message sent successfully!')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Message sent successfully!')));
         Navigator.pop(context);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to send message')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Failed to send message')));
       }
     }
   }
@@ -70,17 +70,18 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
               // Inquiry Type Dropdown
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(labelText: 'Inquiry Type'),
-                items: [
-                  'Payment Issue',
-                  'Calculation Error',
-                  'Account Problem',
-                  'General Feedback',
-                ].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+                items:
+                    [
+                      'Payment Issue',
+                      'Calculation Error',
+                      'Account Problem',
+                      'General Feedback',
+                    ].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                 onChanged: (value) => setState(() => _inquiryType = value),
                 validator: (value) => value == null ? 'Required' : null,
               ),
@@ -97,8 +98,8 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
               // Email Field
               TextFormField(
                 decoration: InputDecoration(labelText: 'Email'),
-                validator: (value) => 
-                    !value!.contains('@') ? 'Invalid email' : null,
+                validator:
+                    (value) => !value!.contains('@') ? 'Invalid email' : null,
                 onSaved: (value) => _email = value,
               ),
               SizedBox(height: 20),
@@ -116,7 +117,9 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
               ElevatedButton.icon(
                 onPressed: _pickFile,
                 icon: Icon(Icons.attach_file),
-                label: Text(_attachment == null ? 'Attach File' : 'File Selected'),
+                label: Text(
+                  _attachment == null ? 'Attach File' : 'File Selected',
+                ),
               ),
               SizedBox(height: 30),
 

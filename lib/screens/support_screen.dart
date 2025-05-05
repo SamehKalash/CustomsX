@@ -16,9 +16,9 @@ class _SupportScreenState extends State<SupportScreen> {
     if (await canLaunchUrlString(url)) {
       await launchUrlString(url);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not open FAQ page')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Could not open FAQ page')));
     }
   }
 
@@ -33,11 +33,17 @@ class _SupportScreenState extends State<SupportScreen> {
   // Local FAQ data
   final Map<String, List<Map<String, String>>> faqData = {
     "Payments": [
-      {"question": "How do I make a payment?", "answer": "Go to Payments section"},
+      {
+        "question": "How do I make a payment?",
+        "answer": "Go to Payments section",
+      },
       {"question": "Payment failed?", "answer": "Check card details"},
     ],
     "Calculations": [
-      {"question": "How are duties calculated?", "answer": "Based on item value"},
+      {
+        "question": "How are duties calculated?",
+        "answer": "Based on item value",
+      },
     ],
   };
 
@@ -89,26 +95,35 @@ class _SupportScreenState extends State<SupportScreen> {
               icon: Icon(Icons.arrow_back),
               onPressed: () => setState(() => _showLocalFAQ = false),
             ),
-            Text("FAQs", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text(
+              "FAQs",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
           ],
         ),
         ...faqData.entries.map((entry) {
           return ExpansionTile(
             title: Text(entry.key),
-            children: entry.value.map((faq) {
-              return ListTile(
-                title: Text(faq['question']!),
-                subtitle: Text(faq['answer']!),
-              );
-            }).toList(),
+            children:
+                entry.value.map((faq) {
+                  return ListTile(
+                    title: Text(faq['question']!),
+                    subtitle: Text(faq['answer']!),
+                  );
+                }).toList(),
           );
         }).toList(),
       ],
     );
   }
 
-  Widget _buildSupportCard({required IconData icon, required String title, 
-    required String subtitle, required VoidCallback onTap, required Color color}) {
+  Widget _buildSupportCard({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+    required Color color,
+  }) {
     return Card(
       child: ListTile(
         leading: Icon(icon, color: color),
