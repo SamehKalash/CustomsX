@@ -2,14 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'contact_us.dart';
 
-class SupportScreen extends StatelessWidget {
-  // Open FAQ URL
+class SupportScreen extends StatefulWidget {
+  @override
+  State<SupportScreen> createState() => _SupportScreenState();
+}
+
+class _SupportScreenState extends State<SupportScreen> {
+  bool _showLocalFAQ = false;
+
+  // Open official FAQ page
   void _openFAQ() async {
-    const url = 'https://customs.gov.eg/faq';
+    const url = 'https://customs.gov.eg/faq'; // ✅ Official FAQ link
     if (await canLaunchUrlString(url)) {
       await launchUrlString(url);
     } else {
-      throw 'Could not launch $url';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not open FAQ page')),
+      );
     }
   }
 
@@ -21,13 +30,16 @@ class SupportScreen extends StatelessWidget {
     );
   }
 
-  // Launch phone call
-  void _callSupport() async {
-    const phone = 'tel:+20212345678';
-    if (await canLaunchUrlString(phone)) {
-      await launchUrlString(phone);
-    }
-  }
+  // Local FAQ data
+  final Map<String, List<Map<String, String>>> faqData = {
+    "Payments": [
+      {"question": "How do I make a payment?", "answer": "Go to Payments section"},
+      {"question": "Payment failed?", "answer": "Check card details"},
+    ],
+    "Calculations": [
+      {"question": "How are duties calculated?", "answer": "Based on item value"},
+    ],
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -35,54 +47,73 @@ class SupportScreen extends StatelessWidget {
       appBar: AppBar(title: Text('Support')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            // FAQ Card
-            _buildSupportCard(
-              icon: Icons.help_outline,
-              title: 'FAQ',
-              subtitle: 'Find answers to common questions',
-              onTap: _openFAQ,
-              color: Colors.blue,
-            ),
-            
-            // Contact Us Card
-            _buildSupportCard(
-              icon: Icons.email,
-              title: 'Contact Us',
-              subtitle: 'Send us a message',
-              onTap: () => _openContactUs(context),
-              color: Colors.green,
-            ),
-            
-            // Call Support Card
-            _buildSupportCard(
-              icon: Icons.phone,
-              title: 'Call Support',
-              subtitle: '24/7 helpline',
-              onTap: _callSupport,
-              color: Colors.orange,
-            ),
-          ],
-        ),
+        child: _showLocalFAQ ? _buildLocalFAQ() : _buildSupportOptions(context),
       ),
     );
   }
 
-  Widget _buildSupportCard({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required VoidCallback onTap,
-    required Color color,
-  }) {
+  Widget _buildSupportOptions(BuildContext context) {
+    return Column(
+      children: [
+        _buildSupportCard(
+          icon: Icons.help_outline,
+          title: 'FAQ (Web)',
+          subtitle: 'Official customs FAQ',
+          onTap: _openFAQ,
+          color: Colors.blue,
+        ),
+        _buildSupportCard(
+          icon: Icons.library_books,
+          title: 'FAQ (Local)',
+          subtitle: 'Common questions',
+          onTap: () => setState(() => _showLocalFAQ = true),
+          color: Colors.teal,
+        ),
+        _buildSupportCard(
+          icon: Icons.email,
+          title: 'Contact Us',
+          subtitle: 'Send us a message',
+          onTap: () => _openContactUs(context),
+          color: Colors.green,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLocalFAQ() {
+    return ListView(
+      children: [
+        Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => setState(() => _showLocalFAQ = false),
+            ),
+            Text("FAQs", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          ],
+        ),
+        ...faqData.entries.map((entry) {
+          return ExpansionTile(
+            title: Text(entry.key),
+            children: entry.value.map((faq) {
+              return ListTile(
+                title: Text(faq['question']!),
+                subtitle: Text(faq['answer']!),
+              );
+            }).toList(),
+          );
+        }).toList(),
+      ],
+    );
+  }
+
+  Widget _buildSupportCard({required IconData icon, required String title, 
+    required String subtitle, required VoidCallback onTap, required Color color}) {
     return Card(
-      margin: EdgeInsets.only(bottom: 16),
       child: ListTile(
         leading: Icon(icon, color: color),
-        title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(title),
         subtitle: Text(subtitle),
-        trailing: Icon(Icons.chevron_right),
         onTap: onTap,
       ),
     );

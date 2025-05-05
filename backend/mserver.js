@@ -26,75 +26,76 @@ const countrySchema = new mongoose.Schema({
   slug: String
 });
 
-const userSchema = new mongoose.Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  dob: { type: Date, required: true },
-  gender: { type: String, required: true },
-  address: { type: String, required: true },
-  country: { type: String, required: true },
-  mobile: { type: String, required: true },
-  countryCode: { type: String, required: true },
+// === CONTACT FORM API START ===
+
+// 1. Contact Schema
+const contactSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  message: { type: String, required: true },
+  inquiryType: { type: String, required: true },
+  attachmentUrl: { type: String, default: null },
   createdAt: { type: Date, default: Date.now },
-  lastLogin: { type: Date, default: null }
+  ticketId: { type: String, required: true }
 });
 
-// Models
-const Country = mongoose.model('Country', countrySchema);
-const User = mongoose.model('User', userSchema);
+const Contact = mongoose.model('Contact', contactSchema);
 
-// Routes
-app.get('/countries', async (req, res) => {
+// 2. Multer Setup for File Uploads
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });  // Or configure cloud storage later
+
+// 3. SendGrid Email Setup
+const sgMail = require('@sendgrid/mail');
+if (process.env.SENDGRID_API_KEY) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+}
+
+// 4. POST /contact - Handles Contact Form Submission
+app.post('/contact', upload.single('attachment'), async (req, res) => {
   try {
-    const countries = await Country.find().sort('name');
-    res.json(countries);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to load countries' });
-  }
-});
+    const { name, email, message, inquiryType } = req.body;
 
-app.post('/register', async (req, res) => {
-  try {
-    const { firstName, lastName, email, password, dob, gender, address, country, mobile, countryCode } = req.body;
-
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ error: 'Email already registered' });
+    // Basic validation
+    if (!name || !email || !message || !inquiryType) {
+      return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Generate unique Ticket ID
+    const ticketId = 'TKT-' + Math.random().toString(36).substring(2, 10).toUpperCase();
 
-    const newUser = new User({
-      firstName,
-      lastName,
+    // Save contact to database
+    const newContact = new Contact({
+      name,
       email,
-      password: hashedPassword,
-      dob: new Date(dob),
-      gender,
-      address,
-      country,
-      mobile: `${mobile}`,
-      countryCode
+      message,
+      inquiryType,
+      ticketId,
+      attachmentUrl: req.file ? req.file.path : null
     });
 
-    await newUser.save();
+    await newContact.save();
 
-    res.status(201).json({
-      message: 'Registration successful',
-      user: {
-        id: newUser._id,
-        firstName: newUser.firstName,
-        email: newUser.email
-      }
-    });
+    // Optional: Send auto-confirmation email
+    if (process.env.SENDGRID_API_KEY) {
+      const msg = {
+        to: email,
+        from: 'support@example.com', // 🔧 CHANGE THIS to your verified sender
+        subject: `Support Request Received (ID: ${ticketId})`,
+        text: `Hi ${name},\n\nWe’ve received your message regarding "${inquiryType}". Our team will respond shortly.\n\nTicket ID: ${ticketId}\n\nThank you!`,
+      };
+      await sgMail.send(msg);
+    }
 
-  } catch (error) {
-    console.error('Registration error:', error);
-    res.status(500).json({ error: 'Server error during registration' });
+    res.status(200).json({ message: 'Submitted successfully', ticketId });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+// === CONTACT FORM API END ===
+
 
 app.post('/login', async (req, res) => {
   try {
@@ -191,3 +192,19 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
+const mongoose = require('mongoose');
+
+const InquirySchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  message: String,
+  inquiryType: String,
+  attachmentPath: String, // path to saved file
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+module.exports = mongoose.model('Inquiry', InquirySchema);
+const Inquiry = require('./models/Inquiry'); // Adjust the path as necessary

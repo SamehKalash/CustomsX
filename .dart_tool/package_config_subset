@@ -58,6 +58,10 @@ file
 3.0
 file:///home/hadeel/.pub-cache/hosted/pub.dev/file-7.0.1/
 file:///home/hadeel/.pub-cache/hosted/pub.dev/file-7.0.1/lib/
+file_picker
+2.19
+file:///home/hadeel/.pub-cache/hosted/pub.dev/file_picker-6.2.1/
+file:///home/hadeel/.pub-cache/hosted/pub.dev/file_picker-6.2.1/lib/
 file_selector_linux
 3.3
 file:///home/hadeel/.pub-cache/hosted/pub.dev/file_selector_linux-0.9.3+2/
@@ -414,6 +418,10 @@ web
 3.4
 file:///home/hadeel/.pub-cache/hosted/pub.dev/web-1.1.1/
 file:///home/hadeel/.pub-cache/hosted/pub.dev/web-1.1.1/lib/
+win32
+3.7
+file:///home/hadeel/.pub-cache/hosted/pub.dev/win32-5.12.0/
+file:///home/hadeel/.pub-cache/hosted/pub.dev/win32-5.12.0/lib/
 window_size
 3.0
 file:///home/hadeel/.pub-cache/hosted/pub.dev/window_size-0.1.0/
