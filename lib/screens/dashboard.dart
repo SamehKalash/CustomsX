@@ -741,9 +741,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void _showFABAction(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => const CustomsFeeSelectionScreen(),
-      ),
+      MaterialPageRoute(builder: (context) => const CustomsCalculatorScreen()),
     );
   }
 }

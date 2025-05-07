@@ -1,22 +1,32 @@
+
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
+const axios = require('axios');
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, { dbName: 'countrydb' })
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.error('MongoDB Connection Error:', err));
 
-
 // Schemas
+const hscodeSchema = new mongoose.Schema({
+  Code: String,
+  NameAz: String,
+  NameEn: String,
+  NameRu: String,
+  ChildGoods: [mongoose.Schema.Types.Mixed]
+}, { collection: 'hscodes' });
+
 const countrySchema = new mongoose.Schema({
   name: String,
   code: String,
@@ -42,10 +52,81 @@ const userSchema = new mongoose.Schema({
 });
 
 // Models
+const HSCode = mongoose.model('HSCode', hscodeSchema);
 const Country = mongoose.model('Country', countrySchema);
 const User = mongoose.model('User', userSchema);
 
-// Routes
+// HS Code Endpoints
+app.get('/api/hscodes', async (req, res) => {
+  try {
+    const { search } = req.query;
+    const query = search ? { 
+      $or: [
+        { Code: new RegExp(search, 'i') },
+        { NameEn: new RegExp(search, 'i') }
+      ]
+    } : {};
+    
+    const codes = await HSCode.find(query)
+      .limit(50)
+      .select('Code NameEn -_id');
+      
+    res.json(codes);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching HS Codes' });
+  }
+});
+
+// Customs API Endpoints
+app.post('/api/customs/check-code', async (req, res) => {
+  try {
+    const response = await axios.get(
+      'https://c2b-fbusiness.customs.gov.az/api/v1/goods/check-code',
+      {
+        params: req.body,
+        headers: {
+          'Authorization': `Bearer ${process.env.CUSTOMS_API_KEY}`,
+          'lang': req.headers.lang || 'en',
+          'requestSource': 'ECustoms'
+        }
+      }
+    );
+    res.json(response.data);
+  } catch (error) {
+    res.status(error.response?.status || 500).json(error.response?.data);
+  }
+});
+
+app.post('/api/customs/calculate-duty', async (req, res) => {
+  try {
+    const hscode = await HSCode.findOne({ Code: req.body.hsCode })
+      .select('NameEn -_id');
+
+    const response = await axios.post(
+      'https://c2b-fbusiness.customs.gov.az/api/v1/goods/calculate-duty',
+      req.body,
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.CUSTOMS_API_KEY}`,
+          'lang': req.headers.lang || 'en',
+          'requestSource': 'ECustoms',
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    const responseData = response.data;
+    if (responseData.data) {
+      responseData.data.productNameEn = hscode?.NameEn || 'Unknown product';
+    }
+
+    res.json(responseData);
+  } catch (error) {
+    res.status(error.response?.status || 500).json(error.response?.data);
+  }
+});
+
+// Country Endpoints
 app.get('/countries', async (req, res) => {
   try {
     const countries = await Country.find().sort('name');
@@ -55,6 +136,7 @@ app.get('/countries', async (req, res) => {
   }
 });
 
+// User Authentication Endpoints
 app.post('/register', async (req, res) => {
   try {
     const { firstName, lastName, email, password, dob, gender, address, country, mobile, countryCode } = req.body;
@@ -65,7 +147,6 @@ app.post('/register', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const newUser = new User({
       firstName,
       lastName,
@@ -80,14 +161,9 @@ app.post('/register', async (req, res) => {
     });
 
     await newUser.save();
-
     res.status(201).json({
       message: 'Registration successful',
-      user: {
-        id: newUser._id,
-        firstName: newUser.firstName,
-        email: newUser.email
-      }
+      user: { id: newUser._id, firstName: newUser.firstName, email: newUser.email }
     });
 
   } catch (error) {
@@ -99,16 +175,12 @@ app.post('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ error: 'Account not found' });
-    }
 
+    if (!user) return res.status(404).json({ error: 'Account not found' });
+    
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
+    if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
 
     user.lastLogin = Date.now();
     await user.save();
@@ -135,15 +207,13 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// New: Update Profile
+// User Management Endpoints
 app.post('/updateProfile', async (req, res) => {
   try {
     const { email, firstName, lastName, address, country, mobile } = req.body;
-
     const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
+
+    if (!user) return res.status(404).json({ error: 'User not found' });
 
     user.firstName = firstName ?? user.firstName;
     user.lastName = lastName ?? user.lastName;
@@ -152,7 +222,6 @@ app.post('/updateProfile', async (req, res) => {
     user.mobile = mobile ?? user.mobile;
 
     await user.save();
-
     res.json({ message: 'Profile updated successfully' });
   } catch (error) {
     console.error('Profile update error:', error);
@@ -160,25 +229,18 @@ app.post('/updateProfile', async (req, res) => {
   }
 });
 
-// New: Change Password
 app.post('/changePassword', async (req, res) => {
   try {
     const { email, oldPassword, newPassword } = req.body;
-
     const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
 
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    
     const isMatch = await bcrypt.compare(oldPassword, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ error: 'Old password is incorrect' });
-    }
+    if (!isMatch) return res.status(401).json({ error: 'Old password is incorrect' });
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedPassword;
+    user.password = await bcrypt.hash(newPassword, 10);
     await user.save();
-
     res.json({ message: 'Password changed successfully' });
   } catch (error) {
     console.error('Password change error:', error);
@@ -187,7 +249,4 @@ app.post('/changePassword', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
