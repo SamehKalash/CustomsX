@@ -7,7 +7,7 @@ import '../widgets/status_card.dart';
 import './profile_screen.dart';
 import './exchange_rate_screen.dart';
 import '../providers/user_provider.dart';
-import './customs_fee_selection_screen.dart';
+import 'customs_calculation_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});

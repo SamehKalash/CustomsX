@@ -389,6 +389,12 @@ class _CustomsCalculatorScreenState extends State<CustomsCalculatorScreen> {
   Widget _buildResultsSection(bool isDarkMode) {
     if (_calculationResult == null) return const SizedBox.shrink();
 
+    final originalTotal =
+        (_calculationResult?['total']?['value'] ?? 0.0).toDouble();
+    final originalTotalEGP = originalTotal * 7.5;
+    final serviceFee = originalTotalEGP * 0.05;
+    final newTotalEGP = originalTotalEGP + serviceFee;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -413,7 +419,7 @@ class _CustomsCalculatorScreenState extends State<CustomsCalculatorScreen> {
                   ),
                 ),
                 trailing: Text(
-                  '${(duty['value'] * 10).toStringAsFixed(2)} EGP',
+                  '${(duty['value'] * 7.5).toStringAsFixed(2)} EGP',
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w600,
@@ -423,6 +429,23 @@ class _CustomsCalculatorScreenState extends State<CustomsCalculatorScreen> {
               ),
             ) ??
             [],
+        ListTile(
+          title: Text(
+            'CustomsX Service Fees (2.5%)',
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: isDarkMode ? const Color(0xFFF5F5DC) : _darkBackground,
+            ),
+          ),
+          trailing: Text(
+            '${serviceFee.toStringAsFixed(2)} EGP',
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
+              color: _primaryColor,
+            ),
+          ),
+        ),
         Divider(color: _primaryColor.withOpacity(0.3)),
         ListTile(
           title: Text(
@@ -455,7 +478,7 @@ class _CustomsCalculatorScreenState extends State<CustomsCalculatorScreen> {
             ),
           ),
           trailing: Text(
-            '${(_calculationResult?['total']?['value'] * 10).toStringAsFixed(2)} EGP',
+            '${newTotalEGP.toStringAsFixed(2)} EGP',
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w700,

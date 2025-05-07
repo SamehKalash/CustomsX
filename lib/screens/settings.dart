@@ -23,12 +23,12 @@ class SettingsScreen extends StatelessWidget {
                 isDarkMode ? const Color(0xFFF5F5DC) : const Color(0xFF1A120B),
           ),
         ),
-        backgroundColor:
-            isDarkMode ? const Color(0xFF3C2A21) : const Color(0xFFD4A373),
+        backgroundColor: isDarkMode ? const Color(0xFF3C2A21) : Colors.white,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_rounded, size: 24.w),
           onPressed: () => Navigator.pop(context),
         ),
+        elevation: 2,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.w),
@@ -47,20 +47,13 @@ class SettingsScreen extends StatelessWidget {
             ),
             _buildDivider(isDarkMode),
 
-            _buildSectionHeader('Language & Region', isDarkMode),
+            _buildSectionHeader('Language', isDarkMode),
             _buildSettingsCard(
               context,
               icon: Icons.language_rounded,
               title: 'App Language',
               subtitle: 'English (United States)',
               onTap: () => _showLanguageSelector(context),
-            ),
-            _buildSettingsCard(
-              context,
-              icon: Icons.flag_rounded,
-              title: 'Country/Region',
-              subtitle: 'Egypt',
-              onTap: () => _showRegionSelector(context),
             ),
             _buildDivider(isDarkMode),
 
@@ -271,10 +264,6 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  void _showRegionSelector(BuildContext context) {
-    // Implement region selector
-  }
-
   void _navigateToSecurity(BuildContext context) {
     Navigator.push(
       context,
@@ -287,7 +276,7 @@ class SettingsScreen extends StatelessWidget {
                     Provider.of<ThemeProvider>(context).themeMode ==
                             ThemeMode.dark
                         ? const Color(0xFF3C2A21)
-                        : const Color(0xFFD4A373),
+                        : Colors.white,
               ),
               body: const Center(child: Text('Security settings content')),
             ),

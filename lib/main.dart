@@ -15,7 +15,7 @@ import 'screens/documents.dart';
 import 'screens/compliance.dart';
 import 'screens/settings.dart';
 import 'screens/forgot_password_screen.dart';
-import 'screens/customs_fee_screen.dart';
+import 'screens/customs_calculation_screen.dart';
 
 // Theme management
 import 'theme/theme_provider.dart';
