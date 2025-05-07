@@ -93,7 +93,11 @@ class GlobalClearApp extends StatelessWidget {
 
   Map<String, WidgetBuilder> _appRoutes() {
     return {
-      '/welcome': (context) => const WelcomeScreen(),
+      '/welcome':
+          (context) => Scaffold(
+            body: const WelcomeScreen(),
+            bottomNavigationBar: CustomNavigationBar(),
+          ),
       '/login': (context) => LoginScreen(),
       '/createCompany': (context) => const CreateCompanyScreen(),
       '/createAccount': (context) => const CreateAccountScreen(),
