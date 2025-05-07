@@ -132,6 +132,6 @@ class ApiService {
             ? 'Network error during $operation'
             : error.toString();
 
-    return Exception('$message');
+    return Exception(message);
   }
 }

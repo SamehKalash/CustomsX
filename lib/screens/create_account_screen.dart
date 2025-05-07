@@ -19,7 +19,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _lastNameController = TextEditingController();
   final _dobController = TextEditingController();
   final _addressController = TextEditingController();
-  final _landlineController = TextEditingController();
   final _mobileController = TextEditingController();
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -193,8 +192,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             isDarkMode: isDarkMode,
             validator: (value) {
               if (value == null || value.isEmpty) return 'Required field';
-              if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value))
+              if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
                 return 'Invalid characters';
+              }
               return null;
             },
           ),
@@ -209,8 +209,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             isDarkMode: isDarkMode,
             validator: (value) {
               if (value == null || value.isEmpty) return 'Required field';
-              if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value))
+              if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
                 return 'Invalid characters';
+              }
               return null;
             },
           ),
@@ -334,7 +335,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   Widget _buildMobileNumberField(bool isDarkMode) {
     return Row(
       children: [
-        Container(
+        SizedBox(
           width: 140.w,
           child: DropdownButtonFormField<String>(
             value: _countryCode,
@@ -461,8 +462,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           label: 'Confirm Password',
           isDarkMode: isDarkMode,
           validator: (value) {
-            if (value != _passwordController.text)
+            if (value != _passwordController.text) {
               return 'Passwords do not match';
+            }
             return null;
           },
         ),
@@ -508,17 +510,18 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   Widget _buildSubmitButton(bool isDarkMode) {
     return StatefulBuilder(
       builder: (context, setState) {
-        bool _isLoading = false;
+        bool isLoading = false;
 
         return SizedBox(
           width: double.infinity,
           child: ElevatedButton(
             onPressed:
-                _isLoading
+                isLoading
+                    // ignore: dead_code
                     ? null
                     : () async {
                       if (_formKey.currentState!.validate() && _termsAccepted) {
-                        setState(() => _isLoading = true);
+                        setState(() => isLoading = true);
 
                         try {
                           // Prepare user data map
@@ -568,7 +571,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             ),
                           );
                         } finally {
-                          setState(() => _isLoading = false);
+                          setState(() => isLoading = false);
                         }
                       } else if (!_termsAccepted) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -590,7 +593,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               disabledBackgroundColor: _primaryColor.withOpacity(0.6),
             ),
             child:
-                _isLoading
+                isLoading
                     ? SizedBox(
                       height: 24.h,
                       width: 24.h,

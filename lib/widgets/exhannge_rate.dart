@@ -79,18 +79,46 @@ class _ExchangeRateWidgetState extends State<ExchangeRateWidget> {
       'symbol': 'E£',
       'currencyName': 'Egyptian Pound',
     },
+    {
+      'currency': 'AUD',
+      'rate': '33.12',
+      'country': 'Australia',
+      'symbol': '\$',
+      'currencyName': 'Australian Dollar',
+    },
+    {
+      'currency': 'INR',
+      'rate': '0.61',
+      'country': 'India',
+      'symbol': '₹',
+      'currencyName': 'Indian Rupee',
+    },
+    {
+      'currency': 'CNY',
+      'rate': '7.25',
+      'country': 'China',
+      'symbol': '¥',
+      'currencyName': 'Chinese Yuan',
+    },
+    {
+      'currency': 'ZAR',
+      'rate': '3.25',
+      'country': 'South Africa',
+      'symbol': 'R',
+      'currencyName': 'South African Rand',
+    },
   ];
 
   String searchQuery = '';
+  String defaultCurrency = 'EGP'; // Default currency set to Egyptian Pound
 
   @override
   Widget build(BuildContext context) {
-    final filteredRates =
-        exchangeRates.where((rate) {
-          final query = searchQuery.toLowerCase();
-          return rate['country']!.toLowerCase().contains(query) ||
-              rate['currency']!.toLowerCase().contains(query);
-        }).toList();
+    final filteredRates = exchangeRates.where((rate) {
+      final query = searchQuery.toLowerCase();
+      return rate['country']!.toLowerCase().contains(query) ||
+          rate['currency']!.toLowerCase().contains(query);
+    }).toList();
 
     return Card(
       elevation: 4,
@@ -104,9 +132,10 @@ class _ExchangeRateWidgetState extends State<ExchangeRateWidget> {
             // Title Section
             Text(
               'Exchange Rates',
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
 
@@ -130,41 +159,53 @@ class _ExchangeRateWidgetState extends State<ExchangeRateWidget> {
             // Exchange Rates List
             filteredRates.isEmpty
                 ? const Center(
-                  child: Text(
-                    'No results found.',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                )
+                    child: Text(
+                      'No results found.',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  )
                 : ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: filteredRates.length,
-                  itemBuilder: (context, index) {
-                    final rate = filteredRates[index];
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Theme.of(
-                          context,
-                        ).colorScheme.primary.withOpacity(0.1),
-                        child: Text(
-                          rate['currency']!,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: filteredRates.length,
+                    itemBuilder: (context, index) {
+                      final rate = filteredRates[index];
+                      final isDefault = rate['currency'] == defaultCurrency;
+
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.1),
+                          child: Text(
+                            rate['currency']!,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                      title: Text(
-                        rate['country']!,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text(
-                        '${rate['currencyName']} - Rate: ${rate['symbol']}${rate['rate']}',
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                    );
-                  },
-                ),
+                        title: Text(
+                          rate['country']!,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(
+                          '${rate['currencyName']} - Rate: ${rate['symbol']}${rate['rate']}',
+                          style: const TextStyle(color: Colors.grey),
+                        ),
+                        trailing: isDefault
+                            ? const Icon(Icons.check_circle,
+                                color: Colors.green)
+                            : null,
+                        onTap: () {
+                          setState(() {
+                            defaultCurrency = rate['currency']!;
+                          });
+                        },
+                      );
+                    },
+                  ),
           ],
         ),
       ),

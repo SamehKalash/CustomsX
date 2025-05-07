@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -8,6 +7,7 @@ import '../widgets/status_card.dart';
 import './profile_screen.dart';
 import './exchange_rate_screen.dart';
 import '../providers/user_provider.dart';
+import './customs_fee_selection_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -240,10 +240,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final difference = now.difference(lastLogin);
 
     if (difference.inSeconds < 60) return 'Last login: Just now';
-    if (difference.inMinutes < 60)
+    if (difference.inMinutes < 60) {
       return 'Last login: ${difference.inMinutes}m ago';
-    if (difference.inHours < 24)
+    }
+    if (difference.inHours < 24) {
       return 'Last login: ${difference.inHours}h ago';
+    }
     if (difference.inDays < 7) return 'Last login: ${difference.inDays}d ago';
 
     return 'Last login: ${DateFormat('MMM dd, yyyy - hh:mm a').format(lastLogin)}';
@@ -500,8 +502,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return FloatingActionButton(
       onPressed: () => _showFABAction(context),
       backgroundColor: _primaryColor,
-      child: Icon(Icons.add, color: Colors.white, size: 28.w),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+      child: Icon(Icons.add, color: Colors.white, size: 28.w),
     );
   }
 
@@ -737,6 +739,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _showFABAction(BuildContext context) {
-    // Add FAB action logic here
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const CustomsFeeSelectionScreen(),
+      ),
+    );
   }
 }
