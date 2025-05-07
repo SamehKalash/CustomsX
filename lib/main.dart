@@ -37,9 +37,11 @@ void main() async {
     dotenv.env['API_URL'] = 'http://localhost:5000';
   }
 
-  // Configure window for Linux desktop
+  // Configure window for Linux and Windows desktop
   if (Platform.isLinux) {
     _configureLinuxWindow();
+  } else if (Platform.isWindows) {
+    _configureWindowsWindow();
   }
 
   runApp(
@@ -54,6 +56,20 @@ void main() async {
 }
 
 void _configureLinuxWindow() {
+  setWindowTitle('Customs Clearance App');
+  setWindowFrame(
+    const Rect.fromLTWH(
+      0,
+      0,
+      414, // iPhone 14 Pro width
+      896, // iPhone 14 Pro height
+    ),
+  );
+  setWindowMinSize(const Size(360, 640));
+  setWindowMaxSize(const Size(414, 896));
+}
+
+void _configureWindowsWindow() {
   setWindowTitle('Customs Clearance App');
   setWindowFrame(
     const Rect.fromLTWH(
