@@ -12,7 +12,7 @@ class _SupportScreenState extends State<SupportScreen> {
 
   // Open official FAQ page
   void _openFAQ() async {
-    const url = 'https://customs.gov.eg/faq'; // ✅ Official FAQ link
+    const url = 'https://custom-web.azurewebsites.net/Legislations/FAQ'; // ✅ Official FAQ link
     if (await canLaunchUrlString(url)) {
       await launchUrlString(url);
     } else {
