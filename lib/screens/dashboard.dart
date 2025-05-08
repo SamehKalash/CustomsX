@@ -277,9 +277,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: [
         _buildActionButton(
           context,
-          Icons.calculate,
-          'Calculator',
-          '/calculator',
+          Icons.support_agent,
+          'Support',
+          '/support',
           isDarkMode,
         ),
         _buildActionButton(

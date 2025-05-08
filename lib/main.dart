@@ -16,6 +16,7 @@ import 'screens/compliance.dart';
 import 'screens/settings.dart';
 import 'screens/forgot_password_screen.dart';
 import 'screens/customs_calculation_screen.dart';
+import 'screens/support.dart';
 
 // Theme management
 import 'theme/theme_provider.dart';
@@ -120,6 +121,7 @@ class GlobalClearApp extends StatelessWidget {
       '/settings': (context) => const SettingsScreen(),
       '/forgot-password': (context) => const ForgotPasswordScreen(),
       '/customs-fee': (context) => const CustomsCalculatorScreen(),
+      '/support': (context) => const SupportScreen(),
     };
   }
 }
