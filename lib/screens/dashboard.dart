@@ -189,8 +189,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(20.w),
+      margin: EdgeInsets.only(bottom: 20.h),
       decoration: BoxDecoration(
-        color: isDarkMode ? Color(0xFF3C2A21) : _primaryColor,
+        color: isDarkMode ? const Color(0xFF3C2A21) : _primaryColor,
         borderRadius: BorderRadius.circular(15.r),
         boxShadow: [
           BoxShadow(
@@ -207,7 +208,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             'Welcome Back,',
             style: TextStyle(
               fontSize: 18.sp,
-              color: isDarkMode ? Color(0xFFF5F5DC) : Colors.white,
+              color: isDarkMode ? const Color(0xFFF5F5DC) : Colors.white,
             ),
           ),
           Text(
@@ -223,10 +224,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             _getLastLoginText(lastLogin),
             style: TextStyle(
               fontSize: 14.sp,
-              color:
-                  isDarkMode
-                      ? Color(0xFFF5F5DC).withOpacity(0.7)
-                      : Colors.white70,
+              color: isDarkMode
+                  ? const Color(0xFFF5F5DC).withOpacity(0.7)
+                  : Colors.white70,
             ),
           ),
         ],
@@ -267,37 +267,42 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildQuickActions(BuildContext context, bool isDarkMode) {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 3,
-      childAspectRatio: 0.9,
-      mainAxisSpacing: 12.w,
-      crossAxisSpacing: 12.w,
-      padding: EdgeInsets.symmetric(horizontal: 8.w),
-      children: [
-        _buildActionButton(
-          context,
-          Icons.support_agent,
-          'Support',
-          '/support',
-          isDarkMode,
-        ),
-        _buildActionButton(
-          context,
-          Icons.track_changes,
-          'Tracking',
-          '/tracking',
-          isDarkMode,
-        ),
-        _buildActionButton(
-          context,
-          Icons.upload_file,
-          'Upload',
-          '/documents',
-          isDarkMode,
-        ),
-      ],
+    return Center(
+      child: Wrap(
+        spacing: 16.w,
+        runSpacing: 16.h,
+        alignment: WrapAlignment.center,
+        children: [
+          _buildActionButton(
+            context,
+            Icons.calculate,
+            'Calculator',
+            '/calculator',
+            isDarkMode,
+          ),
+          _buildActionButton(
+            context,
+            Icons.track_changes,
+            'Tracking',
+            '/tracking',
+            isDarkMode,
+          ),
+          _buildActionButton(
+            context,
+            Icons.upload_file,
+            'Upload',
+            '/documents',
+            isDarkMode,
+          ),
+          _buildActionButton(
+            context,
+            Icons.search,
+            'IMEI Checker',
+            '/imei-checker',
+            isDarkMode,
+          ),
+        ],
+      ),
     );
   }
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:window_size/window_size.dart';
-
+import 'screens/imei_checker_screen.dart';
 // Screen imports
 import 'screens/welcome_screen.dart';
 import 'screens/login_screen.dart';
@@ -120,6 +120,7 @@ class GlobalClearApp extends StatelessWidget {
       '/compliance': (context) => const ComplianceGuideScreen(),
       '/settings': (context) => const SettingsScreen(),
       '/forgot-password': (context) => const ForgotPasswordScreen(),
+      '/imei-checker': (context) => const IMEICheckerScreen(),
       '/customs-fee': (context) => const CustomsCalculatorScreen(),
       '/support': (context) => const SupportScreen(),
     };
