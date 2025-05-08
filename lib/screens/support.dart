@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme_provider.dart';
+import './dashboard.dart';
+import './profile_screen.dart';
 
 class SupportScreen extends StatefulWidget {
   const SupportScreen({super.key});
@@ -11,34 +13,38 @@ class SupportScreen extends StatefulWidget {
 }
 
 class _SupportScreenState extends State<SupportScreen> {
+  int _currentIndex = 1; // Support is the middle tab
   final Color _primaryColor = const Color(0xFFD4A373);
   final Color _darkBackground = const Color(0xFF1A120B);
-  
   final TextEditingController _subjectController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
-  
   int _selectedTab = 0;
-  
+
   final List<Map<String, dynamic>> _faqs = [
     {
       'question': 'How do I track my shipment?',
-      'answer': 'You can track your shipment by going to the Tracking section and entering your tracking number. The system will show you real-time updates on your shipment status.'
+      'answer':
+          'You can track your shipment by going to the Tracking section and entering your tracking number. The system will show you real-time updates on your shipment status.',
     },
     {
       'question': 'What documents are required for customs clearance?',
-      'answer': 'Typically, you need a commercial invoice, packing list, bill of lading or airway bill, and a certificate of origin. Additional documents may be required depending on the type of goods and destination country.'
+      'answer':
+          'Typically, you need a commercial invoice, packing list, bill of lading or airway bill, and a certificate of origin. Additional documents may be required depending on the type of goods and destination country.',
     },
     {
       'question': 'How long does customs clearance take?',
-      'answer': 'Standard customs clearance typically takes 1-3 business days. However, this can vary depending on the complexity of the shipment, documentation completeness, and any inspections required.'
+      'answer':
+          'Standard customs clearance typically takes 1-3 business days. However, this can vary depending on the complexity of the shipment, documentation completeness, and any inspections required.',
     },
     {
       'question': 'What are the payment methods available?',
-      'answer': 'We accept credit/debit cards, bank transfers, and digital wallets. You can manage all your payments through our secure payment gateway in the Payment section.'
+      'answer':
+          'We accept credit/debit cards, bank transfers, and digital wallets. You can manage all your payments through our secure payment gateway in the Payment section.',
     },
     {
       'question': 'How can I calculate import duties and taxes?',
-      'answer': 'Use our Calculator tool in the Quick Actions section. Enter your product details, value, and destination to get an estimate of duties and taxes applicable to your shipment.'
+      'answer':
+          'Use our Calculator tool in the Quick Actions section. Enter your product details, value, and destination to get an estimate of duties and taxes applicable to your shipment.',
     },
   ];
 
@@ -53,25 +59,23 @@ class _SupportScreenState extends State<SupportScreen> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDarkMode = themeProvider.themeMode == ThemeMode.dark;
-    final iconColor = isDarkMode ? const Color(0xFFF5F5DC) : _darkBackground;
 
     return Scaffold(
-      appBar: _buildAppBar(context, isDarkMode, iconColor),
+      appBar: _buildAppBar(isDarkMode),
       body: Container(
         decoration: _buildBackgroundGradient(isDarkMode),
         child: Column(
           children: [
             _buildTabBar(isDarkMode),
-            Expanded(
-              child: _buildTabContent(context, isDarkMode),
-            ),
+            Expanded(child: _buildTabContent(context, isDarkMode)),
           ],
         ),
       ),
+      bottomNavigationBar: _buildBottomNavBar(isDarkMode),
     );
   }
 
-  AppBar _buildAppBar(BuildContext context, bool isDarkMode, Color iconColor) {
+  AppBar _buildAppBar(bool isDarkMode) {
     return AppBar(
       title: Text(
         'Support Center',
@@ -83,12 +87,8 @@ class _SupportScreenState extends State<SupportScreen> {
       ),
       backgroundColor: isDarkMode ? _darkBackground : Colors.white,
       elevation: 4,
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back, color: iconColor),
-        onPressed: () => Navigator.pushNamed(context, '/dashboard'),
-      ),
+      automaticallyImplyLeading: false,
       centerTitle: true,
-      iconTheme: IconThemeData(color: iconColor),
     );
   }
 
@@ -112,6 +112,121 @@ class _SupportScreenState extends State<SupportScreen> {
         stops: const [0.0, 0.5, 1.0],
       ),
     );
+  }
+
+  Widget _buildBottomNavBar(bool isDarkMode) {
+    return Container(
+      decoration: BoxDecoration(
+        color: isDarkMode ? _darkBackground : Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: Offset(0, -2.h),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 24.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavItem(Icons.home, 'Home', 0, isDarkMode),
+              _buildNavItem(Icons.help_outline, 'Support', 1, isDarkMode),
+              _buildNavItem(Icons.person, 'Profile', 2, isDarkMode),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItem(
+    IconData icon,
+    String label,
+    int index,
+    bool isDarkMode,
+  ) {
+    final isSelected = _currentIndex == index;
+    return GestureDetector(
+      onTap: () => _updateIndex(index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 28.w,
+            color:
+                isSelected
+                    ? _primaryColor
+                    : (isDarkMode
+                        ? Color(0xFFF5F5DC).withOpacity(0.6)
+                        : _darkBackground.withOpacity(0.6)),
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12.sp,
+              color:
+                  isSelected
+                      ? _primaryColor
+                      : (isDarkMode
+                          ? Color(0xFFF5F5DC).withOpacity(0.6)
+                          : _darkBackground.withOpacity(0.6)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _updateIndex(int index) {
+    setState(() => _currentIndex = index);
+    if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => const DashboardScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(-1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOutQuart;
+
+            var tween = Tween(
+              begin: begin,
+              end: end,
+            ).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(position: offsetAnimation, child: child);
+          },
+          transitionDuration: const Duration(milliseconds: 500),
+        ),
+      );
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => const ProfileScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOutQuart;
+
+            var tween = Tween(
+              begin: begin,
+              end: end,
+            ).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(position: offsetAnimation, child: child);
+          },
+          transitionDuration: const Duration(milliseconds: 500),
+        ),
+      );
+    }
   }
 
   Widget _buildTabBar(bool isDarkMode) {
@@ -140,29 +255,25 @@ class _SupportScreenState extends State<SupportScreen> {
 
   Widget _buildTabButton(String title, int index, bool isDarkMode) {
     final isSelected = _selectedTab == index;
-    
     return Expanded(
       child: GestureDetector(
-        onTap: () {
-          setState(() {
-            _selectedTab = index;
-          });
-        },
+        onTap: () => setState(() => _selectedTab = index),
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 16.h),
           decoration: BoxDecoration(
-            color: isSelected 
-                ? _primaryColor 
-                : isDarkMode ? Color(0xFF3C2A21) : Colors.white,
+            color: isSelected ? _primaryColor : Colors.transparent,
             borderRadius: BorderRadius.circular(15.r),
           ),
           child: Center(
             child: Text(
               title,
               style: TextStyle(
-                color: isSelected 
-                    ? Colors.white 
-                    : isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
+                color:
+                    isSelected
+                        ? Colors.white
+                        : isDarkMode
+                        ? Color(0xFFF5F5DC)
+                        : _darkBackground,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                 fontSize: 16.sp,
               ),
@@ -239,7 +350,10 @@ class _SupportScreenState extends State<SupportScreen> {
               faq['answer'],
               style: TextStyle(
                 fontSize: 15.sp,
-                color: isDarkMode ? Color(0xFFF5F5DC).withOpacity(0.9) : _darkBackground.withOpacity(0.8),
+                color:
+                    isDarkMode
+                        ? Color(0xFFF5F5DC).withOpacity(0.9)
+                        : _darkBackground.withOpacity(0.8),
                 height: 1.5,
               ),
             ),
@@ -265,32 +379,32 @@ class _SupportScreenState extends State<SupportScreen> {
           ),
           SizedBox(height: 20.h),
           _buildContactItem(
-            Icons.phone, 
-            'Phone Support', 
+            Icons.phone,
+            'Phone Support',
             '+1 (800) 123-4567',
             'Available 24/7',
             isDarkMode,
           ),
           SizedBox(height: 16.h),
           _buildContactItem(
-            Icons.email, 
-            'Email Support', 
+            Icons.email,
+            'Email Support',
             'support@customsx.com',
             'Response within 24 hours',
             isDarkMode,
           ),
           SizedBox(height: 16.h),
           _buildContactItem(
-            Icons.chat_bubble, 
-            'Live Chat', 
+            Icons.chat_bubble,
+            'Live Chat',
             'Available on our website',
             'Business hours: 9 AM - 6 PM',
             isDarkMode,
           ),
           SizedBox(height: 16.h),
           _buildContactItem(
-            Icons.location_on, 
-            'Headquarters', 
+            Icons.location_on,
+            'Headquarters',
             '123 Customs Plaza, Suite 500',
             'New York, NY 10001, USA',
             isDarkMode,
@@ -303,9 +417,9 @@ class _SupportScreenState extends State<SupportScreen> {
   }
 
   Widget _buildContactItem(
-    IconData icon, 
-    String title, 
-    String detail, 
+    IconData icon,
+    String title,
+    String detail,
     String subtitle,
     bool isDarkMode,
   ) {
@@ -359,7 +473,10 @@ class _SupportScreenState extends State<SupportScreen> {
                   subtitle,
                   style: TextStyle(
                     fontSize: 14.sp,
-                    color: isDarkMode ? Color(0xFFF5F5DC).withOpacity(0.7) : _darkBackground.withOpacity(0.6),
+                    color:
+                        isDarkMode
+                            ? Color(0xFFF5F5DC).withOpacity(0.7)
+                            : _darkBackground.withOpacity(0.6),
                   ),
                 ),
               ],
@@ -445,7 +562,10 @@ class _SupportScreenState extends State<SupportScreen> {
             'Fill out the form below and our support team will get back to you within 24 hours.',
             style: TextStyle(
               fontSize: 14.sp,
-              color: isDarkMode ? Color(0xFFF5F5DC).withOpacity(0.7) : _darkBackground.withOpacity(0.6),
+              color:
+                  isDarkMode
+                      ? Color(0xFFF5F5DC).withOpacity(0.7)
+                      : _darkBackground.withOpacity(0.6),
             ),
           ),
           SizedBox(height: 20.h),
@@ -472,11 +592,7 @@ class _SupportScreenState extends State<SupportScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildFormField(
-            'Issue Type',
-            isDarkMode,
-            isDropdown: true,
-          ),
+          _buildFormField('Issue Type', isDarkMode, isDropdown: true),
           SizedBox(height: 16.h),
           _buildFormField(
             'Subject',
@@ -491,24 +607,17 @@ class _SupportScreenState extends State<SupportScreen> {
             isMultiline: true,
           ),
           SizedBox(height: 16.h),
-          _buildFormField(
-            'Attachments',
-            isDarkMode,
-            isAttachment: true,
-          ),
+          _buildFormField('Attachments', isDarkMode, isAttachment: true),
           SizedBox(height: 24.h),
           Center(
             child: ElevatedButton(
               onPressed: () {
-                // Submit ticket logic
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('Support ticket submitted successfully!'),
                     backgroundColor: _primaryColor,
                   ),
                 );
-                
-                // Clear form
                 _subjectController.clear();
                 _messageController.clear();
               },
@@ -523,10 +632,7 @@ class _SupportScreenState extends State<SupportScreen> {
               ),
               child: Text(
                 'Submit Ticket',
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
               ),
             ),
           ),
@@ -536,7 +642,7 @@ class _SupportScreenState extends State<SupportScreen> {
   }
 
   Widget _buildFormField(
-    String label, 
+    String label,
     bool isDarkMode, {
     TextEditingController? controller,
     bool isMultiline = false,
@@ -551,120 +657,149 @@ class _SupportScreenState extends State<SupportScreen> {
         color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
       ),
     );
-    
+
     final fieldDecoration = InputDecoration(
       filled: true,
-      fillColor: isDarkMode ? Color(0xFF1A120B).withOpacity(0.5) : Color(0xFFF5F5DC).withOpacity(0.3),
-      hintText: isMultiline ? 'Describe your issue in detail...' : 'Enter $label',
+      fillColor:
+          isDarkMode
+              ? Color(0xFF1A120B).withOpacity(0.5)
+              : Color(0xFFF5F5DC).withOpacity(0.3),
+      hintText:
+          isMultiline ? 'Describe your issue in detail...' : 'Enter $label',
       hintStyle: TextStyle(
-        color: isDarkMode ? Color(0xFFF5F5DC).withOpacity(0.5) : _darkBackground.withOpacity(0.4),
+        color:
+            isDarkMode
+                ? Color(0xFFF5F5DC).withOpacity(0.5)
+                : _darkBackground.withOpacity(0.4),
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.r),
-        borderSide: BorderSide(
-          color: _primaryColor.withOpacity(0.5),
-        ),
+        borderSide: BorderSide(color: _primaryColor.withOpacity(0.5)),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.r),
-        borderSide: BorderSide(
-          color: _primaryColor.withOpacity(0.5),
-        ),
+        borderSide: BorderSide(color: _primaryColor.withOpacity(0.5)),
       ),
       contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
     );
-    
-    Widget field;
-    
+
     if (isDropdown) {
-      field = DropdownButtonFormField<String>(
-        decoration: fieldDecoration,
-        hint: Text(
-          'Select Issue Type',
-          style: TextStyle(
-            color: isDarkMode ? Color(0xFFF5F5DC).withOpacity(0.7) : _darkBackground.withOpacity(0.6),
-          ),
-        ),
-        dropdownColor: isDarkMode ? Color(0xFF3C2A21) : Colors.white,
-        icon: Icon(Icons.arrow_drop_down, color: _primaryColor),
-        items: [
-          'Technical Issue',
-          'Billing Question',
-          'Shipment Problem',
-          'Documentation Help',
-          'Feature Request',
-          'Other',
-        ].map((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        onChanged: (String? newValue) {},
-        style: TextStyle(
-          color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
-          fontSize: 16.sp,
-        ),
-      );
-    } else if (isMultiline) {
-      field = TextFormField(
-        controller: controller,
-        decoration: fieldDecoration,
-        maxLines: 5,
-        style: TextStyle(
-          color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
-          fontSize: 16.sp,
-        ),
-      );
-    } else if (isAttachment) {
-      field = InkWell(
-        onTap: () {
-          // Attachment logic
-        },
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
-          decoration: BoxDecoration(
-            color: isDarkMode ? Color(0xFF1A120B).withOpacity(0.5) : Color(0xFFF5F5DC).withOpacity(0.3),
-            borderRadius: BorderRadius.circular(10.r),
-            border: Border.all(
-              color: _primaryColor.withOpacity(0.5),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          labelText,
+          SizedBox(height: 8.h),
+          DropdownButtonFormField<String>(
+            decoration: fieldDecoration,
+            hint: Text(
+              'Select Issue Type',
+              style: TextStyle(
+                color:
+                    isDarkMode
+                        ? Color(0xFFF5F5DC).withOpacity(0.7)
+                        : _darkBackground.withOpacity(0.6),
+              ),
+            ),
+            dropdownColor: isDarkMode ? Color(0xFF3C2A21) : Colors.white,
+            icon: Icon(Icons.arrow_drop_down, color: _primaryColor),
+            items:
+                [
+                  'Technical Issue',
+                  'Billing Question',
+                  'Shipment Problem',
+                  'Documentation Help',
+                  'Feature Request',
+                  'Other',
+                ].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+            onChanged: (String? newValue) {},
+            style: TextStyle(
+              color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
+              fontSize: 16.sp,
             ),
           ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.attach_file,
-                color: _primaryColor,
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                'Click to attach files',
-                style: TextStyle(
-                  color: isDarkMode ? Color(0xFFF5F5DC).withOpacity(0.7) : _darkBackground.withOpacity(0.6),
-                  fontSize: 16.sp,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    } else {
-      field = TextFormField(
-        controller: controller,
-        decoration: fieldDecoration,
-        style: TextStyle(
-          color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
-          fontSize: 16.sp,
-        ),
+        ],
       );
     }
-    
+
+    if (isMultiline) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          labelText,
+          SizedBox(height: 8.h),
+          TextFormField(
+            controller: controller,
+            decoration: fieldDecoration,
+            maxLines: 5,
+            style: TextStyle(
+              color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
+              fontSize: 16.sp,
+            ),
+          ),
+        ],
+      );
+    }
+
+    if (isAttachment) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          labelText,
+          SizedBox(height: 8.h),
+          InkWell(
+            onTap: () {
+              /* Add attachment logic */
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+              decoration: BoxDecoration(
+                color:
+                    isDarkMode
+                        ? Color(0xFF1A120B).withOpacity(0.5)
+                        : Color(0xFFF5F5DC).withOpacity(0.3),
+                borderRadius: BorderRadius.circular(10.r),
+                border: Border.all(color: _primaryColor.withOpacity(0.5)),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.attach_file, color: _primaryColor),
+                  SizedBox(width: 8.w),
+                  Text(
+                    'Click to attach files',
+                    style: TextStyle(
+                      color:
+                          isDarkMode
+                              ? Color(0xFFF5F5DC).withOpacity(0.7)
+                              : _darkBackground.withOpacity(0.6),
+                      fontSize: 16.sp,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         labelText,
         SizedBox(height: 8.h),
-        field,
+        TextFormField(
+          controller: controller,
+          decoration: fieldDecoration,
+          style: TextStyle(
+            color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
+            fontSize: 16.sp,
+          ),
+        ),
       ],
     );
   }

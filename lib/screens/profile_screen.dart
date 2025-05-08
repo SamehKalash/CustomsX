@@ -7,6 +7,7 @@ import './dashboard.dart';
 import './settings.dart';
 import './login_screen.dart';
 import './profile_edit_screen.dart';
+import './support.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -17,7 +18,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
-  int _currentIndex = 1;
+  int _currentIndex = 2; // Profile is now the 3rd item (index 2)
   final Color _primaryColor = const Color(0xFFD4A373);
   final Color _darkBackground = const Color(0xFF1A120B);
   late AnimationController _animationController;
@@ -160,29 +161,6 @@ class _ProfileScreenState extends State<ProfileScreen>
               ).animate(animation),
               child: child,
             ),
-      ),
-    );
-  }
-
-  AppBar _buildAppBar(bool isDarkMode) {
-    return AppBar(
-      title: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        child: Text(
-          'Profile',
-          key: ValueKey<bool>(isDarkMode),
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 8.sp,
-            color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
-          ),
-        ),
-      ),
-      backgroundColor: isDarkMode ? _darkBackground : Colors.white,
-      elevation: 4,
-      automaticallyImplyLeading: false,
-      iconTheme: IconThemeData(
-        color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
       ),
     );
   }
@@ -407,7 +385,8 @@ class _ProfileScreenState extends State<ProfileScreen>
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavItem(Icons.home, 'Home', 0, isDarkMode),
-              _buildNavItem(Icons.person, 'Profile', 1, isDarkMode),
+              _buildNavItem(Icons.help_outline, 'Support', 1, isDarkMode),
+              _buildNavItem(Icons.person, 'Profile', 2, isDarkMode),
             ],
           ),
         ),
@@ -477,6 +456,31 @@ class _ProfileScreenState extends State<ProfileScreen>
             return SlideTransition(position: offsetAnimation, child: child);
           },
           transitionDuration: const Duration(milliseconds: 500),
+        ),
+      );
+    } else if (index == 1) {
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder:
+              (context, animation, secondaryAnimation) => const SupportScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(0.0, 1.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOutBack;
+
+            var tween = Tween(
+              begin: begin,
+              end: end,
+            ).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(
+              position: offsetAnimation,
+              child: FadeTransition(opacity: animation, child: child),
+            );
+          },
+          transitionDuration: const Duration(milliseconds: 600),
         ),
       );
     }

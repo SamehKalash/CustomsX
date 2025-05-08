@@ -8,6 +8,7 @@ import './profile_screen.dart';
 import './exchange_rate_screen.dart';
 import '../providers/user_provider.dart';
 import 'customs_calculation_screen.dart';
+import './support.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -519,14 +520,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
       ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.h),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem(Icons.home, 'Home', 0, isDarkMode),
-            _buildNavItem(Icons.person, 'Profile', 1, isDarkMode),
-          ],
+      child: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 24.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavItem(Icons.home, 'Home', 0, isDarkMode),
+              _buildNavItem(Icons.help_outline, 'Support', 1, isDarkMode),
+              _buildNavItem(Icons.person, 'Profile', 2, isDarkMode),
+            ],
+          ),
         ),
       ),
     );
@@ -595,8 +599,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
           transitionDuration: const Duration(milliseconds: 500),
         ),
       );
-    }
-    if (index == 1) {
+    } else if (index == 1) {
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder:
+              (context, animation, secondaryAnimation) => const SupportScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(0.0, 1.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOutBack;
+
+            var tween = Tween(
+              begin: begin,
+              end: end,
+            ).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(
+              position: offsetAnimation,
+              child: FadeTransition(opacity: animation, child: child),
+            );
+          },
+          transitionDuration: const Duration(milliseconds: 600),
+        ),
+      );
+    } else if (index == 2) {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
