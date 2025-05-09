@@ -16,90 +16,6 @@ class ReceiptScreen extends StatefulWidget {
 }
 
 class _ReceiptScreenState extends State<ReceiptScreen> {
-  final List<Map<String, String>> exchangeRates = [
-    {
-      'currency': 'USD',
-      'rate': '50.65',
-      'symbol': '\$',
-      'currencyName': 'US Dollar',
-    },
-    {
-      'currency': 'GBP',
-      'rate': '65.51',
-      'symbol': '£',
-      'currencyName': 'British Pound',
-    },
-    {
-      'currency': 'CAD',
-      'rate': '35.44',
-      'symbol': '\$',
-      'currencyName': 'Canadian Dollar',
-    },
-    {
-      'currency': 'DKK',
-      'rate': '7.32',
-      'symbol': 'kr',
-      'currencyName': 'Danish Krone',
-    },
-    {
-      'currency': 'NOK',
-      'rate': '4.81',
-      'symbol': 'kr',
-      'currencyName': 'Norwegian Krone',
-    },
-    {
-      'currency': 'SEK',
-      'rate': '5.05',
-      'symbol': 'kr',
-      'currencyName': 'Swedish Krona',
-    },
-    {
-      'currency': 'CHF',
-      'rate': '57.28',
-      'symbol': 'CHF',
-      'currencyName': 'Swiss Franc',
-    },
-    {
-      'currency': 'JPY',
-      'rate': '0.34',
-      'symbol': '¥',
-      'currencyName': 'Japanese Yen',
-    },
-    {'currency': 'EUR', 'rate': '54.62', 'symbol': '€', 'currencyName': 'Euro'},
-    {
-      'currency': 'EGP',
-      'rate': '1.00',
-      'symbol': 'E£',
-      'currencyName': 'Egyptian Pound',
-    },
-    {
-      'currency': 'AUD',
-      'rate': '33.12',
-      'symbol': '\$',
-      'currencyName': 'Australian Dollar',
-    },
-    {
-      'currency': 'INR',
-      'rate': '0.61',
-      'symbol': '₹',
-      'currencyName': 'Indian Rupee',
-    },
-    {
-      'currency': 'CNY',
-      'rate': '7.25',
-      'symbol': '¥',
-      'currencyName': 'Chinese Yuan',
-    },
-    {
-      'currency': 'ZAR',
-      'rate': '3.25',
-      'symbol': 'R',
-      'currencyName': 'South African Rand',
-    },
-  ];
-
-  String selectedCurrency = 'EGP';
-
   @override
   void initState() {
     super.initState();
@@ -130,14 +46,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
     final Color labelColor = isDarkMode ? Colors.white70 : Colors.black54;
     final Color borderColor = isDarkMode ? Colors.white10 : Colors.grey[300]!;
 
-    // Find selected rate
-    final rateMap = exchangeRates.firstWhere(
-      (r) => r['currency'] == selectedCurrency,
-    );
-    final double rate = double.parse(rateMap['rate']!);
-    final String symbol = rateMap['symbol']!;
-
-    // Mock data for demonstration (all in EGP)
+    // Mock data in EGP
     final String issuerRIN = "EG-1234567890";
     final String dateTime = DateTime.now().toString();
     final String customsDeclarationNumber = "ACI-2024-00012345";
@@ -151,8 +60,8 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
     final double vatEGP = 400.00;
     final double serviceFeeEGP = 100.00;
 
-    // Convert values
-    String format(double egp) => "${(egp / rate).toStringAsFixed(2)} $symbol";
+    // Format all values in EGP
+    String format(double egp) => "E£ ${egp.toStringAsFixed(2)}";
     String taxBreakdown =
         "Customs Duty: ${format(customsDutyEGP)}\n"
         "VAT: ${format(vatEGP)}\n"
@@ -204,7 +113,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
                   child: Icon(
                     Icons.receipt_long,
                     size: 48.w,
-                    color: Color(0xFFD4A373),
+                    color: const Color(0xFFD4A373),
                     semanticLabel: 'Receipt Icon',
                   ),
                 ),
@@ -277,13 +186,6 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
                 ),
                 SizedBox(height: 8.h),
                 _receiptRow(
-                  'Exchange Rate:',
-                  '1 $symbol = ${rate.toStringAsFixed(2)} EGP',
-                  textColor,
-                  labelColor,
-                ),
-                SizedBox(height: 8.h),
-                _receiptRow(
                   'Issuer\'s Registration No:',
                   issuerRIN,
                   textColor,
@@ -291,108 +193,51 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
                 ),
                 SizedBox(height: 8.h),
                 _receiptRow('Date & Time:', dateTime, textColor, labelColor),
+                SizedBox(height: 8.h),
+                _receiptRow(
+                  'Exchange Rate:',
+                  '1 USD = 51.7143 EGP',
+                  textColor,
+                  labelColor,
+                ),
                 SizedBox(height: 24.h),
                 Divider(color: borderColor),
                 SizedBox(height: 16.h),
                 Center(
                   child: Text(
-                    'Thank you for your payment!',
+                    'WHAT ARE YOU WAITING FOR!',
                     style: TextStyle(
-                      color: Color(0xFFD4A373),
+                      color: const Color(0xFFD4A373),
                       fontWeight: FontWeight.w600,
                       fontSize: 16.sp,
                     ),
                   ),
                 ),
                 SizedBox(height: 24.h),
-                // Currency picker and dashboard button row
-                Container(
+                SizedBox(
                   width: double.infinity,
-                  padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 0),
-                  decoration: BoxDecoration(
-                    color:
-                        isDarkMode ? const Color(0xFF1A120B) : Colors.grey[50],
-                    borderRadius: BorderRadius.circular(10.r),
-                    border: Border.all(color: borderColor),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(maxWidth: 180.w),
-                          child: SizedBox(
-                            height: 48.h,
-                            child: DropdownButtonFormField<String>(
-                              value: selectedCurrency,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 12.w,
-                                  vertical: 8.h,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8.r),
-                                  borderSide: BorderSide(color: borderColor),
-                                ),
-                              ),
-                              style: TextStyle(
-                                fontSize: 16.sp,
-                                color: textColor,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              dropdownColor: cardColor,
-                              icon: Icon(Icons.expand_more, color: textColor),
-                              items:
-                                  exchangeRates.map((rate) {
-                                    return DropdownMenuItem<String>(
-                                      value: rate['currency'],
-                                      child: Text(
-                                        '${rate['currency']} (${rate['symbol']})',
-                                      ),
-                                    );
-                                  }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedCurrency = value!;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
+                  height: 48.h,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.payment),
+                    label: const Text('Pay through CustomsX'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFD4A373),
+                      foregroundColor:
+                          isDarkMode ? const Color(0xFF1A120B) : Colors.white,
+                      textStyle: TextStyle(
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.w600,
                       ),
-                      SizedBox(width: 12.w),
-                      Expanded(
-                        flex: 1,
-                        child: SizedBox(
-                          height: 48.h,
-                          child: ElevatedButton.icon(
-                            icon: const Icon(Icons.dashboard),
-                            label: const Text('Dashboard'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFD4A373),
-                              foregroundColor:
-                                  isDarkMode
-                                      ? const Color(0xFF1A120B)
-                                      : Colors.white,
-                              textStyle: TextStyle(
-                                fontSize: 13.sp,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
-                              elevation: 2,
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/dashboard',
-                                (route) => false,
-                              );
-                            },
-                          ),
-                        ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
                       ),
-                    ],
+                      elevation: 2,
+                    ),
+                    onPressed: () {
+                      Navigator.of(
+                        context,
+                      ).pushNamedAndRemoveUntil('/dashboard', (route) => false);
+                    },
                   ),
                 ),
               ],
