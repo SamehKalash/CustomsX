@@ -303,6 +303,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
             '/imei-checker',
             isDarkMode,
           ),
+          _buildActionButton(
+            context,
+            Icons.payment,
+            'Payments',
+            '/payments',
+            isDarkMode,
+          ),
         ],
       ),
     );

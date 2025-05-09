@@ -18,6 +18,8 @@ import 'screens/forgot_password_screen.dart';
 import 'screens/customs_calculation_screen.dart';
 import 'screens/support.dart';
 import 'screens/media_screen.dart';
+import 'screens/payments_screen.dart';
+import 'screens/payment_method.dart';
 
 // Theme management
 import 'theme/theme_provider.dart';
@@ -28,7 +30,6 @@ import 'providers/user_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Load environment variables with error handling
   try {
     await dotenv.load(fileName: ".env");
     print('Environment variables loaded successfully');
@@ -125,6 +126,8 @@ class GlobalClearApp extends StatelessWidget {
       '/customs-fee': (context) => const CustomsCalculatorScreen(),
       '/support': (context) => const SupportScreen(),
       '/media': (context) => const MediaScreen(),
+      '/payments': (context) => const PaymentsScreen(),
+      '/payment_method': (context) => PaymentMethodsScreen(),
     };
   }
 }
