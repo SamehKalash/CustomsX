@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-
+import 'dart:io';
+import 'dart:convert';
 class ApiService {
   static String get baseUrl => dotenv.env['API_URL'] ?? 'http://localhost:5000';
   static const Duration _timeoutDuration = Duration(seconds: 10);
@@ -20,28 +21,43 @@ class ApiService {
       throw _parseException(e, 'countries');
     }
   }
-  static Future<void> updateProfileType({
+  
+  Future<void> updateProfileTypeWithFiles({
     required String userId,
     required String profileType,
     required String companyName,
     required String registrationNumber,
+    required String authorizedRepresentatives,
+    required File licenseFile,
+    required File socialInsuranceFile,
+    required File commercialRegisterFile,
+    required File taxCardFile,
   }) async {
     final url = Uri.parse('$baseUrl/users/$userId');
-    final response = await http.put(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'profileType': profileType,
-        'companyName': companyName,
-        'registrationNumber': registrationNumber,
-      }),
-    );
+    final request = http.MultipartRequest('PUT', url);
+
+    // Add fields
+    request.fields['profileType'] = profileType;
+    request.fields['companyName'] = companyName;
+    request.fields['registrationNumber'] = registrationNumber;
+    request.fields['authorizedRepresentatives'] = authorizedRepresentatives;
+
+    // Add files
+    request.files.add(await http.MultipartFile.fromPath('licenseFile', licenseFile.path));
+    request.files.add(await http.MultipartFile.fromPath('socialInsuranceFile', socialInsuranceFile.path));
+    request.files.add(await http.MultipartFile.fromPath('commercialRegisterFile', commercialRegisterFile.path));
+    request.files.add(await http.MultipartFile.fromPath('taxCardFile', taxCardFile.path));
+
+    // Send request
+    final response = await request.send();
 
     if (response.statusCode != 200) {
-      final error = jsonDecode(response.body)['error'] ?? 'Unknown error';
+      final responseBody = await response.stream.bytesToString();
+      final error = jsonDecode(responseBody)['error'] ?? 'Unknown error';
       throw Exception('Failed to update profile type: $error');
     }
   }
+  
   static Future<Map<String, dynamic>> registerUser(
     Map<String, dynamic> userData,
   ) async {
