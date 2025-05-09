@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../theme/theme_provider.dart';
 import './dashboard.dart';
 import './profile_screen.dart';
+import 'media_screen.dart';
+import './news_details_screen.dart';
 
 class SupportScreen extends StatefulWidget {
   const SupportScreen({super.key});
@@ -13,7 +15,7 @@ class SupportScreen extends StatefulWidget {
 }
 
 class _SupportScreenState extends State<SupportScreen> {
-  int _currentIndex = 1; // Support is the middle tab
+  int _currentIndex = 2;
   final Color _primaryColor = const Color(0xFFD4A373);
   final Color _darkBackground = const Color(0xFF1A120B);
   final TextEditingController _subjectController = TextEditingController();
@@ -61,7 +63,7 @@ class _SupportScreenState extends State<SupportScreen> {
     final isDarkMode = themeProvider.themeMode == ThemeMode.dark;
 
     return Scaffold(
-      appBar: _buildAppBar(isDarkMode),
+      appBar: _buildAppBar(context),
       body: Container(
         decoration: _buildBackgroundGradient(isDarkMode),
         child: Column(
@@ -75,20 +77,22 @@ class _SupportScreenState extends State<SupportScreen> {
     );
   }
 
-  AppBar _buildAppBar(bool isDarkMode) {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.themeMode == ThemeMode.dark;
+
     return AppBar(
+      backgroundColor: isDarkMode ? _darkBackground : Colors.white,
       title: Text(
-        'Support Center',
+        'Support Section',
         style: TextStyle(
-          fontWeight: FontWeight.w700,
           fontSize: 24.sp,
-          color: isDarkMode ? Color(0xFFF5F5DC) : _darkBackground,
+          fontWeight: FontWeight.w800,
+          color: isDarkMode ? const Color(0xFFF5F5DC) : const Color(0xFF1A120B),
         ),
       ),
-      backgroundColor: isDarkMode ? _darkBackground : Colors.white,
-      elevation: 4,
+      elevation: 0,
       automaticallyImplyLeading: false,
-      centerTitle: true,
     );
   }
 
@@ -133,8 +137,9 @@ class _SupportScreenState extends State<SupportScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavItem(Icons.home, 'Home', 0, isDarkMode),
-              _buildNavItem(Icons.help_outline, 'Support', 1, isDarkMode),
-              _buildNavItem(Icons.person, 'Profile', 2, isDarkMode),
+              _buildNavItem(Icons.article, 'News', 1, isDarkMode),
+              _buildNavItem(Icons.help_outline, 'Support', 2, isDarkMode),
+              _buildNavItem(Icons.person, 'Profile', 3, isDarkMode),
             ],
           ),
         ),
@@ -184,49 +189,43 @@ class _SupportScreenState extends State<SupportScreen> {
 
   void _updateIndex(int index) {
     setState(() => _currentIndex = index);
-    if (index == 0) {
-      Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (_, __, ___) => const DashboardScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(-1.0, 0.0);
-            const end = Offset.zero;
-            const curve = Curves.easeInOutQuart;
-
-            var tween = Tween(
-              begin: begin,
-              end: end,
-            ).chain(CurveTween(curve: curve));
-            var offsetAnimation = animation.drive(tween);
-
-            return SlideTransition(position: offsetAnimation, child: child);
-          },
-          transitionDuration: const Duration(milliseconds: 500),
-        ),
-      );
-    } else if (index == 2) {
-      Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (_, __, ___) => const ProfileScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(1.0, 0.0);
-            const end = Offset.zero;
-            const curve = Curves.easeInOutQuart;
-
-            var tween = Tween(
-              begin: begin,
-              end: end,
-            ).chain(CurveTween(curve: curve));
-            var offsetAnimation = animation.drive(tween);
-
-            return SlideTransition(position: offsetAnimation, child: child);
-          },
-          transitionDuration: const Duration(milliseconds: 500),
-        ),
-      );
+    switch (index) {
+      case 0:
+        _navigateWithTransition(const DashboardScreen(), isBack: true);
+        break;
+      case 1:
+        _navigateWithTransition(const MediaScreen());
+        break;
+      case 3:
+        _navigateWithTransition(const ProfileScreen());
+        break;
     }
+  }
+
+  void _navigateWithTransition(Widget page, {bool isBack = false}) {
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => page,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          final begin = isBack ? Offset(-1.0, 0.0) : Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOutQuart;
+
+          final tween = Tween(
+            begin: begin,
+            end: end,
+          ).chain(CurveTween(curve: curve));
+          final offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: FadeTransition(opacity: animation, child: child),
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 500),
+      ),
+    );
   }
 
   Widget _buildTabBar(bool isDarkMode) {

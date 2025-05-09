@@ -36,3 +36,7 @@ flutter:
   uses-material-design: true
   assets:
     - .env
+    - assets/images/
+    - assets/images/widget1.jpg
+    - assets/images/widget2.1.jpeg
+    - assets/images/widget2.2.jpeg

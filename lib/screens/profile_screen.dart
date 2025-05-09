@@ -8,6 +8,7 @@ import './settings.dart';
 import './login_screen.dart';
 import './profile_edit_screen.dart';
 import './support.dart';
+import './media_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -18,7 +19,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
-  int _currentIndex = 2; // Profile is now the 3rd item (index 2)
+  int _currentIndex = 3; // Profile is index 3 in 4-tab system
   final Color _primaryColor = const Color(0xFFD4A373);
   final Color _darkBackground = const Color(0xFF1A120B);
   late AnimationController _animationController;
@@ -385,8 +386,9 @@ class _ProfileScreenState extends State<ProfileScreen>
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavItem(Icons.home, 'Home', 0, isDarkMode),
-              _buildNavItem(Icons.help_outline, 'Support', 1, isDarkMode),
-              _buildNavItem(Icons.person, 'Profile', 2, isDarkMode),
+              _buildNavItem(Icons.article, 'News', 1, isDarkMode),
+              _buildNavItem(Icons.help_outline, 'Support', 2, isDarkMode),
+              _buildNavItem(Icons.person, 'Profile', 3, isDarkMode),
             ],
           ),
         ),
@@ -436,53 +438,42 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   void _updateIndex(int index) {
     setState(() => _currentIndex = index);
-    if (index == 0) {
-      Navigator.of(context).pushReplacement(
-        PageRouteBuilder(
-          pageBuilder:
-              (context, animation, secondaryAnimation) =>
-                  const DashboardScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(-1.0, 0.0);
-            const end = Offset.zero;
-            const curve = Curves.easeInOutQuart;
-
-            var tween = Tween(
-              begin: begin,
-              end: end,
-            ).chain(CurveTween(curve: curve));
-            var offsetAnimation = animation.drive(tween);
-
-            return SlideTransition(position: offsetAnimation, child: child);
-          },
-          transitionDuration: const Duration(milliseconds: 500),
-        ),
-      );
-    } else if (index == 1) {
-      Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder:
-              (context, animation, secondaryAnimation) => const SupportScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(0.0, 1.0);
-            const end = Offset.zero;
-            const curve = Curves.easeInOutBack;
-
-            var tween = Tween(
-              begin: begin,
-              end: end,
-            ).chain(CurveTween(curve: curve));
-            var offsetAnimation = animation.drive(tween);
-
-            return SlideTransition(
-              position: offsetAnimation,
-              child: FadeTransition(opacity: animation, child: child),
-            );
-          },
-          transitionDuration: const Duration(milliseconds: 600),
-        ),
-      );
+    switch (index) {
+      case 0:
+        _navigateWithTransition(const DashboardScreen(), isBack: true);
+        break;
+      case 1:
+        _navigateWithTransition(const MediaScreen());
+        break;
+      case 2:
+        _navigateWithTransition(const SupportScreen());
+        break;
     }
+  }
+
+  void _navigateWithTransition(Widget page, {bool isBack = false}) {
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => page,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          final begin = isBack ? Offset(-1.0, 0.0) : Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOutQuart;
+
+          final tween = Tween(
+            begin: begin,
+            end: end,
+          ).chain(CurveTween(curve: curve));
+          final offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: FadeTransition(opacity: animation, child: child),
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 500),
+      ),
+    );
   }
 }

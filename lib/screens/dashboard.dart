@@ -7,8 +7,9 @@ import '../widgets/status_card.dart';
 import './profile_screen.dart';
 import './exchange_rate_screen.dart';
 import '../providers/user_provider.dart';
-import 'customs_calculation_screen.dart';
+import './customs_calculation_screen.dart';
 import './support.dart';
+import './media_screen.dart'; // Add this import
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -18,7 +19,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  int _currentIndex = 0;
+  int _currentIndex = 0; // Home is index 0
   final Color _primaryColor = const Color(0xFFD4A373);
   final Color _darkBackground = const Color(0xFF1A120B);
 
@@ -224,9 +225,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             _getLastLoginText(lastLogin),
             style: TextStyle(
               fontSize: 14.sp,
-              color: isDarkMode
-                  ? const Color(0xFFF5F5DC).withOpacity(0.7)
-                  : Colors.white70,
+              color:
+                  isDarkMode
+                      ? const Color(0xFFF5F5DC).withOpacity(0.7)
+                      : Colors.white70,
             ),
           ),
         ],
@@ -532,8 +534,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavItem(Icons.home, 'Home', 0, isDarkMode),
-              _buildNavItem(Icons.help_outline, 'Support', 1, isDarkMode),
-              _buildNavItem(Icons.person, 'Profile', 2, isDarkMode),
+              _buildNavItem(Icons.article, 'News', 1, isDarkMode),
+              _buildNavItem(Icons.help_outline, 'Support', 2, isDarkMode),
+              _buildNavItem(Icons.person, 'Profile', 3, isDarkMode),
             ],
           ),
         ),
@@ -583,74 +586,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void _updateIndex(int index) {
     setState(() => _currentIndex = index);
-    if (index == 0) {
-      Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (_, __, ___) => const DashboardScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(-1.0, 0.0);
-            const end = Offset.zero;
-            const curve = Curves.easeInOutQuart;
-
-            var tween = Tween(
-              begin: begin,
-              end: end,
-            ).chain(CurveTween(curve: curve));
-            var offsetAnimation = animation.drive(tween);
-
-            return SlideTransition(position: offsetAnimation, child: child);
-          },
-          transitionDuration: const Duration(milliseconds: 500),
-        ),
-      );
-    } else if (index == 1) {
-      Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder:
-              (context, animation, secondaryAnimation) => const SupportScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(0.0, 1.0);
-            const end = Offset.zero;
-            const curve = Curves.easeInOutBack;
-
-            var tween = Tween(
-              begin: begin,
-              end: end,
-            ).chain(CurveTween(curve: curve));
-            var offsetAnimation = animation.drive(tween);
-
-            return SlideTransition(
-              position: offsetAnimation,
-              child: FadeTransition(opacity: animation, child: child),
-            );
-          },
-          transitionDuration: const Duration(milliseconds: 600),
-        ),
-      );
-    } else if (index == 2) {
-      Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (_, __, ___) => const ProfileScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(1.0, 0.0);
-            const end = Offset.zero;
-            const curve = Curves.easeInOutQuart;
-
-            var tween = Tween(
-              begin: begin,
-              end: end,
-            ).chain(CurveTween(curve: curve));
-            var offsetAnimation = animation.drive(tween);
-
-            return SlideTransition(position: offsetAnimation, child: child);
-          },
-          transitionDuration: const Duration(milliseconds: 500),
-        ),
-      );
+    switch (index) {
+      case 1:
+        _navigateWithTransition(const MediaScreen());
+        break;
+      case 2:
+        _navigateWithTransition(const SupportScreen());
+        break;
+      case 3:
+        _navigateWithTransition(const ProfileScreen());
+        break;
     }
+  }
+
+  void _navigateWithTransition(Widget page, {bool isBack = false}) {
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => page,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          var begin = isBack ? Offset(-1.0, 0.0) : Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOutQuart;
+
+          final tween = Tween(
+            begin: begin,
+            end: end,
+          ).chain(CurveTween(curve: curve));
+          final offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: FadeTransition(opacity: animation, child: child),
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 500),
+      ),
+    );
   }
 
   void _showNotifications(BuildContext context, bool isDarkMode) {
