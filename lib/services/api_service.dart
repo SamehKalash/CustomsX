@@ -20,7 +20,28 @@ class ApiService {
       throw _parseException(e, 'countries');
     }
   }
+  static Future<void> updateProfileType({
+    required String userId,
+    required String profileType,
+    required String companyName,
+    required String registrationNumber,
+  }) async {
+    final url = Uri.parse('$baseUrl/users/$userId');
+    final response = await http.put(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'profileType': profileType,
+        'companyName': companyName,
+        'registrationNumber': registrationNumber,
+      }),
+    );
 
+    if (response.statusCode != 200) {
+      final error = jsonDecode(response.body)['error'] ?? 'Unknown error';
+      throw Exception('Failed to update profile type: $error');
+    }
+  }
   static Future<Map<String, dynamic>> registerUser(
     Map<String, dynamic> userData,
   ) async {
