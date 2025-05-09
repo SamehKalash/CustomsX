@@ -17,6 +17,7 @@ import 'screens/settings.dart';
 import 'screens/forgot_password_screen.dart';
 import 'screens/customs_calculation_screen.dart';
 import 'screens/support.dart';
+import 'screens/media_screen.dart';
 
 // Theme management
 import 'theme/theme_provider.dart';
@@ -123,6 +124,7 @@ class GlobalClearApp extends StatelessWidget {
       '/imei-checker': (context) => const IMEICheckerScreen(),
       '/customs-fee': (context) => const CustomsCalculatorScreen(),
       '/support': (context) => const SupportScreen(),
+      '/media': (context) => const MediaScreen(),
     };
   }
 }
