@@ -3,13 +3,94 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
-import 'dart:convert';
+
 class ApiService {
   static String get baseUrl => dotenv.env['API_URL'] ?? 'http://localhost:5000';
   static const Duration _timeoutDuration = Duration(seconds: 10);
   static const String _customsBaseUrl =
       'https://c2b-fbusiness.customs.gov.az/api/v1';
 
+  // ================== IMEI Services ==================
+  static Future<Map<String, dynamic>> fetchPhoneType(String imei) async {
+    try {
+      // Validate IMEI format (main branch implementation)
+      if (imei.length != 15 || !RegExp(r'^\d{15}$').hasMatch(imei)) {
+        throw Exception('Please enter a valid 15-digit IMEI number');
+      }
+
+      final response = await http
+          .get(
+            Uri.parse('$baseUrl/api/imei/$imei'),
+            headers: {'Content-Type': 'application/json'},
+          )
+          .timeout(_timeoutDuration);
+
+      final responseBody = _handleResponse(response, 'IMEI check failed');
+
+      // Handle invalid TAC (main branch implementation)
+      if (responseBody['valid_tac'] != true) {
+        throw Exception(
+          'Invalid device identification (TAC validation failed)',
+        );
+      }
+
+      return {
+        'brand': responseBody['brand'] ?? 'Unknown',
+        'model': responseBody['model'] ?? 'Unknown',
+        'device_type': responseBody['device_type'] ?? 'Mobile Device',
+        'operating_system': responseBody['operating_system'] ?? 'Unknown',
+        'fee': responseBody['fee']?.toInt() ?? 5000,
+        'is_registered': responseBody['is_registered'] ?? false,
+        'valid_tac': responseBody['valid_tac'] ?? false,
+        'origin_country': responseBody['origin_country'] ?? 'Unknown',
+        'release_year': responseBody['release_year']?.toString() ?? 'N/A',
+        'technical_specs': responseBody['technical_specs'] is Map
+            ? Map<String, dynamic>.from(responseBody['technical_specs'])
+            : <String, dynamic>{},
+      };
+    } on TimeoutException {
+      throw Exception('IMEI check timed out. Please try again.');
+    } catch (e) {
+      throw _parseException(e, 'fetching device information');
+    }
+  }
+
+  static Future<Map<String, dynamic>> registerIMEI(String imei) async {
+    try {
+      // Validate IMEI before registration (main branch implementation)
+      if (imei.length != 15 || !RegExp(r'^\d{15}$').hasMatch(imei)) {
+        throw Exception('Invalid IMEI format');
+      }
+
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/api/imei/register'),
+            headers: {'Content-Type': 'application/json'},
+            body: json.encode({'imei_number': imei}),
+          )
+          .timeout(_timeoutDuration);
+
+      final responseBody = _handleResponse(response, 'IMEI registration failed');
+
+      return {
+        'message': responseBody['message'] ?? 'Registration successful',
+        'imeiRecord': {
+          'imei_number': responseBody['imeiRecord']['imei_number'],
+          'is_registered': responseBody['imeiRecord']['is_registered'] ?? false,
+          'registration_date': responseBody['imeiRecord']['registration_date'],
+          'fee': responseBody['imeiRecord']['fee']?.toInt() ?? 5000,
+          'brand': responseBody['imeiRecord']['brand'],
+          'model': responseBody['imeiRecord']['model'],
+        },
+      };
+    } on TimeoutException {
+      throw Exception('Registration process timed out');
+    } catch (e) {
+      throw _parseException(e, 'device registration');
+    }
+  }
+
+  // ================== Country Services ==================
   static Future<List<dynamic>> getCountries() async {
     try {
       final response = await http
@@ -18,10 +99,11 @@ class ApiService {
 
       return _handleResponse(response, 'Failed to load countries');
     } catch (e) {
-      throw _parseException(e, 'countries');
+      throw _parseException(e, 'loading countries');
     }
   }
-  
+
+  // ================== User Services ==================
   Future<void> updateProfileTypeWithFiles({
     required String userId,
     required String profileType,
@@ -57,7 +139,7 @@ class ApiService {
       throw Exception('Failed to update profile type: $error');
     }
   }
-  
+
   static Future<Map<String, dynamic>> registerUser(
     Map<String, dynamic> userData,
   ) async {
@@ -76,7 +158,7 @@ class ApiService {
 
       return _handleResponse(response, 'Registration failed');
     } catch (e) {
-      throw _parseException(e, 'registration');
+      throw _parseException(e, 'user registration');
     }
   }
 
@@ -102,7 +184,7 @@ class ApiService {
 
       return _handleResponse(response, 'Login failed');
     } catch (e) {
-      throw _parseException(e, 'login');
+      throw _parseException(e, 'user login');
     }
   }
 
@@ -148,6 +230,7 @@ class ApiService {
     }
   }
 
+  // ================== Customs Services ==================
   static Future<Map<String, dynamic>> validateHscode({
     required int declarationMode,
     required String code,
@@ -204,6 +287,7 @@ class ApiService {
     }
   }
 
+  // ================== HS Code Services ==================
   static Future<List<dynamic>> getHscodes({String searchQuery = ''}) async {
     try {
       final response = await http
@@ -215,147 +299,39 @@ class ApiService {
 
       return _handleResponse(response, 'Failed to load HS codes');
     } catch (e) {
-      throw _parseException(e, 'HS codes fetch');
+      throw _parseException(e, 'loading HS codes');
     }
   }
-// These are just the updated IMEI-related methods for the ApiService class
-// Add these to your existing api_service.dart file
 
-  // Updated Fetch phone information based on IMEI number
-  static Future<Map<String, dynamic>> fetchPhoneType(String imeiNumber) async {
+  // ================== New IMEI Methods ==================
+  static Future<Map<String, dynamic>> getDetailedImeiInfo(String imei) async {
     try {
-      // Input validation on client side
-      if (imeiNumber.length != 15 || !RegExp(r'^\d{15}$').hasMatch(imeiNumber)) {
+      if (imei.length != 15 || !RegExp(r'^\d{15}$').hasMatch(imei)) {
         throw Exception('Please enter a valid 15-digit IMEI number.');
       }
 
       final response = await http
           .get(
-            Uri.parse('$baseUrl/api/phone-type/$imeiNumber'),
+            Uri.parse('$baseUrl/api/imei-details/$imei'),
             headers: {'Content-Type': 'application/json'},
           )
           .timeout(_timeoutDuration);
 
-      // Handle response based on status code
-      if (response.statusCode == 200) {
-        final responseBody = jsonDecode(response.body);
-        
-        // Additional device information processing
-        if (responseBody['brand'] == 'Unknown' && responseBody['model'] == 'Unknown') {
-          responseBody['warning'] = 'Limited device information available';
-        }
-        
-        return responseBody;
-      } else if (response.statusCode == 404) {
-        // Handle specific 404 error (IMEI not found)
-        final errorBody = jsonDecode(response.body);
-        throw Exception(errorBody['error'] ?? 'IMEI not found in the database.');
-      } else {
-        // Handle other errors
-        final errorBody = jsonDecode(response.body);
-        throw Exception(errorBody['error'] ?? 'Unknown error occurred.');
-      }
-    } on TimeoutException {
-      throw Exception('Request timed out. Please check your connection and try again.');
-    } on FormatException {
-      throw Exception('Invalid response from server. Please try again later.');
+      return _handleResponse(response, 'Failed to fetch detailed IMEI information');
     } catch (e) {
-      if (e is Exception) {
-        throw e;
-      }
-      throw Exception('Error fetching phone information: $e');
-    }
-  }
-
-  // Register IMEI after payment
-  static Future<Map<String, dynamic>> registerIMEI(String imeiNumber) async {
-    try {
-      // Input validation on client side
-      if (imeiNumber.length != 15 || !RegExp(r'^\d{15}$').hasMatch(imeiNumber)) {
-        throw Exception('Please enter a valid 15-digit IMEI number.');
-      }
-
-      final response = await http
-          .post(
-            Uri.parse('$baseUrl/api/register-imei'),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({'imei_number': imeiNumber}),
-          )
-          .timeout(_timeoutDuration);
-
-      if (response.statusCode == 200) {
-        final result = jsonDecode(response.body);
-        
-        // Add confirmation timestamp
-        if (result['imeiRecord'] != null) {
-          result['imeiRecord']['registered_date'] = DateTime.now().toIso8601String();
-        }
-        
-        return result;
-      } else if (response.statusCode == 400) {
-        // Handle specific 400 errors (like already registered)
-        final errorBody = jsonDecode(response.body);
-        throw Exception(errorBody['error'] ?? 'Failed to register IMEI. It may already be registered.');
-      } else {
-        // Handle other errors
-        final errorBody = jsonDecode(response.body);
-        throw Exception(errorBody['error'] ?? 'Failed to register IMEI.');
-      }
-    } on TimeoutException {
-      throw Exception('Request timed out. Please check your connection and try again.');
-    } on FormatException {
-      throw Exception('Invalid response from server. Please try again later.');
-    } catch (e) {
-      if (e is Exception) {
-        throw e;
-      }
-      throw _parseException(e, 'registering IMEI');
-    }
-  }
-  
-  // New method to check detailed IMEI information
-  static Future<Map<String, dynamic>> getDetailedImeiInfo(String imeiNumber) async {
-    try {
-      // Input validation on client side
-      if (imeiNumber.length != 15 || !RegExp(r'^\d{15}$').hasMatch(imeiNumber)) {
-        throw Exception('Please enter a valid 15-digit IMEI number.');
-      }
-
-      final response = await http
-          .get(
-            Uri.parse('$baseUrl/api/imei-details/$imeiNumber'),
-            headers: {'Content-Type': 'application/json'},
-          )
-          .timeout(_timeoutDuration);
-
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
-      } else {
-        final errorBody = jsonDecode(response.body);
-        throw Exception(errorBody['error'] ?? 'Failed to fetch detailed IMEI information.');
-      }
-    } catch (e) {
-      if (e is Exception) {
-        throw e;
-      }
       throw _parseException(e, 'fetching detailed IMEI information');
     }
   }
 
-  // -- Helper methods --
+  // ================== Helper Methods ==================
   static Map<String, dynamic> _processCustomsResponse(
     http.Response response,
     String operation,
   ) {
-    final responseBody = _handleResponse(
-      response,
-      'Failed to complete $operation',
-    );
+    final responseBody = _handleResponse(response, 'Failed to complete $operation');
 
     if (responseBody['code'] != 200) {
-      final error =
-          responseBody['exception']?['errorMessage'] ??
-          'Unknown $operation error';
+      final error = responseBody['exception']?['errorMessage'] ?? 'Unknown error';
       throw Exception('$operation failed: $error');
     }
 
@@ -363,15 +339,9 @@ class ApiService {
   }
 
   static Map<String, String> _customsHeaders({String lang = 'en'}) {
-    return {
-      'Content-Type': 'application/json',
-      'lang': lang,
-      // Add authorization if needed:
-      // 'Authorization': 'Bearer ${dotenv.env['CUSTOMS_TOKEN']}',
-    };
+    return {'Content-Type': 'application/json', 'lang': lang};
   }
 
-  // -- Keep existing response handlers unchanged --
   static dynamic _handleResponse(http.Response response, String errorMessage) {
     try {
       final responseBody = json.decode(response.body);
@@ -381,17 +351,16 @@ class ApiService {
       final serverError = responseBody['error'] ?? 'Unknown server error';
       throw Exception('$errorMessage - $serverError');
     } on FormatException {
-      throw Exception('Invalid response format from server');
+      throw Exception('Invalid server response format');
     }
   }
 
   static Exception _parseException(dynamic error, String operation) {
-    final message =
-        error is TimeoutException
-            ? 'Request timed out during $operation'
-            : error is http.ClientException
+    final message = error is TimeoutException
+        ? 'Request timed out during $operation'
+        : error is http.ClientException
             ? 'Network error during $operation'
-            : error.toString();
-    return Exception(message);
+            : error.toString().replaceAll('Exception: ', '');
+    return Exception('$message. Please try again.');
   }
 }

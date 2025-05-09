@@ -11,6 +11,9 @@
 /home/sam/SCCF-1/build/linux/x64/debug/bundle/data/flutter_assets/shaders/ink_sparkle.frag
 /home/sam/SCCF-1/build/linux/x64/debug/bundle/data/flutter_assets/AssetManifest.bin
 /home/sam/SCCF-1/build/linux/x64/debug/bundle/data/flutter_assets/fonts/MaterialIcons-Regular.otf
+/home/sam/SCCF-1/build/linux/x64/debug/bundle/data/flutter_assets/assets/images/widget2.1.jpeg
+/home/sam/SCCF-1/build/linux/x64/debug/bundle/data/flutter_assets/assets/images/widget1.jpg
+/home/sam/SCCF-1/build/linux/x64/debug/bundle/data/flutter_assets/assets/images/widget2.2.jpeg
 /home/sam/SCCF-1/build/linux/x64/debug/bundle/data/flutter_assets/NOTICES.Z
 /home/sam/SCCF-1/build/linux/x64/debug/bundle/data/flutter_assets/.env
 /home/sam/SCCF-1/build/linux/x64/debug/bundle/data/flutter_assets/lib/hs_codes_vehicles.json
