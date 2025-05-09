@@ -47,48 +47,121 @@ const userSchema = new mongoose.Schema({
   mobile: { type: String, required: true },
   countryCode: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
-  lastLogin: { type: Date, default: null }
+  lastLogin: { type: Date, default: null },
+  accounttype: { type: String, default: "Personal" }
 });
 
-// Updated IMEI Schema with detailed device information
 const imeiSchema = new mongoose.Schema({
-  imei_number: {
-    type: String,
-    required: true,
+  imei_number: { 
+    type: String, 
+    required: true, 
     unique: true,
-    maxlength: 15,
+    validate: {
+      validator: v => /^\d{15}$/.test(v),
+      message: props => `${props.value} is not a valid 15-digit IMEI number!`
+    }
   },
-  brand: {
-    type: String,
-    default: 'Unknown',
-  },
-  model: {
-    type: String,
-    default: 'Unknown',
-  },
-  device_type: {
-    type: String,
-    default: 'Unknown',
-  },
-  operating_system: {
-    type: String,
-    default: 'Unknown',
-  },
-  is_registered: {
-    type: Boolean,
-    default: false,
-  },
-  paid_at: {
-    type: Date,
-    default: null,
-  },
-});
+  device_type: String,
+  brand: String,
+  model: String,
+  operating_system: String,
+  fee: Number,
+  is_registered: { type: Boolean, default: false },
+  registration_date: { type: Date, default: null },
+  technical_specs: mongoose.Schema.Types.Mixed,
+  valid_tac: Boolean,
+  origin_country: String,
+  release_year: Number
+}, { collection: 'imeis' });
 
 // Models
-const IMEI = mongoose.model('IMEI', imeiSchema);
 const HSCode = mongoose.model('HSCode', hscodeSchema);
 const Country = mongoose.model('Country', countrySchema);
 const User = mongoose.model('User', userSchema);
+const IMEI = mongoose.model('IMEI', imeiSchema);
+
+// ================== IMEI Endpoints ==================
+app.get('/api/imei/:imei', async (req, res) => {
+  try {
+    const { imei } = req.params;
+    
+    if (!/^\d{15}$/.test(imei)) {
+      return res.status(400).json({ error: 'Invalid IMEI format - must be 15 digits' });
+    }
+
+    const imeiRecord = await IMEI.findOne({ imei_number: imei });
+    
+    if (!imeiRecord) {
+      return res.status(404).json({ error: 'IMEI not found in database' });
+    }
+
+    if (!imeiRecord.valid_tac) {
+      return res.status(400).json({ error: 'Invalid TAC - Device not recognized' });
+    }
+
+    res.json({
+      imei_number: imeiRecord.imei_number,
+      device_type: imeiRecord.device_type,
+      brand: imeiRecord.brand,
+      model: imeiRecord.model,
+      operating_system: imeiRecord.operating_system,
+      fee: imeiRecord.fee,
+      is_registered: imeiRecord.is_registered,
+      registration_date: imeiRecord.registration_date,
+      technical_specs: imeiRecord.technical_specs,
+      valid_tac: imeiRecord.valid_tac,
+      origin_country: imeiRecord.origin_country,
+      release_year: imeiRecord.release_year
+    });
+
+  } catch (error) {
+    console.error('IMEI check error:', error);
+    res.status(500).json({ error: 'Server error during IMEI check' });
+  }
+});
+
+app.post('/api/imei/register', async (req, res) => {
+  try {
+    const { imei_number } = req.body;
+    
+    if (!/^\d{15}$/.test(imei_number)) {
+      return res.status(400).json({ error: 'Invalid IMEI format - must be 15 digits' });
+    }
+
+    let imeiRecord = await IMEI.findOne({ imei_number });
+
+    if (!imeiRecord) {
+      return res.status(404).json({ error: 'IMEI not found in database' });
+    }
+
+    if (imeiRecord.is_registered) {
+      return res.status(400).json({ error: 'IMEI already registered' });
+    }
+
+    imeiRecord.is_registered = true;
+    imeiRecord.registration_date = new Date();
+    await imeiRecord.save();
+
+    res.json({
+      message: 'IMEI registered successfully',
+      imeiRecord: {
+        imei_number: imeiRecord.imei_number,
+        brand: imeiRecord.brand,
+        model: imeiRecord.model,
+        fee: imeiRecord.fee,
+        is_registered: imeiRecord.is_registered,
+        registration_date: imeiRecord.registration_date,
+        device_type: imeiRecord.device_type,
+        operating_system: imeiRecord.operating_system
+      }
+    });
+
+  } catch (error) {
+    console.error('IMEI registration error:', error);
+    res.status(500).json({ error: 'Server error during IMEI registration' });
+  }
+});
+
 
 // HS Code Endpoints
 app.get('/api/hscodes', async (req, res) => {
@@ -110,245 +183,7 @@ app.get('/api/hscodes', async (req, res) => {
     res.status(500).json({ error: 'Error fetching HS Codes' });
   }
 });
-// Updated helper function to call the IMEI.info API
-// based on the provided documentation
-async function fetchIMEIInfo(imei) {
-  try {
-    const apiKey = process.env.IMEI_API_KEY;
-    const serviceId = process.env.IMEI_SERVICE_ID || '1'; // Default to service ID 1 if not specified
-    
-    // Based on the documentation, correct endpoint format
-    const apiUrl = 'https://dash.imei.info/api/check';
-    
-    console.log(`Checking IMEI ${imei} with service ID ${serviceId}`);
-    
-    const response = await axios.get(`${apiUrl}/${serviceId}/`, {
-      params: {
-        imei: imei,
-        API_KEY: apiKey
-      },
-      timeout: 10000 // 10 second timeout
-    });
 
-    if (response.data && response.status === 200) {
-      console.log('IMEI API response received:', response.status);
-      return {
-        success: true,
-        data: response.data
-      };
-    } else {
-      throw new Error('IMEI lookup failed with status: ' + response.status);
-    }
-  } catch (error) {
-    console.error('IMEI API error:', error.message);
-    
-    // Better error handling with more specific error messages
-    if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
-      return {
-        success: false,
-        error: error.response.data?.detail || 
-               error.response.data?.message || 
-               `Error ${error.response.status}: Failed to lookup IMEI`
-      };
-    } else if (error.request) {
-      // The request was made but no response was received
-      return {
-        success: false,
-        error: 'No response received from IMEI service. Please try again later.'
-      };
-    } else {
-      // Something happened in setting up the request that triggered an Error
-      return {
-        success: false,
-        error: 'Error contacting IMEI.info API: ' + error.message
-      };
-    }
-  }
-}
-
-// Updated IMEI Endpoints
-app.get('/api/phone-type/:imei', async (req, res) => {
-  const { imei } = req.params;
-
-  if (!imei || imei.length !== 15 || !/^\d{15}$/.test(imei)) {
-    return res.status(400).json({ error: 'Invalid IMEI number. It must be 15 digits.' });
-  }
-
-  try {
-    // Find the IMEI record in the database
-    const imeiRecord = await IMEI.findOne({ imei_number: imei });
-
-    if (imeiRecord) {
-      // If device is found in database, return its info
-      const responseData = imeiRecord.toObject();
-      responseData.fee = 5000; // Standard fee
-      return res.status(200).json(responseData);
-    }
-
-    // If not found in database, fetch from IMEI.info API
-    const imeiInfo = await fetchIMEIInfo(imei);
-    
-    if (!imeiInfo.success) {
-      return res.status(404).json({ error: imeiInfo.error || 'Unable to verify IMEI information.' });
-    }
-    
-    // Format the response to match our expected structure
-    // Based on the API documentation
-    const deviceInfo = {
-      imei_number: imei,
-      brand: imeiInfo.data.brand || imeiInfo.data.manufacturer || 'Unknown',
-      model: imeiInfo.data.model || imeiInfo.data.device_model || 'Unknown',
-      device_type: imeiInfo.data.device_type || imeiInfo.data.type || 'Smartphone',
-      operating_system: imeiInfo.data.os || imeiInfo.data.operating_system || 'Unknown',
-      is_registered: false,
-      fee: 5000  // Standard fee for device registration
-    };
-
-    // Return the device info without saving it yet
-    res.status(200).json(deviceInfo);
-  } catch (error) {
-    console.error('Error fetching phone information:', error);
-    res.status(500).json({ error: 'An error occurred while checking the IMEI.' });
-  }
-});
-
-app.post('/api/register-imei', async (req, res) => {
-  const { imei_number } = req.body;
-
-  if (!imei_number || imei_number.length !== 15 || !/^\d{15}$/.test(imei_number)) {
-    return res.status(400).json({ error: 'Invalid IMEI number. It must be 15 digits.' });
-  }
-
-  try {
-    // Find the IMEI record or create a new one
-    let imeiRecord = await IMEI.findOne({ imei_number });
-
-    if (imeiRecord && imeiRecord.is_registered) {
-      return res.status(400).json({ error: 'IMEI is already registered.' });
-    }
-
-    if (!imeiRecord) {
-      // If not found, fetch from IMEI.info API
-      const imeiInfo = await fetchIMEIInfo(imei_number);
-      
-      if (!imeiInfo.success) {
-        return res.status(404).json({ error: 'Unable to verify IMEI. ' + (imeiInfo.error || 'Unknown error') });
-      }
-      
-      // Create a new record with the retrieved information
-      imeiRecord = new IMEI({
-        imei_number,
-        brand: imeiInfo.data.brand || imeiInfo.data.manufacturer || 'Unknown',
-        model: imeiInfo.data.model || imeiInfo.data.device_model || 'Unknown',
-        device_type: imeiInfo.data.device_type || imeiInfo.data.type || 'Smartphone',
-        operating_system: imeiInfo.data.os || imeiInfo.data.operating_system || 'Unknown',
-        is_registered: false
-      });
-    }
-
-    // Register the IMEI
-    imeiRecord.is_registered = true;
-    imeiRecord.paid_at = new Date();
-    await imeiRecord.save();
-
-    // Return the updated record with fee for consistency
-    const responseData = imeiRecord.toObject();
-    responseData.fee = 5000; // Add fee to response
-    
-    res.status(200).json({ 
-      message: 'IMEI registered successfully.',
-      imeiRecord: responseData
-    });
-  } catch (error) {
-    console.error('Error registering IMEI:', error);
-    res.status(500).json({ error: 'An error occurred while registering the IMEI.' });
-  }
-});
-
-// New endpoint to get detailed IMEI information
-app.get('/api/imei-details/:imei', async (req, res) => {
-  const { imei } = req.params;
-
-  if (!imei || imei.length !== 15 || !/^\d{15}$/.test(imei)) {
-    return res.status(400).json({ error: 'Invalid IMEI number. It must be 15 digits.' });
-  }
-
-  try {
-    // First check if we have this IMEI in our database
-    const imeiRecord = await IMEI.findOne({ imei_number: imei });
-    
-    // Always fetch the latest data from the API for detailed information
-    const imeiInfo = await fetchIMEIInfo(imei);
-    
-    if (!imeiInfo.success) {
-      // If API call fails but we have a record, return what we know
-      if (imeiRecord) {
-        const basicInfo = imeiRecord.toObject();
-        basicInfo.is_registered = imeiRecord.is_registered;
-        basicInfo.registration_date = imeiRecord.paid_at;
-        basicInfo.note = "Limited information available - using local records only";
-        return res.status(200).json(basicInfo);
-      }
-      
-      return res.status(404).json({ error: imeiInfo.error || 'Unable to retrieve IMEI information.' });
-    }
-    
-    // Merge the API data with any local data we have
-    const detailedInfo = {
-      imei_number: imei,
-      brand: imeiInfo.data.brand || imeiInfo.data.manufacturer || 'Unknown',
-      model: imeiInfo.data.model || imeiInfo.data.device_model || 'Unknown',
-      device_type: imeiInfo.data.device_type || imeiInfo.data.type || 'Smartphone',
-      operating_system: imeiInfo.data.os || imeiInfo.data.operating_system || 'Unknown',
-      
-      // Additional details from the API response
-      serial_number: imeiInfo.data.serial_number || null,
-      manufacture_date: imeiInfo.data.manufacture_date || null,
-      country_origin: imeiInfo.data.country || imeiInfo.data.origin || null,
-      specifications: {
-        memory: imeiInfo.data.memory || imeiInfo.data.ram || null,
-        storage: imeiInfo.data.storage || null,
-        display: imeiInfo.data.display || null,
-        camera: imeiInfo.data.camera || null,
-        processor: imeiInfo.data.processor || imeiInfo.data.cpu || null
-      },
-      
-      // If we have local registration data, include it
-      is_registered: imeiRecord ? imeiRecord.is_registered : false,
-      registration_date: imeiRecord ? imeiRecord.paid_at : null,
-      
-      // Include the raw API response for diagnostic purposes
-      api_data: process.env.NODE_ENV === 'development' ? imeiInfo.data : undefined
-    };
-    
-    // If this is a device we haven't registered yet but have info for, save the basic details
-    if (!imeiRecord) {
-      const newImeiRecord = new IMEI({
-        imei_number: imei,
-        brand: detailedInfo.brand,
-        model: detailedInfo.model,
-        device_type: detailedInfo.device_type,
-        operating_system: detailedInfo.operating_system,
-        is_registered: false
-      });
-      
-      // Save asynchronously without waiting
-      newImeiRecord.save().catch(err => {
-        console.error('Error saving new IMEI record:', err);
-      });
-    }
-    
-    res.status(200).json(detailedInfo);
-  } catch (error) {
-    console.error('Error fetching detailed IMEI information:', error);
-    res.status(500).json({ 
-      error: 'An error occurred while retrieving detailed IMEI information.',
-      message: error.message
-    });
-  }
-});
 // Customs API Endpoints
 app.post('/api/customs/check-code', async (req, res) => {
   try {
