@@ -13,7 +13,6 @@ import './switch_to_company_screen.dart';
 import './media_screen.dart';
 import './subscription_page.dart';
 
-
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -140,8 +139,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                             isDarkMode,
                           ),
                           SizedBox(height: 20.h),
-                          _buildSwitchToCompanyButton(isDarkMode), // Add the button here
-
+                          _buildSwitchToCompanyButton(isDarkMode),
+                          _buildPremiumButton(context, isDarkMode),
                         ],
                       ),
                     ),
@@ -157,13 +156,12 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   Widget _buildSwitchToCompanyButton(bool isDarkMode) {
-
     final userProvider = Provider.of<UserProvider>(context);
     final user = userProvider.user;
 
     // Only show button if user is logged in and has a Personal account type
     if (user == null || user['accounttype'] != 'Personal') {
-      return const SizedBox.shrink(); // Returns an empty widget
+      return const SizedBox.shrink();
     }
 
     return Center(
@@ -177,7 +175,6 @@ class _ProfileScreenState extends State<ProfileScreen>
           );
         },
         style: ElevatedButton.styleFrom(
-
           backgroundColor:
               isDarkMode ? const Color(0xFFD4A373) : _darkBackground,
           padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 24.w),
@@ -197,7 +194,6 @@ class _ProfileScreenState extends State<ProfileScreen>
       ),
     );
   }
-
 
   Widget _buildPremiumButton(BuildContext context, bool isDarkMode) {
     final userProvider = Provider.of<UserProvider>(context);
