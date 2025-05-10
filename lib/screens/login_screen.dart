@@ -318,17 +318,20 @@ class _LoginScreenState extends State<LoginScreen>
           password: _passwordController.text,
         );
 
-        _emailController.clear();
-        _passwordController.clear();
-
         if (response['user'] != null) {
+          // Set user data first
           Provider.of<UserProvider>(
             context,
             listen: false,
           ).setUser(response['user']);
-        }
 
-        _navigateToDashboard(context);
+          // Then clear fields and navigate
+          _emailController.clear();
+          _passwordController.clear();
+          _navigateToDashboard(context);
+        } else {
+          throw Exception('Invalid login response');
+        }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

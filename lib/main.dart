@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:window_size/window_size.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'screens/imei_checker_screen.dart';
 // Screen imports
 import 'screens/welcome_screen.dart';
@@ -20,7 +21,8 @@ import 'screens/support.dart';
 import 'screens/media_screen.dart';
 import 'screens/payments_screen.dart';
 import 'screens/payment_method.dart';
-
+import 'screens/declaration_screen.dart'; // Import the new screen
+import 'screens/unauthorized_access_screen.dart';
 // Theme management
 import 'theme/theme_provider.dart';
 import 'theme/theme.dart';
@@ -48,12 +50,22 @@ void main() async {
   }
 
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => UserProvider()),
-      ],
-      child: const GlobalClearApp(),
+    ScreenUtilInit(
+      designSize: const Size(
+        414,
+        896,
+      ), // Using iPhone 14 Pro dimensions as base
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_) => ThemeProvider()),
+            ChangeNotifierProvider(create: (_) => UserProvider()),
+          ],
+          child: const GlobalClearApp(),
+        );
+      },
     ),
   );
 }
@@ -123,11 +135,22 @@ class GlobalClearApp extends StatelessWidget {
       '/settings': (context) => const SettingsScreen(),
       '/forgot-password': (context) => const ForgotPasswordScreen(),
       '/imei-checker': (context) => const IMEICheckerScreen(),
-      '/customs-fee': (context) => const CustomsCalculatorScreen(),
+      '/customs-fee': (context) {
+        return Builder(
+          builder: (context) {
+            final userProvider = Provider.of<UserProvider>(context);
+            if (userProvider.user == null) {
+              return const UnauthorizedAccessScreen();
+            }
+            return const CustomsCalculatorScreen();
+          },
+        );
+      },
       '/support': (context) => const SupportScreen(),
       '/media': (context) => const MediaScreen(),
       '/payments': (context) => const PaymentsScreen(),
       '/payment_method': (context) => PaymentMethodsScreen(),
+      '/declaration': (context) => const DeclarationScreen(),
     };
   }
 }

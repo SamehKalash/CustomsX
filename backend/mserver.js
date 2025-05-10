@@ -270,7 +270,12 @@ app.post('/register', async (req, res) => {
     await newUser.save();
     res.status(201).json({
       message: 'Registration successful',
-      user: { id: newUser._id, firstName: newUser.firstName, email: newUser.email }
+      user: { 
+        id: newUser._id, 
+        firstName: newUser.firstName, 
+        email: newUser.email,
+        accounttype: newUser.accounttype 
+      }
     });
 
   } catch (error) {
@@ -305,6 +310,7 @@ app.post('/login', async (req, res) => {
         dob: user.dob,
         createdAt: user.createdAt,
         lastLogin: user.lastLogin,
+        accounttype: user.accounttype,
       }
     });
 
@@ -352,6 +358,43 @@ app.post('/changePassword', async (req, res) => {
   } catch (error) {
     console.error('Password change error:', error);
     res.status(500).json({ error: 'Server error during password change' });
+  }
+});
+
+// Update user profile type
+app.put('/users/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { accounttype, companyName, registrationNumber, authorizedRepresentatives } = req.body;
+    
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    user.accounttype = accounttype;
+    user.companyName = companyName;
+    user.registrationNumber = registrationNumber;
+    user.authorizedRepresentatives = authorizedRepresentatives;
+
+    await user.save();
+
+    res.json({
+      message: 'Profile type updated successfully',
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        accounttype: user.accounttype,
+        companyName: user.companyName,
+        registrationNumber: user.registrationNumber,
+        authorizedRepresentatives: user.authorizedRepresentatives
+      }
+    });
+  } catch (error) {
+    console.error('Profile type update error:', error);
+    res.status(500).json({ error: 'Server error during profile type update' });
   }
 });
 
