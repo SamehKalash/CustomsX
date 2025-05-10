@@ -10,6 +10,7 @@ import './profile_edit_screen.dart';
 import './support.dart';
 import './switch_to_company_screen.dart';
 import './media_screen.dart';
+import './subscription_page.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -140,6 +141,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           _buildSwitchToCompanyButton(
                             isDarkMode,
                           ), // Add the button here
+                          _buildPremiumButton(context, isDarkMode),
                         ],
                       ),
                     ),
@@ -189,6 +191,49 @@ class _ProfileScreenState extends State<ProfileScreen>
             fontWeight: FontWeight.bold,
             color: isDarkMode ? _darkBackground : Colors.white,
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPremiumButton(BuildContext context, bool isDarkMode) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final user = userProvider.user;
+
+    // Only show for Company accounts
+    if (user == null || user['accounttype'] != 'Company') {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      child: ElevatedButton(
+        onPressed:
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SubscriptionPage()),
+            ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFFD4A373),
+          padding: EdgeInsets.symmetric(vertical: 12.h),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.r),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.star, color: Colors.white),
+            SizedBox(width: 8.w),
+            Text(
+              'Get Premium',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
       ),
     );
