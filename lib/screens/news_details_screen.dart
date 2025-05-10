@@ -210,7 +210,7 @@ class NewsDetailsScreen extends StatelessWidget {
     bool isDarkMode,
     BuildContext context,
   ) {
-    final isSelected = false; // No selection on details screen
+    final isSelected = false;
     return GestureDetector(
       onTap: () => _handleNavigation(index, context),
       child: Column(

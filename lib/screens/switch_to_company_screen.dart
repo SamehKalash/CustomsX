@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
-
 import '../services/api_service.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
@@ -58,6 +57,7 @@ class _SwitchToCompanyScreenState extends State<SwitchToCompanyScreen> {
     } catch (e) {
       print('Text recognition error: $e');
       return '';
+
     }
   }
 
@@ -215,6 +215,7 @@ class _SwitchToCompanyScreenState extends State<SwitchToCompanyScreen> {
                       _taxCardFile = file;
                     });
                   },
+
                 ),
                 const SizedBox(height: 16),
                 _buildInputField(
@@ -301,6 +302,7 @@ class _SwitchToCompanyScreenState extends State<SwitchToCompanyScreen> {
     required String label,
     required File? file,
     required Function(File, String) onFilePicked,
+
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -328,6 +330,8 @@ class _SwitchToCompanyScreenState extends State<SwitchToCompanyScreen> {
                 backgroundColor: const Color(0xFFD4A373),
               ),
               child: const Text('Upload & Extract'),
+
+
             ),
           ],
         ),

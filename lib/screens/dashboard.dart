@@ -10,6 +10,7 @@ import '../providers/user_provider.dart';
 import './customs_calculation_screen.dart';
 import './support.dart';
 import './media_screen.dart'; // Add this import
+import 'declaration_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -279,21 +280,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             context,
             Icons.calculate,
             'Calculator',
-            '/calculator',
-            isDarkMode,
-          ),
-          _buildActionButton(
-            context,
-            Icons.track_changes,
-            'Tracking',
-            '/tracking',
-            isDarkMode,
-          ),
-          _buildActionButton(
-            context,
-            Icons.upload_file,
-            'Upload',
-            '/documents',
+            '/customs-fee',
             isDarkMode,
           ),
           _buildActionButton(
@@ -453,7 +440,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
         trailing: Icon(Icons.chevron_right, color: _primaryColor),
-        onTap: () => Navigator.pushNamed(context, '/compliance'),
+        onTap: () {
+          if (title == 'Global Trade News') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const MediaScreen()),
+            );
+          } else {
+            Navigator.pushNamed(context, '/compliance');
+          }
+        },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.r),
         ),
@@ -753,7 +749,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void _showFABAction(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const CustomsCalculatorScreen()),
+      MaterialPageRoute(builder: (context) => const DeclarationScreen()),
     );
   }
 }

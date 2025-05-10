@@ -80,7 +80,7 @@ rule CXX_SHARED_LIBRARY_LINKER__window_size_plugin
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /snap/flutter/149/usr/bin/cmake -S/home/sam/SCCF-1/linux -B/home/sam/SCCF-1/build/linux/x64/debug
+  command = /snap/flutter/149/usr/bin/cmake -S/home/sam/Desktop/CustomsX/linux -B/home/sam/Desktop/CustomsX/build/linux/x64/debug
   description = Re-running CMake...
   generator = 1
 

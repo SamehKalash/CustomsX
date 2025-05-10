@@ -119,16 +119,33 @@ class ApiService {
     final request = http.MultipartRequest('PUT', url);
 
     // Add fields
-    request.fields['profileType'] = profileType;
+
+    request.fields['accounttype'] =
+        profileType; // Changed from 'profileType' to 'accounttype'
     request.fields['companyName'] = companyName;
     request.fields['registrationNumber'] = registrationNumber;
     request.fields['authorizedRepresentatives'] = authorizedRepresentatives;
 
     // Add files
-    request.files.add(await http.MultipartFile.fromPath('licenseFile', licenseFile.path));
-    request.files.add(await http.MultipartFile.fromPath('socialInsuranceFile', socialInsuranceFile.path));
-    request.files.add(await http.MultipartFile.fromPath('commercialRegisterFile', commercialRegisterFile.path));
-    request.files.add(await http.MultipartFile.fromPath('taxCardFile', taxCardFile.path));
+
+    request.files.add(
+      await http.MultipartFile.fromPath('licenseFile', licenseFile.path),
+    );
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'socialInsuranceFile',
+        socialInsuranceFile.path,
+      ),
+    );
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'commercialRegisterFile',
+        commercialRegisterFile.path,
+      ),
+    );
+    request.files.add(
+      await http.MultipartFile.fromPath('taxCardFile', taxCardFile.path),
+    );
 
     // Send request
     final response = await request.send();
@@ -317,7 +334,10 @@ class ApiService {
           )
           .timeout(_timeoutDuration);
 
-      return _handleResponse(response, 'Failed to fetch detailed IMEI information');
+      return _handleResponse(
+        response,
+        'Failed to fetch detailed IMEI information',
+      );
     } catch (e) {
       throw _parseException(e, 'fetching detailed IMEI information');
     }

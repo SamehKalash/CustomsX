@@ -91,11 +91,18 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Account', style: TextStyle(fontSize: 20.sp)),
-        backgroundColor: isDarkMode ? Color(0xFF1A120B) : Colors.white,
+        title: Text(
+          'Create Account',
+          style: TextStyle(
+            fontSize: 20.sp,
+            color: isDarkMode ? Color(0xFFF5F5DC) : Color(0xFF1A120B),
+          ),
+        ),
+        backgroundColor: isDarkMode ? Color(0xFF3C2A21) : Colors.white,
         iconTheme: IconThemeData(
           color: isDarkMode ? Color(0xFFF5F5DC) : Color(0xFF1A120B),
         ),
+        elevation: 0,
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -105,8 +112,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             colors:
                 isDarkMode
                     ? [
-                      Color(0xFF1A120B),
                       Color(0xFF3C2A21),
+                      Color(0xFF1A120B),
                       Color(0xFFD4A373).withOpacity(0.2),
                     ]
                     : [
@@ -221,30 +228,73 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   }
 
   Widget _buildDobField(BuildContext context, bool isDarkMode) {
-    return _buildTextField(
-      controller: _dobController,
-      label: 'Date of Birth',
-      hint: 'DD/MM/YYYY',
-      icon: Icons.calendar_today,
-      isDarkMode: isDarkMode,
-      readOnly: true,
-      onTap: () async {
-        final date = await showDatePicker(
-          context: context,
-          initialDate: DateTime.now(),
-          firstDate: DateTime(1900),
-          lastDate: DateTime.now(),
+    return InkWell(
+      onTap: () => _selectDate(context),
+      child: InputDecorator(
+        decoration: _inputDecoration(
+          label: 'Date of Birth',
+          icon: Icons.calendar_today,
+          isDarkMode: isDarkMode,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              _dobController.text.isEmpty ? 'Select date' : _dobController.text,
+              style: TextStyle(
+                fontSize: 14.sp,
+                color:
+                    _dobController.text.isEmpty
+                        ? (isDarkMode
+                            ? Color(0xFFF5F5DC).withOpacity(0.5)
+                            : Color(0xFF1A120B).withOpacity(0.4))
+                        : (isDarkMode ? Color(0xFFF5F5DC) : Color(0xFF1A120B)),
+              ),
+            ),
+            Icon(
+              Icons.arrow_drop_down,
+              color:
+                  isDarkMode
+                      ? Color(0xFFF5F5DC).withOpacity(0.7)
+                      : Color(0xFF1A120B).withOpacity(0.6),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final isDarkMode = themeProvider.themeMode == ThemeMode.dark;
+
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Color(0xFFD4A373),
+              onPrimary: Colors.white,
+              surface: isDarkMode ? Color(0xFF3C2A21) : Colors.white,
+              onSurface: isDarkMode ? Colors.white : Color(0xFF1A120B),
+            ),
+            dialogBackgroundColor:
+                isDarkMode ? Color(0xFF3C2A21) : Colors.white,
+          ),
+          child: child!,
         );
-        if (date != null) {
-          _dobController.text =
-              date.toIso8601String().split('T')[0]; // YYYY-MM-DD format
-        }
-      },
-      validator: (value) {
-        if (value == null || value.isEmpty) return 'Required field';
-        return null;
       },
     );
+
+    if (picked != null) {
+      setState(() {
+        _dobController.text = '${picked.day}/${picked.month}/${picked.year}';
+      });
+    }
   }
 
   Widget _buildGenderDropdown(bool isDarkMode) {
@@ -530,14 +580,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             'lastName': _lastNameController.text,
                             'email': _emailController.text,
                             'password': _passwordController.text,
-                            'dob':
-                                _dobController
-                                    .text, // Should be in ISO 8601 format
+                            'dob': _dobController.text,
                             'gender': _gender,
                             'address': _addressController.text,
                             'country': _country,
                             'countryCode': _countryCode,
                             'mobile': '$_countryCode${_mobileController.text}',
+                            'accounttype':
+                                'Personal', // Adding default account type
                           };
 
                           // Send registration request
