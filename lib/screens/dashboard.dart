@@ -10,6 +10,7 @@ import '../providers/user_provider.dart';
 import './customs_calculation_screen.dart';
 import './support.dart';
 import './media_screen.dart'; // Add this import
+import 'declaration_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -753,7 +754,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void _showFABAction(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const CustomsCalculatorScreen()),
+      MaterialPageRoute(builder: (context) => const DeclarationScreen()),
     );
   }
 }
