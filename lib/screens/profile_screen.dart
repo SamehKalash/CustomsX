@@ -8,9 +8,11 @@ import './settings.dart';
 import './login_screen.dart';
 import './profile_edit_screen.dart';
 import './support.dart';
+
 import './switch_to_company_screen.dart';
 import './media_screen.dart';
 import './subscription_page.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -138,10 +140,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                             isDarkMode,
                           ),
                           SizedBox(height: 20.h),
-                          _buildSwitchToCompanyButton(
-                            isDarkMode,
-                          ), // Add the button here
-                          _buildPremiumButton(context, isDarkMode),
+                          _buildSwitchToCompanyButton(isDarkMode), // Add the button here
+
                         ],
                       ),
                     ),
@@ -157,6 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   Widget _buildSwitchToCompanyButton(bool isDarkMode) {
+
     final userProvider = Provider.of<UserProvider>(context);
     final user = userProvider.user;
 
@@ -176,6 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           );
         },
         style: ElevatedButton.styleFrom(
+
           backgroundColor:
               isDarkMode ? const Color(0xFFD4A373) : _darkBackground,
           padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 24.w),
@@ -195,6 +197,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       ),
     );
   }
+
 
   Widget _buildPremiumButton(BuildContext context, bool isDarkMode) {
     final userProvider = Provider.of<UserProvider>(context);

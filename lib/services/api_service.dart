@@ -44,10 +44,9 @@ class ApiService {
         'valid_tac': responseBody['valid_tac'] ?? false,
         'origin_country': responseBody['origin_country'] ?? 'Unknown',
         'release_year': responseBody['release_year']?.toString() ?? 'N/A',
-        'technical_specs':
-            responseBody['technical_specs'] is Map
-                ? Map<String, dynamic>.from(responseBody['technical_specs'])
-                : <String, dynamic>{},
+        'technical_specs': responseBody['technical_specs'] is Map
+            ? Map<String, dynamic>.from(responseBody['technical_specs'])
+            : <String, dynamic>{},
       };
     } on TimeoutException {
       throw Exception('IMEI check timed out. Please try again.');
@@ -71,10 +70,7 @@ class ApiService {
           )
           .timeout(_timeoutDuration);
 
-      final responseBody = _handleResponse(
-        response,
-        'IMEI registration failed',
-      );
+      final responseBody = _handleResponse(response, 'IMEI registration failed');
 
       return {
         'message': responseBody['message'] ?? 'Registration successful',
@@ -123,6 +119,7 @@ class ApiService {
     final request = http.MultipartRequest('PUT', url);
 
     // Add fields
+
     request.fields['accounttype'] =
         profileType; // Changed from 'profileType' to 'accounttype'
     request.fields['companyName'] = companyName;
@@ -130,6 +127,7 @@ class ApiService {
     request.fields['authorizedRepresentatives'] = authorizedRepresentatives;
 
     // Add files
+
     request.files.add(
       await http.MultipartFile.fromPath('licenseFile', licenseFile.path),
     );
@@ -350,14 +348,10 @@ class ApiService {
     http.Response response,
     String operation,
   ) {
-    final responseBody = _handleResponse(
-      response,
-      'Failed to complete $operation',
-    );
+    final responseBody = _handleResponse(response, 'Failed to complete $operation');
 
     if (responseBody['code'] != 200) {
-      final error =
-          responseBody['exception']?['errorMessage'] ?? 'Unknown error';
+      final error = responseBody['exception']?['errorMessage'] ?? 'Unknown error';
       throw Exception('$operation failed: $error');
     }
 
@@ -382,10 +376,9 @@ class ApiService {
   }
 
   static Exception _parseException(dynamic error, String operation) {
-    final message =
-        error is TimeoutException
-            ? 'Request timed out during $operation'
-            : error is http.ClientException
+    final message = error is TimeoutException
+        ? 'Request timed out during $operation'
+        : error is http.ClientException
             ? 'Network error during $operation'
             : error.toString().replaceAll('Exception: ', '');
     return Exception('$message. Please try again.');
