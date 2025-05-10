@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme_provider.dart';
+import '../providers/user_provider.dart';
 import 'correction_form_screen.dart';
 import 'declaration_form_screen.dart';
+import 'unauthorized_access_screen.dart';
 
 class DeclarationScreen extends StatefulWidget {
   const DeclarationScreen({super.key});
@@ -359,6 +361,22 @@ class _DeclarationScreenState extends State<DeclarationScreen> {
         child: InkWell(
           borderRadius: BorderRadius.circular(15.r),
           onTap: () {
+            // Check if user is logged in
+            final userProvider = Provider.of<UserProvider>(
+              context,
+              listen: false,
+            );
+            if (userProvider.user == null) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const UnauthorizedAccessScreen(),
+                ),
+              );
+              return;
+            }
+
+            // Proceed with navigation if user is logged in
             if (isCorrection) {
               Navigator.push(
                 context,

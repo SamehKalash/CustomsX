@@ -580,14 +580,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             'lastName': _lastNameController.text,
                             'email': _emailController.text,
                             'password': _passwordController.text,
-                            'dob':
-                                _dobController
-                                    .text, // Should be in ISO 8601 format
+                            'dob': _dobController.text,
                             'gender': _gender,
                             'address': _addressController.text,
                             'country': _country,
                             'countryCode': _countryCode,
                             'mobile': '$_countryCode${_mobileController.text}',
+                            'accounttype':
+                                'Personal', // Adding default account type
                           };
 
                           // Send registration request

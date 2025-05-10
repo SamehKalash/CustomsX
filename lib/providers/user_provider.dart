@@ -24,7 +24,8 @@ class UserProvider with ChangeNotifier {
 
   void updateProfileType(String profileType) {
     if (_user != null) {
-      _user!['profileType'] = profileType;
+      _user!['accounttype'] =
+          profileType; // Changed from 'profileType' to 'accounttype'
       notifyListeners();
     }
   }

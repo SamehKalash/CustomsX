@@ -280,21 +280,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             context,
             Icons.calculate,
             'Calculator',
-            '/calculator',
-            isDarkMode,
-          ),
-          _buildActionButton(
-            context,
-            Icons.track_changes,
-            'Tracking',
-            '/tracking',
-            isDarkMode,
-          ),
-          _buildActionButton(
-            context,
-            Icons.upload_file,
-            'Upload',
-            '/documents',
+            '/customs-fee',
             isDarkMode,
           ),
           _buildActionButton(
@@ -454,7 +440,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
         trailing: Icon(Icons.chevron_right, color: _primaryColor),
-        onTap: () => Navigator.pushNamed(context, '/compliance'),
+        onTap: () {
+          if (title == 'Global Trade News') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const MediaScreen()),
+            );
+          } else {
+            Navigator.pushNamed(context, '/compliance');
+          }
+        },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.r),
         ),
