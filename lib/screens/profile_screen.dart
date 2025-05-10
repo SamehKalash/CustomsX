@@ -8,7 +8,9 @@ import './settings.dart';
 import './login_screen.dart';
 import './profile_edit_screen.dart';
 import './support.dart';
+import './switch_to_company_screen.dart'; 
 import './media_screen.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -135,6 +137,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                             () => _confirmLogout(context),
                             isDarkMode,
                           ),
+                          SizedBox(height: 20.h),
+                          _buildSwitchToCompanyButton(isDarkMode), // Add the button here
                         ],
                       ),
                     ),
@@ -146,6 +150,37 @@ class _ProfileScreenState extends State<ProfileScreen>
         ),
       ),
       bottomNavigationBar: _buildBottomNavBar(isDarkMode),
+    );
+  }
+
+  Widget _buildSwitchToCompanyButton(bool isDarkMode) {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SwitchToCompanyScreen(),
+            ),
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: isDarkMode ? const Color(0xFFD4A373) : _darkBackground,
+          padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 24.w),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.r),
+          ),
+          elevation: 5,
+        ),
+        child: Text(
+          'Switch to Company Account',
+          style: TextStyle(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.bold,
+            color: isDarkMode ? _darkBackground : Colors.white,
+          ),
+        ),
+      ),
     );
   }
 

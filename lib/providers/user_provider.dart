@@ -21,4 +21,11 @@ class UserProvider with ChangeNotifier {
     _lastLogin = null;
     notifyListeners();
   }
+
+  void updateProfileType(String profileType) {
+    if (_user != null) {
+      _user!['profileType'] = profileType;
+      notifyListeners();
+    }
+  }
 }

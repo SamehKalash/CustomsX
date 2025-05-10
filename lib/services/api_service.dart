@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'dart:io';
 
 class ApiService {
   static String get baseUrl => dotenv.env['API_URL'] ?? 'http://localhost:5000';
@@ -12,7 +13,7 @@ class ApiService {
   // ================== IMEI Services ==================
   static Future<Map<String, dynamic>> fetchPhoneType(String imei) async {
     try {
-      // Validate IMEI format
+      // Validate IMEI format (main branch implementation)
       if (imei.length != 15 || !RegExp(r'^\d{15}$').hasMatch(imei)) {
         throw Exception('Please enter a valid 15-digit IMEI number');
       }
@@ -26,7 +27,7 @@ class ApiService {
 
       final responseBody = _handleResponse(response, 'IMEI check failed');
 
-      // Handle invalid TAC
+      // Handle invalid TAC (main branch implementation)
       if (responseBody['valid_tac'] != true) {
         throw Exception(
           'Invalid device identification (TAC validation failed)',
@@ -43,10 +44,9 @@ class ApiService {
         'valid_tac': responseBody['valid_tac'] ?? false,
         'origin_country': responseBody['origin_country'] ?? 'Unknown',
         'release_year': responseBody['release_year']?.toString() ?? 'N/A',
-        'technical_specs':
-            responseBody['technical_specs'] is Map
-                ? Map<String, dynamic>.from(responseBody['technical_specs'])
-                : <String, dynamic>{},
+        'technical_specs': responseBody['technical_specs'] is Map
+            ? Map<String, dynamic>.from(responseBody['technical_specs'])
+            : <String, dynamic>{},
       };
     } on TimeoutException {
       throw Exception('IMEI check timed out. Please try again.');
@@ -57,7 +57,7 @@ class ApiService {
 
   static Future<Map<String, dynamic>> registerIMEI(String imei) async {
     try {
-      // Validate IMEI before registration
+      // Validate IMEI before registration (main branch implementation)
       if (imei.length != 15 || !RegExp(r'^\d{15}$').hasMatch(imei)) {
         throw Exception('Invalid IMEI format');
       }
@@ -70,10 +70,7 @@ class ApiService {
           )
           .timeout(_timeoutDuration);
 
-      final responseBody = _handleResponse(
-        response,
-        'IMEI registration failed',
-      );
+      final responseBody = _handleResponse(response, 'IMEI registration failed');
 
       return {
         'message': responseBody['message'] ?? 'Registration successful',
@@ -107,6 +104,42 @@ class ApiService {
   }
 
   // ================== User Services ==================
+  Future<void> updateProfileTypeWithFiles({
+    required String userId,
+    required String profileType,
+    required String companyName,
+    required String registrationNumber,
+    required String authorizedRepresentatives,
+    required File licenseFile,
+    required File socialInsuranceFile,
+    required File commercialRegisterFile,
+    required File taxCardFile,
+  }) async {
+    final url = Uri.parse('$baseUrl/users/$userId');
+    final request = http.MultipartRequest('PUT', url);
+
+    // Add fields
+    request.fields['profileType'] = profileType;
+    request.fields['companyName'] = companyName;
+    request.fields['registrationNumber'] = registrationNumber;
+    request.fields['authorizedRepresentatives'] = authorizedRepresentatives;
+
+    // Add files
+    request.files.add(await http.MultipartFile.fromPath('licenseFile', licenseFile.path));
+    request.files.add(await http.MultipartFile.fromPath('socialInsuranceFile', socialInsuranceFile.path));
+    request.files.add(await http.MultipartFile.fromPath('commercialRegisterFile', commercialRegisterFile.path));
+    request.files.add(await http.MultipartFile.fromPath('taxCardFile', taxCardFile.path));
+
+    // Send request
+    final response = await request.send();
+
+    if (response.statusCode != 200) {
+      final responseBody = await response.stream.bytesToString();
+      final error = jsonDecode(responseBody)['error'] ?? 'Unknown error';
+      throw Exception('Failed to update profile type: $error');
+    }
+  }
+
   static Future<Map<String, dynamic>> registerUser(
     Map<String, dynamic> userData,
   ) async {
@@ -270,19 +303,35 @@ class ApiService {
     }
   }
 
+  // ================== New IMEI Methods ==================
+  static Future<Map<String, dynamic>> getDetailedImeiInfo(String imei) async {
+    try {
+      if (imei.length != 15 || !RegExp(r'^\d{15}$').hasMatch(imei)) {
+        throw Exception('Please enter a valid 15-digit IMEI number.');
+      }
+
+      final response = await http
+          .get(
+            Uri.parse('$baseUrl/api/imei-details/$imei'),
+            headers: {'Content-Type': 'application/json'},
+          )
+          .timeout(_timeoutDuration);
+
+      return _handleResponse(response, 'Failed to fetch detailed IMEI information');
+    } catch (e) {
+      throw _parseException(e, 'fetching detailed IMEI information');
+    }
+  }
+
   // ================== Helper Methods ==================
   static Map<String, dynamic> _processCustomsResponse(
     http.Response response,
     String operation,
   ) {
-    final responseBody = _handleResponse(
-      response,
-      'Failed to complete $operation',
-    );
+    final responseBody = _handleResponse(response, 'Failed to complete $operation');
 
     if (responseBody['code'] != 200) {
-      final error =
-          responseBody['exception']?['errorMessage'] ?? 'Unknown error';
+      final error = responseBody['exception']?['errorMessage'] ?? 'Unknown error';
       throw Exception('$operation failed: $error');
     }
 
@@ -307,10 +356,9 @@ class ApiService {
   }
 
   static Exception _parseException(dynamic error, String operation) {
-    final message =
-        error is TimeoutException
-            ? 'Request timed out during $operation'
-            : error is http.ClientException
+    final message = error is TimeoutException
+        ? 'Request timed out during $operation'
+        : error is http.ClientException
             ? 'Network error during $operation'
             : error.toString().replaceAll('Exception: ', '');
     return Exception('$message. Please try again.');
