@@ -21,8 +21,10 @@ import 'screens/support.dart';
 import 'screens/media_screen.dart';
 import 'screens/payments_screen.dart';
 import 'screens/payment_method.dart';
-import 'screens/declaration_screen.dart'; // Import the new screen
+import 'screens/declaration_screen.dart';
 import 'screens/unauthorized_access_screen.dart';
+import 'screens/subscription_page.dart';
+
 // Theme management
 import 'theme/theme_provider.dart';
 import 'theme/theme.dart';
@@ -151,6 +153,7 @@ class GlobalClearApp extends StatelessWidget {
       '/payments': (context) => const PaymentsScreen(),
       '/payment_method': (context) => PaymentMethodsScreen(),
       '/declaration': (context) => const DeclarationScreen(),
+      '/subscription': (context) => const SubscriptionPage(),
     };
   }
 }
