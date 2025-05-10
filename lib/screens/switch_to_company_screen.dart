@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:google_ml_kit/google_ml_kit.dart';
+
 import '../services/api_service.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
@@ -35,10 +37,27 @@ class _SwitchToCompanyScreenState extends State<SwitchToCompanyScreen> {
     super.dispose();
   }
 
-  Future<void> _pickFile(Function(File) onFilePicked) async {
+  Future<void> _pickFileAndExtractText(Function(File, String) onFilePicked) async {
     final result = await FilePicker.platform.pickFiles();
     if (result != null && result.files.single.path != null) {
-      onFilePicked(File(result.files.single.path!));
+      final file = File(result.files.single.path!);
+      final extractedText = await _extractTextFromFile(file);
+      onFilePicked(file, extractedText);
+    }
+  }
+
+  Future<String> _extractTextFromFile(File file) async {
+    try {
+      final inputImage = InputImage.fromFilePath(file.path);
+      // Use the new API style for text recognition
+      final textRecognizer = TextRecognizer();
+      final recognizedText = await textRecognizer.processImage(inputImage);
+      await textRecognizer.close();
+      
+      return recognizedText.text;
+    } catch (e) {
+      print('Text recognition error: $e');
+      return '';
     }
   }
 
@@ -108,6 +127,7 @@ class _SwitchToCompanyScreenState extends State<SwitchToCompanyScreen> {
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,30 +176,45 @@ class _SwitchToCompanyScreenState extends State<SwitchToCompanyScreen> {
                   hintText: 'Enter your registration number',
                 ),
                 const SizedBox(height: 16),
-                _buildFileUploadField(
+                _buildFileUploadFieldWithOCR(
                   label: 'License Document',
                   file: _licenseFile,
-                  onFilePicked: (file) => setState(() => _licenseFile = file),
+                  onFilePicked: (file, extractedText) {
+                    setState(() {
+                      _licenseFile = file;
+                      _companyNameController.text = extractedText;
+                    });
+                  },
                 ),
                 const SizedBox(height: 16),
-                _buildFileUploadField(
+                _buildFileUploadFieldWithOCR(
                   label: 'Social Insurance Document',
                   file: _socialInsuranceFile,
-                  onFilePicked: (file) =>
-                      setState(() => _socialInsuranceFile = file),
+                  onFilePicked: (file, extractedText) {
+                    setState(() {
+                      _socialInsuranceFile = file;
+                    });
+                  },
                 ),
                 const SizedBox(height: 16),
-                _buildFileUploadField(
+                _buildFileUploadFieldWithOCR(
                   label: 'Commercial Register Extract',
                   file: _commercialRegisterFile,
-                  onFilePicked: (file) =>
-                      setState(() => _commercialRegisterFile = file),
+                  onFilePicked: (file, extractedText) {
+                    setState(() {
+                      _commercialRegisterFile = file;
+                    });
+                  },
                 ),
                 const SizedBox(height: 16),
-                _buildFileUploadField(
+                _buildFileUploadFieldWithOCR(
                   label: 'Tax Card',
                   file: _taxCardFile,
-                  onFilePicked: (file) => setState(() => _taxCardFile = file),
+                  onFilePicked: (file, extractedText) {
+                    setState(() {
+                      _taxCardFile = file;
+                    });
+                  },
                 ),
                 const SizedBox(height: 16),
                 _buildInputField(
@@ -262,10 +297,10 @@ class _SwitchToCompanyScreenState extends State<SwitchToCompanyScreen> {
     );
   }
 
-  Widget _buildFileUploadField({
+  Widget _buildFileUploadFieldWithOCR({
     required String label,
     required File? file,
-    required Function(File) onFilePicked,
+    required Function(File, String) onFilePicked,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -288,11 +323,11 @@ class _SwitchToCompanyScreenState extends State<SwitchToCompanyScreen> {
               ),
             ),
             ElevatedButton(
-              onPressed: () => _pickFile(onFilePicked),
+              onPressed: () => _pickFileAndExtractText(onFilePicked),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFD4A373),
               ),
-              child: const Text('Upload'),
+              child: const Text('Upload & Extract'),
             ),
           ],
         ),
