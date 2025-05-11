@@ -7,6 +7,8 @@ import '../theme/theme_provider.dart';
 import 'dashboard.dart';
 import 'create_account_screen.dart';
 import 'forgot_password_screen.dart';
+import 'two_factor_verification_screen.dart';
+import 'phone_verification_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -311,37 +313,78 @@ class _LoginScreenState extends State<LoginScreen>
 
   Future<void> _handleLogin(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      setState(() => _isLoading = true);
+      setState(() {
+        _isLoading = true;
+      });
+
       try {
         final response = await ApiService.loginUser(
-          email: _emailController.text.trim(),
+          email: _emailController.text,
           password: _passwordController.text,
         );
 
-        if (response['user'] != null) {
-          // Set user data first
-          Provider.of<UserProvider>(
-            context,
-            listen: false,
-          ).setUser(response['user']);
+        print('Login response: $response'); // Debug log
 
-          // Then clear fields and navigate
-          _emailController.clear();
-          _passwordController.clear();
-          _navigateToDashboard(context);
-        } else {
-          throw Exception('Invalid login response');
+        // Check if phone verification is required
+        if (response.containsKey('requiresPhoneVerification')) {
+          final userId = response['user']['id'];
+          final phone = response['user']['mobile'];
+          
+          print('Navigating to phone verification: userId=$userId, phone=$phone'); // Debug log
+          
+          if (mounted) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => PhoneVerificationScreen(
+                  userId: userId,
+                  phone: phone,
+                ),
+              ),
+            );
+          }
+          return;
+        }
+
+        // Check if 2FA is required
+        if (response.containsKey('requires2FA')) {
+          if (mounted) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => TwoFactorVerificationScreen(
+                  userId: response['userId'],
+                ),
+              ),
+            );
+          }
+          return;
+        }
+
+        // Standard login without 2FA
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.setUser(response['user']);
+
+        if (mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => const DashboardScreen(),
+            ),
+          );
         }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.toString().replaceAll('Exception: ', '')),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 3),
-          ),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Login failed: ${e.toString()}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       } finally {
-        setState(() => _isLoading = false);
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       }
     }
   }

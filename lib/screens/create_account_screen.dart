@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'dart:convert';
 import '../theme/theme_provider.dart';
 import '../services/api_service.dart';
+import 'phone_verification_screen.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -76,7 +77,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           'code': code.toString(),
           'name': country['name'],
           'flag': country['emoji'],
-          'image': country['image'],
+          'image': country['image'] ?? '',
         });
       }
     }
@@ -354,22 +355,19 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         icon: Icons.flag,
         isDarkMode: isDarkMode,
       ),
+      isExpanded: true,
+      menuMaxHeight: 350.h,
       items:
           _countries.map<DropdownMenuItem<Map<String, dynamic>>>((country) {
             return DropdownMenuItem(
               value: country,
-              child: Row(
-                children: [
-                  Text(country['emoji'], style: TextStyle(fontSize: 20.sp)),
-                  SizedBox(width: 12.w),
-                  Text(
-                    country['name'],
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: isDarkMode ? Color(0xFFF5F5DC) : Color(0xFF1A120B),
-                    ),
-                  ),
-                ],
+              child: Text(
+                country['name'] ?? 'Unknown',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: isDarkMode ? Color(0xFFF5F5DC) : Color(0xFF1A120B),
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             );
           }).toList(),
@@ -398,24 +396,15 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     .map(
                       (code) => DropdownMenuItem(
                         value: code['code'],
-                        child: Row(
-                          children: [
-                            Text(
-                              code['flag'] ?? '🏳',
-                              style: TextStyle(fontSize: 18.sp),
-                            ),
-                            SizedBox(width: 8.w),
-                            Text(
-                              code['code']!,
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                color:
-                                    isDarkMode
-                                        ? Color(0xFFF5F5DC)
-                                        : Color(0xFF1A120B),
-                              ),
-                            ),
-                          ],
+                        child: Text(
+                          code['code']!,
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: isDarkMode
+                                ? Color(0xFFF5F5DC)
+                                : Color(0xFF1A120B),
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     )
@@ -595,20 +584,42 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             userData,
                           );
 
-                          // Show success message
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                response['message'] ??
-                                    'Registration successful!',
+                          print('Registration response: $response'); // Debug log
+                          
+                          // Check if phone verification is required
+                          if (response.containsKey('requiresPhoneVerification') || 
+                              (response['user'] != null && response['user']['requiresPhoneVerification'] == true)) {
+                            
+                            final userId = response['user']['id'];
+                            final phone = '$_countryCode${_mobileController.text}';
+                            
+                            print('Navigating to phone verification: userId=$userId, phone=$phone'); // Debug log
+                            
+                            // Navigate to phone verification screen
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => PhoneVerificationScreen(
+                                  userId: userId,
+                                  phone: phone,
+                                ),
                               ),
-                              backgroundColor: Colors.green,
-                              duration: const Duration(seconds: 3),
-                            ),
-                          );
+                            );
+                          } else {
+                            // Show success message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  response['message'] ??
+                                      'Registration successful!',
+                                ),
+                                backgroundColor: Colors.green,
+                                duration: const Duration(seconds: 3),
+                              ),
+                            );
 
-                          // Navigate to login screen
-                          Navigator.pushReplacementNamed(context, '/login');
+                            // Navigate to login screen
+                            Navigator.pushReplacementNamed(context, '/login');
+                          }
                         } catch (e) {
                           // Show error message
                           ScaffoldMessenger.of(context).showSnackBar(

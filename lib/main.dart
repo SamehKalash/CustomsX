@@ -25,6 +25,9 @@ import 'screens/declaration_screen.dart';
 import 'screens/unauthorized_access_screen.dart';
 import 'screens/subscription_page.dart';
 import 'screens/logistics_booking_screen.dart';
+import 'screens/two_factor_verification_screen.dart';
+import 'screens/two_factor_setup_screen.dart';
+import 'screens/phone_verification_screen.dart';
 
 // Theme management
 import 'theme/theme_provider.dart';
@@ -156,6 +159,28 @@ class GlobalClearApp extends StatelessWidget {
       '/declaration': (context) => const DeclarationScreen(),
       '/subscription': (context) => const SubscriptionPage(),
       '/logistics-booking': (context) => const LogisticsBookingScreen(declarationId: ''),
+      '/phone-verification': (context) {
+        final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+        return PhoneVerificationScreen(
+          userId: args['userId'],
+          phone: args['phone'],
+        );
+      },
+      '/two-factor-verification': (context) {
+        final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+        return TwoFactorVerificationScreen(
+          userId: args['userId'],
+        );
+      },
+      '/two-factor-setup': (context) {
+        final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+        return TwoFactorSetupScreen(
+          userId: args['userId'],
+          email: args['email'],
+          qrCodeUrl: args['qrCodeUrl'],
+          tempSecret: args['tempSecret'],
+        );
+      },
     };
   }
 }

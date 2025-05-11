@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
 import '../theme/theme_provider.dart';
+import '../services/api_service.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({super.key});
@@ -16,6 +17,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   late TextEditingController _firstNameController;
   late TextEditingController _lastNameController;
   late TextEditingController _emailController;
+  late TextEditingController _mobileController;
   bool _isLoading = false;
 
   @override
@@ -27,6 +29,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     );
     _lastNameController = TextEditingController(text: user?['lastName'] ?? '');
     _emailController = TextEditingController(text: user?['email'] ?? '');
+    _mobileController = TextEditingController(text: user?['mobile'] ?? '');
   }
 
   @override
@@ -34,6 +37,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     _firstNameController.dispose();
     _lastNameController.dispose();
     _emailController.dispose();
+    _mobileController.dispose();
     super.dispose();
   }
 
@@ -108,6 +112,19 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
                   ).hasMatch(value)) {
                     return 'Enter a valid email address';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 20.h),
+              _buildEditField(
+                context,
+                label: 'Mobile Number',
+                controller: _mobileController,
+                icon: Icons.phone_outlined,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your mobile number';
                   }
                   return null;
                 },
@@ -213,17 +230,45 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     setState(() => _isLoading = true);
 
     try {
-      // Simulated API call
-      await Future.delayed(const Duration(seconds: 2));
-
-      // Update user provider
+      // Get the current user data
       final userProvider = Provider.of<UserProvider>(context, listen: false);
-      userProvider.setUser({
-        ...userProvider.user ?? {},
+      final currentUser = userProvider.user;
+      
+      if (currentUser == null) {
+        throw Exception('User not logged in');
+      }
+      
+      // Prepare updated user data
+      final updatedData = {
+        'email': _emailController.text,
         'firstName': _firstNameController.text,
         'lastName': _lastNameController.text,
-        'email': _emailController.text,
-      });
+        'mobile': _mobileController.text,
+        // Keep other fields from the current user
+        'address': currentUser['address'],
+        'country': currentUser['country'],
+      };
+      
+      // Call the API to update the profile
+      final response = await ApiService.updateProfile(updatedData);
+      
+      // Debug logging
+      print('Profile update response:');
+      print(response);
+      
+      // Update the user provider with the returned user data if it exists
+      if (response.containsKey('user')) {
+        userProvider.setUser(response['user']);
+      } else {
+        // Fallback to the data we sent if the response doesn't contain user data
+        userProvider.setUser({
+          ...currentUser,
+          'firstName': _firstNameController.text,
+          'lastName': _lastNameController.text,
+          'email': _emailController.text,
+          'mobile': _mobileController.text,
+        });
+      }
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

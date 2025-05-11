@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const axios = require('axios');
+const speakeasy = require('speakeasy');
+const QRCode = require('qrcode');
 
 const app = express();
 
@@ -48,7 +50,15 @@ const userSchema = new mongoose.Schema({
   countryCode: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
   lastLogin: { type: Date, default: null },
-  accounttype: { type: String, default: "Personal" }
+  accounttype: { type: String, default: "Personal" },
+  // 2FA fields
+  twoFactorEnabled: { type: Boolean, default: false },
+  twoFactorSecret: { type: String, default: null },
+  twoFactorTempSecret: { type: String, default: null },
+  twoFactorVerified: { type: Boolean, default: false },
+  phoneVerificationCode: { type: String, default: null },
+  phoneVerificationExpires: { type: Date, default: null },
+  phoneVerified: { type: Boolean, default: false }
 });
 
 const imeiSchema = new mongoose.Schema({
@@ -79,6 +89,26 @@ const HSCode = mongoose.model('HSCode', hscodeSchema);
 const Country = mongoose.model('Country', countrySchema);
 const User = mongoose.model('User', userSchema);
 const IMEI = mongoose.model('IMEI', imeiSchema);
+
+// Utility function to send verification SMS
+const sendVerificationSMS = async (phone, code) => {
+  // Log the verification code to terminal for testing/development
+  console.log('\n==================================================');
+  console.log(`📱 VERIFICATION CODE for ${phone}: ${code}`);
+  console.log('==================================================\n');
+  
+  // In a real implementation, you would integrate with an SMS service provider
+  // like Twilio, Nexmo, or any other SMS gateway.
+  // For now, we'll just simulate sending and return a success response
+  
+  console.log('SMS sending simulated. In production, integrate with an SMS provider.');
+  return { success: true, message: 'Verification code sent' };
+};
+
+// Generate a random 6-digit code
+const generateVerificationCode = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};
 
 // ================== IMEI Endpoints ==================
 app.get('/api/imei/:imei', async (req, res) => {
@@ -254,6 +284,12 @@ app.post('/register', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    const verificationCode = generateVerificationCode();
+    const expirationTime = new Date();
+    expirationTime.setMinutes(expirationTime.getMinutes() + 10); // Code expires in 10 minutes
+
+    console.log(`\n🔐 NEW USER REGISTRATION - ${email}`);
+
     const newUser = new User({
       firstName,
       lastName,
@@ -264,17 +300,28 @@ app.post('/register', async (req, res) => {
       address,
       country,
       mobile: `${mobile}`,
-      countryCode
+      countryCode,
+      phoneVerificationCode: verificationCode,
+      phoneVerificationExpires: expirationTime,
+      phoneVerified: false
     });
 
     await newUser.save();
+    
+    // Send verification SMS
+    try {
+      await sendVerificationSMS(mobile, verificationCode);
+    } catch (smsError) {
+      console.error('SMS sending error:', smsError);
+      // Continue with registration even if SMS fails
+    }
+
     res.status(201).json({
-      message: 'Registration successful',
+      message: 'Registration initiated. Please verify your phone.',
       user: { 
         id: newUser._id, 
-        firstName: newUser.firstName, 
         email: newUser.email,
-        accounttype: newUser.accounttype 
+        requiresPhoneVerification: true
       }
     });
 
@@ -284,9 +331,96 @@ app.post('/register', async (req, res) => {
   }
 });
 
+// Endpoint to verify phone
+app.post('/verify-phone', async (req, res) => {
+  try {
+    const { userId, code } = req.body;
+    
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    if (user.phoneVerified) {
+      return res.status(400).json({ error: 'Phone already verified' });
+    }
+    
+    if (!user.phoneVerificationCode || 
+        user.phoneVerificationCode !== code || 
+        new Date() > user.phoneVerificationExpires) {
+      return res.status(400).json({ error: 'Invalid or expired verification code' });
+    }
+    
+    // Mark phone as verified
+    user.phoneVerified = true;
+    user.phoneVerificationCode = null;
+    user.phoneVerificationExpires = null;
+    
+    // Skip 2FA setup
+    await user.save();
+    
+    res.json({ 
+      message: 'Phone verified successfully.',
+      twoFactorSetupRequired: false
+    });
+    
+  } catch (error) {
+    console.error('Phone verification error:', error);
+    res.status(500).json({ error: 'Server error during phone verification' });
+  }
+});
+
+// Endpoint to verify and enable 2FA
+app.post('/verify-2fa-setup', async (req, res) => {
+  try {
+    const { userId, token } = req.body;
+    
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    if (!user.twoFactorTempSecret) {
+      return res.status(400).json({ error: 'No temporary 2FA secret found' });
+    }
+    
+    const verified = speakeasy.totp.verify({
+      secret: user.twoFactorTempSecret,
+      encoding: 'base32',
+      token
+    });
+    
+    if (!verified) {
+      return res.status(400).json({ error: 'Invalid 2FA token' });
+    }
+    
+    user.twoFactorSecret = user.twoFactorTempSecret;
+    user.twoFactorTempSecret = null;
+    user.twoFactorEnabled = true;
+    user.twoFactorVerified = true;
+    
+    await user.save();
+    
+    res.json({
+      message: '2FA setup completed successfully',
+      twoFactorEnabled: true,
+      user: { 
+        id: user._id, 
+        firstName: user.firstName, 
+        email: user.email,
+        accounttype: user.accounttype 
+      }
+    });
+    
+  } catch (error) {
+    console.error('2FA setup error:', error);
+    res.status(500).json({ error: 'Server error during 2FA setup' });
+  }
+});
+
 app.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, token } = req.body;
     const user = await User.findOne({ email });
 
     if (!user) return res.status(404).json({ error: 'Account not found' });
@@ -294,29 +428,101 @@ app.post('/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
 
+    // Check if phone is verified
+    if (!user.phoneVerified) {
+      // Generate a new verification code
+      const verificationCode = generateVerificationCode();
+      const expirationTime = new Date();
+      expirationTime.setMinutes(expirationTime.getMinutes() + 10);
+      
+      console.log(`\n⚠️ LOGIN ATTEMPT WITH UNVERIFIED PHONE - ${email}`);
+      
+      user.phoneVerificationCode = verificationCode;
+      user.phoneVerificationExpires = expirationTime;
+      await user.save();
+      
+      // Send new verification SMS
+      try {
+        await sendVerificationSMS(user.mobile, verificationCode);
+      } catch (smsError) {
+        console.error('SMS sending error:', smsError);
+      }
+      
+      return res.json({ 
+        requiresPhoneVerification: true,
+        user: {
+          id: user._id,
+          mobile: user.mobile
+        }
+      });
+    }
+
+    // We're skipping all 2FA checks
     user.lastLogin = Date.now();
     await user.save();
 
-    res.json({
-      message: 'Login successful',
+    // Return user data after successful authentication
+    return res.json({
       user: {
         id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        country: user.country,
-        address: user.address,
         mobile: user.mobile,
-        dob: user.dob,
-        createdAt: user.createdAt,
-        lastLogin: user.lastLogin,
         accounttype: user.accounttype,
+        twoFactorEnabled: false
       }
     });
 
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Server error during login' });
+  }
+});
+
+// Endpoint to verify 2FA during login
+app.post('/verify-2fa', async (req, res) => {
+  try {
+    const { userId, token } = req.body;
+    
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    if (!user.twoFactorEnabled || !user.twoFactorSecret) {
+      return res.status(400).json({ error: '2FA not enabled for this user' });
+    }
+    
+    const verified = speakeasy.totp.verify({
+      secret: user.twoFactorSecret,
+      encoding: 'base32',
+      token,
+      window: 1 // Allow 30 seconds leeway
+    });
+    
+    if (!verified) {
+      return res.status(401).json({ error: 'Invalid 2FA token' });
+    }
+    
+    user.lastLogin = Date.now();
+    await user.save();
+    
+    res.json({
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        mobile: user.mobile,
+        accounttype: user.accounttype,
+        twoFactorEnabled: user.twoFactorEnabled
+      }
+    });
+    
+  } catch (error) {
+    console.error('2FA verification error:', error);
+    res.status(500).json({ error: 'Server error during 2FA verification' });
   }
 });
 
@@ -335,7 +541,21 @@ app.post('/updateProfile', async (req, res) => {
     user.mobile = mobile ?? user.mobile;
 
     await user.save();
-    res.json({ message: 'Profile updated successfully' });
+    
+    // Return updated user data
+    res.json({ 
+      message: 'Profile updated successfully',
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        mobile: user.mobile,
+        address: user.address,
+        country: user.country,
+        accounttype: user.accounttype
+      }
+    });
   } catch (error) {
     console.error('Profile update error:', error);
     res.status(500).json({ error: 'Server error during profile update' });
@@ -395,6 +615,116 @@ app.put('/users/:id', async (req, res) => {
   } catch (error) {
     console.error('Profile type update error:', error);
     res.status(500).json({ error: 'Server error during profile type update' });
+  }
+});
+
+// Resend verification code endpoint
+app.post('/api/resend-verification-code', async (req, res) => {
+  try {
+    const { userId, phone } = req.body;
+    
+    if (!userId || !phone) {
+      return res.status(400).json({ error: 'User ID and phone are required' });
+    }
+    
+    // Find the user
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    // Check if the phone matches
+    if (user.mobile !== phone) {
+      return res.status(400).json({ error: 'Phone number does not match user record' });
+    }
+    
+    // Generate a new verification code
+    const code = generateVerificationCode();
+    const codeExpiry = new Date();
+    codeExpiry.setMinutes(codeExpiry.getMinutes() + 10); // Code expires in 10 minutes
+    
+    console.log(`\n🔄 RESENDING VERIFICATION CODE - ${phone}`);
+    
+    // Update user with new code
+    user.phoneVerificationCode = code;
+    user.phoneVerificationExpires = codeExpiry;
+    await user.save();
+    
+    // Send the verification SMS
+    await sendVerificationSMS(phone, code);
+    
+    res.json({ message: 'Verification code has been resent' });
+  } catch (error) {
+    console.error('Error resending verification code:', error);
+    res.status(500).json({ error: 'Server error while resending verification code' });
+  }
+});
+
+// Get user profile
+app.get('/api/user/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    res.json({
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        mobile: user.mobile,
+        address: user.address,
+        country: user.country,
+        accounttype: user.accounttype,
+        twoFactorEnabled: user.twoFactorEnabled
+      }
+    });
+    
+  } catch (error) {
+    console.error('Get user profile error:', error);
+    res.status(500).json({ error: 'Server error during profile retrieval' });
+  }
+});
+
+// FOR DEVELOPMENT ONLY: Endpoint to manually verify phone
+app.get('/dev/verify-phone/:email', async (req, res) => {
+  // This endpoint should only be accessible in development mode
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(404).json({ error: 'Endpoint not found' });
+  }
+  
+  try {
+    const { email } = req.params;
+    
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    // Mark phone as verified
+    user.phoneVerified = true;
+    user.phoneVerificationCode = null;
+    user.phoneVerificationExpires = null;
+    await user.save();
+    
+    console.log(`\n✅ DEV MODE: Manually verified phone for ${email}`);
+    
+    res.json({ 
+      message: 'Phone manually verified successfully.',
+      user: {
+        id: user._id,
+        email: user.email,
+        phoneVerified: user.phoneVerified
+      }
+    });
+    
+  } catch (error) {
+    console.error('Manual phone verification error:', error);
+    res.status(500).json({ error: 'Server error during manual phone verification' });
   }
 });
 

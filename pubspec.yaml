@@ -41,3 +41,7 @@ flutter:
     - assets/images/widget1.jpg
     - assets/images/widget2.1.jpeg
     - assets/images/widget2.2.jpeg
+    - assets/countries.json
+    - assets/uk_flag.png
+    - assets/egyptian_flag.png
+    - assets/customsX.png

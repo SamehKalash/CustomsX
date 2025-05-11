@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Afghanistan",
+    "code": "AF",
+    "emoji": "🇦🇫",
+    "image": "",
+    "dialCodes": ["+93"]
+  },
+  {
+    "name": "Albania",
+    "code": "AL",
+    "emoji": "🇦🇱",
+    "image": "",
+    "dialCodes": ["+355"]
+  },
+  {
+    "name": "Algeria",
+    "code": "DZ",
+    "emoji": "🇩🇿",
+    "image": "",
+    "dialCodes": ["+213"]
+  },
+  {
+    "name": "Egypt",
+    "code": "EG",
+    "emoji": "🇪🇬",
+    "image": "egyptian_flag.png",
+    "dialCodes": ["+20"]
+  },
+  {
+    "name": "United Kingdom",
+    "code": "GB",
+    "emoji": "🇬🇧",
+    "image": "uk_flag.png",
+    "dialCodes": ["+44"]
+  },
+  {
+    "name": "United States",
+    "code": "US",
+    "emoji": "🇺🇸",
+    "image": "",
+    "dialCodes": ["+1"]
+  },
+  {
+    "name": "United Arab Emirates",
+    "code": "AE",
+    "emoji": "🇦🇪",
+    "image": "",
+    "dialCodes": ["+971"]
+  },
+  {
+    "name": "Azerbaijan",
+    "code": "AZ",
+    "emoji": "🇦🇿",
+    "image": "",
+    "dialCodes": ["+994"]
+  }
+] 

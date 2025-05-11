@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
 import '../theme/theme_provider.dart';
+import '../services/api_service.dart';
 import './dashboard.dart';
 import './settings.dart';
 import './login_screen.dart';
@@ -28,6 +29,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -49,6 +51,32 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
 
     _animationController.forward();
+    
+    // Refresh user data
+    _refreshUserData();
+  }
+  
+  Future<void> _refreshUserData() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final user = userProvider.user;
+    
+    if (user != null && user.containsKey('id')) {
+      setState(() => _isLoading = true);
+      
+      try {
+        final response = await ApiService.getUserProfile(user['id']);
+        
+        if (response.containsKey('user')) {
+          userProvider.setUser(response['user']);
+          print('User data refreshed successfully');
+          print(response['user']);
+        }
+      } catch (e) {
+        print('Error refreshing user data: $e');
+      } finally {
+        setState(() => _isLoading = false);
+      }
+    }
   }
 
   @override
@@ -63,7 +91,11 @@ class _ProfileScreenState extends State<ProfileScreen>
     final userProvider = Provider.of<UserProvider>(context);
     final isDarkMode = themeProvider.themeMode == ThemeMode.dark;
     final user = userProvider.user;
-
+    
+    // Debug logging
+    print('User data in profile screen:');
+    print(user);
+    
     return Scaffold(
       body: Container(
         decoration: _buildBackgroundGradient(isDarkMode),
@@ -292,50 +324,57 @@ class _ProfileScreenState extends State<ProfileScreen>
           ),
         ],
       ),
-      child: Column(
-        children: [
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.easeInOutBack,
-            child: CircleAvatar(
-              radius: 50.r,
-              backgroundColor: Colors.white.withOpacity(0.1),
-              child: Icon(
-                Icons.person_outline_rounded,
-                size: 40.w,
+      child: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(
                 color: Colors.white,
+                strokeWidth: 2.w,
               ),
+            )
+          : Column(
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOutBack,
+                  child: CircleAvatar(
+                    radius: 50.r,
+                    backgroundColor: Colors.white.withOpacity(0.1),
+                    child: Icon(
+                      Icons.person_outline_rounded,
+                      size: 40.w,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                Text(
+                  user != null ? '${user['firstName']} ${user['lastName']}' : 'Guest',
+                  style: TextStyle(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.w700,
+                    color: isDarkMode ? Color(0xFFF5F5DC) : Colors.white,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  user?['mobile']?.toString() ?? '+00 123 456 7890',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    color: (isDarkMode ? Color(0xFFF5F5DC) : Colors.white)
+                        .withOpacity(0.9),
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  user?['email'] ?? 'user@example.com',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    color: (isDarkMode ? Color(0xFFF5F5DC) : Colors.white)
+                        .withOpacity(0.7),
+                  ),
+                ),
+              ],
             ),
-          ),
-          SizedBox(height: 16.h),
-          Text(
-            user != null ? '${user['firstName']} ${user['lastName']}' : 'Guest',
-            style: TextStyle(
-              fontSize: 24.sp,
-              fontWeight: FontWeight.w700,
-              color: isDarkMode ? Color(0xFFF5F5DC) : Colors.white,
-            ),
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            user?['mobile']?.toString() ?? '+00 123 456 7890',
-            style: TextStyle(
-              fontSize: 16.sp,
-              color: (isDarkMode ? Color(0xFFF5F5DC) : Colors.white)
-                  .withOpacity(0.9),
-            ),
-          ),
-          SizedBox(height: 4.h),
-          Text(
-            user?['email'] ?? 'user@example.com',
-            style: TextStyle(
-              fontSize: 16.sp,
-              color: (isDarkMode ? Color(0xFFF5F5DC) : Colors.white)
-                  .withOpacity(0.7),
-            ),
-          ),
-        ],
-      ),
     );
   }
 

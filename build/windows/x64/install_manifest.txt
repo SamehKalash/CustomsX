@@ -5,9 +5,13 @@ S:/CustomsX/build/windows/x64/runner/Debug/window_size_plugin.dll
 S:/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/.env
 S:/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/AssetManifest.bin
 S:/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/AssetManifest.json
+S:/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/assets/countries.json
+S:/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/assets/customsX.png
+S:/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/assets/egyptian_flag.png
 S:/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/assets/images/widget1.jpg
 S:/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/assets/images/widget2.1.jpeg
 S:/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/assets/images/widget2.2.jpeg
+S:/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/assets/uk_flag.png
 S:/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/FontManifest.json
 S:/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/fonts/MaterialIcons-Regular.otf
 S:/CustomsX/build/windows/x64/runner/Debug/data/flutter_assets/kernel_blob.bin

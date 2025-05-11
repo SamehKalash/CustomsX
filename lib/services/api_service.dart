@@ -179,29 +179,124 @@ class ApiService {
     }
   }
 
+  static Future<Map<String, dynamic>> verifyPhone({
+    required String userId,
+    required String code,
+  }) async {
+    try {
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/verify-phone'),
+            headers: {'Content-Type': 'application/json'},
+            body: json.encode({
+              'userId': userId,
+              'code': code,
+            }),
+          )
+          .timeout(_timeoutDuration);
+
+      return _handleResponse(response, 'Phone verification failed');
+    } catch (e) {
+      throw _parseException(e, 'phone verification');
+    }
+  }
+
+  static Future<Map<String, dynamic>> resendVerificationCode({
+    required String userId,
+    required String phone,
+  }) async {
+    try {
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/api/resend-verification-code'),
+            headers: {'Content-Type': 'application/json'},
+            body: json.encode({
+              'userId': userId,
+              'phone': phone,
+            }),
+          )
+          .timeout(_timeoutDuration);
+
+      return _handleResponse(response, 'Failed to resend verification code');
+    } catch (e) {
+      throw _parseException(e, 'resending verification code');
+    }
+  }
+
+  static Future<Map<String, dynamic>> verify2FASetup({
+    required String userId,
+    required String token,
+  }) async {
+    try {
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/verify-2fa-setup'),
+            headers: {'Content-Type': 'application/json'},
+            body: json.encode({
+              'userId': userId,
+              'token': token,
+            }),
+          )
+          .timeout(_timeoutDuration);
+
+      return _handleResponse(response, '2FA setup verification failed');
+    } catch (e) {
+      throw _parseException(e, '2FA setup');
+    }
+  }
+
   static Future<Map<String, dynamic>> loginUser({
     required String email,
     required String password,
+    String? token,
   }) async {
     try {
       if (email.isEmpty || password.isEmpty) {
         throw Exception('Both email and password are required');
       }
 
+      final Map<String, dynamic> requestBody = {
+        'email': email.trim().toLowerCase(),
+        'password': password,
+      };
+
+      if (token != null && token.isNotEmpty) {
+        requestBody['token'] = token;
+      }
+
       final response = await http
           .post(
             Uri.parse('$baseUrl/login'),
             headers: {'Content-Type': 'application/json'},
-            body: json.encode({
-              'email': email.trim().toLowerCase(),
-              'password': password,
-            }),
+            body: json.encode(requestBody),
           )
           .timeout(_timeoutDuration);
 
       return _handleResponse(response, 'Login failed');
     } catch (e) {
-      throw _parseException(e, 'user login');
+      throw _parseException(e, 'login');
+    }
+  }
+
+  static Future<Map<String, dynamic>> verify2FALogin({
+    required String userId,
+    required String token,
+  }) async {
+    try {
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/verify-2fa'),
+            headers: {'Content-Type': 'application/json'},
+            body: json.encode({
+              'userId': userId,
+              'token': token,
+            }),
+          )
+          .timeout(_timeoutDuration);
+
+      return _handleResponse(response, '2FA verification failed');
+    } catch (e) {
+      throw _parseException(e, '2FA verification');
     }
   }
 
@@ -382,5 +477,20 @@ class ApiService {
             ? 'Network error during $operation'
             : error.toString().replaceAll('Exception: ', '');
     return Exception('$message. Please try again.');
+  }
+
+  static Future<Map<String, dynamic>> getUserProfile(String userId) async {
+    try {
+      final response = await http
+          .get(
+            Uri.parse('$baseUrl/api/user/$userId'),
+            headers: {'Content-Type': 'application/json'},
+          )
+          .timeout(_timeoutDuration);
+
+      return _handleResponse(response, 'Failed to fetch user profile');
+    } catch (e) {
+      throw _parseException(e, 'fetching user profile');
+    }
   }
 }
