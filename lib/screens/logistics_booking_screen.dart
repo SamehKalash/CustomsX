@@ -2,10 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme_provider.dart';
 
-class LogisticsBookingScreen extends StatelessWidget {
+class LogisticsBookingScreen extends StatefulWidget {
   final String declarationId;
 
   const LogisticsBookingScreen({Key? key, required this.declarationId}) : super(key: key);
+
+  @override
+  State<LogisticsBookingScreen> createState() => _LogisticsBookingScreenState();
+}
+
+class _LogisticsBookingScreenState extends State<LogisticsBookingScreen> {
+  String? _selectedCarrier; // State variable for selected carrier
 
   @override
   Widget build(BuildContext context) {
@@ -42,24 +49,32 @@ class LogisticsBookingScreen extends StatelessWidget {
             _buildAddressField("Delivery Location", "Company Warehouse, Cairo", textColor, cardColor),
             const SizedBox(height: 16),
             _buildCarrierSelector(textColor, cardColor),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
             _buildQuoteCard(cardColor, textColor),
             const Spacer(),
-            ElevatedButton(
-              onPressed: () => _confirmBooking(context),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: primaryColor,
-                padding: const EdgeInsets.symmetric(vertical: 14), // Adjusted padding for better proportions
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+            Align(
+              alignment: Alignment.center,
+              child: ElevatedButton(
+                onPressed: _selectedCarrier != null
+                    ? () => _confirmBooking(context)
+                    : null, // Disable button if no carrier is selected
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _selectedCarrier != null
+                      ? primaryColor
+                      : primaryColor.withOpacity(0.5), // Dim button if disabled
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 4,
                 ),
-              ),
-              child: const Text(
-                "Book Transport",
-                style: TextStyle(
-                  fontSize: 14, // Reduced font size for better balance
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600, // Slightly lighter weight for a cleaner look
+                child: const Text(
+                  "Book Transport",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
@@ -119,12 +134,17 @@ class LogisticsBookingScreen extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
+          value: _selectedCarrier,
           items: const [
             DropdownMenuItem(value: "DHL", child: Text("DHL")),
             DropdownMenuItem(value: "Aramex", child: Text("Aramex")),
             DropdownMenuItem(value: "Local Provider", child: Text("Local Provider")),
           ],
-          onChanged: (value) {},
+          onChanged: (value) {
+            setState(() {
+              _selectedCarrier = value; // Update selected carrier
+            });
+          },
           decoration: InputDecoration(
             filled: true,
             fillColor: cardColor,
@@ -154,24 +174,38 @@ class LogisticsBookingScreen extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      child: ListTile(
-        title: Text(
-          "Estimated Cost: \$2500",
-          style: TextStyle(
-            color: textColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        subtitle: Text(
-          "ETA: 2-3 days",
-          style: TextStyle(color: textColor.withOpacity(0.8)),
-        ),
-        trailing: Text(
-          "DHL",
-          style: TextStyle(
-            color: textColor,
-            fontWeight: FontWeight.bold,
-          ),
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Estimated Cost: \$2500",
+              style: TextStyle(
+                color: textColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "ETA: 2-3 days",
+              style: TextStyle(color: textColor.withOpacity(0.8), fontSize: 14),
+            ),
+            const SizedBox(height: 8),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                _selectedCarrier ?? "Select a carrier",
+                style: TextStyle(
+                  color: textColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -181,7 +215,7 @@ class LogisticsBookingScreen extends StatelessWidget {
     // Navigate to Payments Screen
     Navigator.pushNamed(context, '/payments', arguments: {
       'amount': 2500,
-      'paymentType': "Transport Fee",
+      'paymentType': "Transport Fee ($_selectedCarrier)",
     });
   }
 }
