@@ -454,24 +454,25 @@ class _DeclarationSummaryScreenState extends State<DeclarationSummaryScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => LogisticsBookingScreen(
-                              declarationId: "exampleDeclarationId", 
+                              declarationId: "exampleDeclarationId",
                             ),
                           ),
                         );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: primaryColor,
-                        padding: EdgeInsets.symmetric(vertical: 15.h),
+                        padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 20.w), // Adjusted padding for better proportions
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.r),
+                          borderRadius: BorderRadius.circular(12.r), // Slightly smaller radius for a cleaner look
                         ),
+                        elevation: 3, // Added subtle elevation for better visual hierarchy
                       ),
                       child: Text(
                         "Arrange Transport →",
                         style: TextStyle(
-                          fontSize: 16.sp,
+                          fontSize: 15.sp, // Adjusted font size for better readability
                           color: Colors.white,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w600, // Slightly lighter weight for a cleaner look
                         ),
                       ),
                     ),
