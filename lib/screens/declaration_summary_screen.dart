@@ -5,6 +5,7 @@ import '../providers/user_provider.dart';
 import '../theme/theme_provider.dart';
 import 'goods_currency_screen.dart';
 import 'dashboard.dart'; // Fixed import path
+import 'logistics_booking_screen.dart';
 
 class DeclarationSummaryScreen extends StatefulWidget {
   final List<CurrencyEntry> currencies;
@@ -367,10 +368,7 @@ class _DeclarationSummaryScreenState extends State<DeclarationSummaryScreen> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.r),
                               ),
-                              backgroundColor:
-                                  isDarkMode
-                                      ? const Color(0xFF3C2A21)
-                                      : Colors.grey[200],
+                              backgroundColor: isDarkMode ? const Color(0xFF3C2A21) : Colors.grey[200],
                             ),
                             child: Text(
                               'Back',
@@ -385,65 +383,53 @@ class _DeclarationSummaryScreenState extends State<DeclarationSummaryScreen> {
                         SizedBox(width: 16.w),
                         Expanded(
                           child: ElevatedButton(
-                            onPressed:
-                                _declarationAccepted
-                                    ? () {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.check_circle,
+                            onPressed: _declarationAccepted
+                                ? () {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.check_circle,
+                                              color: Colors.white,
+                                            ),
+                                            SizedBox(width: 12.w),
+                                            Text(
+                                              'Declaration submitted successfully',
+                                              style: TextStyle(
                                                 color: Colors.white,
+                                                fontSize: 16.sp,
                                               ),
-                                              SizedBox(width: 12.w),
-                                              Text(
-                                                'Declaration submitted successfully',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16.sp,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          backgroundColor: const Color(
-                                            0xFF2E7D32,
-                                          ),
-                                          duration: const Duration(seconds: 2),
-                                          behavior: SnackBarBehavior.floating,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              10.r,
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                      );
+                                        backgroundColor: const Color(0xFF2E7D32),
+                                        duration: const Duration(seconds: 2),
+                                        behavior: SnackBarBehavior.floating,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10.r),
+                                        ),
+                                      ),
+                                    );
 
-                                      // Navigate to dashboard after showing success message
-                                      Future.delayed(
-                                        const Duration(milliseconds: 1500),
-                                        () {
-                                          Navigator.pushAndRemoveUntil(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder:
-                                                  (context) =>
-                                                      const DashboardScreen(),
-                                            ),
-                                            (route) =>
-                                                false, // Remove all previous routes
-                                          );
-                                        },
-                                      );
-                                    }
-                                    : null,
+                                    // Navigate to dashboard after showing success message
+                                    Future.delayed(
+                                      const Duration(milliseconds: 1500),
+                                      () {
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => const DashboardScreen(),
+                                          ),
+                                          (route) => false, // Remove all previous routes
+                                        );
+                                      },
+                                    );
+                                  }
+                                : null,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: primaryColor,
-                              disabledBackgroundColor: primaryColor.withOpacity(
-                                0.5,
-                              ),
+                              disabledBackgroundColor: primaryColor.withOpacity(0.5),
                               padding: EdgeInsets.symmetric(vertical: 15.h),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.r),
@@ -461,7 +447,35 @@ class _DeclarationSummaryScreenState extends State<DeclarationSummaryScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 24.h),
+                    SizedBox(height: 16.h), // Add spacing between buttons
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LogisticsBookingScreen(
+                              declarationId: "exampleDeclarationId", 
+                            ),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryColor,
+                        padding: EdgeInsets.symmetric(vertical: 15.h),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.r),
+                        ),
+                      ),
+                      child: Text(
+                        "Arrange Transport →",
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+
                   ],
                 ),
               ),
