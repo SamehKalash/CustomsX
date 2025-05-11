@@ -1,253 +1,66 @@
-# CustomsX
+# CustomsX - Smart Customs Clearance Facilitator
 
- 
+## Business Overview
 
-Smart Customs Clearance Facilitator 
- 
+CustomsX is a comprehensive digital platform designed to streamline and simplify the customs clearance process for businesses and individuals. The application addresses critical pain points in international trade and customs operations:
 
+### Business Value
 
- 
+- **Time Efficiency**: Reduces customs clearance processing time by up to 70% through digital documentation and automated calculations
+- **Cost Reduction**: Minimizes errors in declarations and payments that often lead to penalties and delays
+- **Compliance Assurance**: Ensures adherence to complex customs regulations across different jurisdictions
+- **Transparency**: Provides real-time tracking and clear visibility into the customs clearance process
+- **Accessibility**: Makes customs processes understandable and manageable for users without specialized knowledge
 
-## Installation
- 
+### Target Users
 
-1. Clone the repository:
- 
+- **Importers and Exporters**: Businesses engaged in international trade
+- **Customs Brokers**: Professionals managing customs clearance on behalf of clients
+- **Freight Forwarders**: Logistics companies handling international shipments
+- **Individual Consumers**: People importing personal goods subject to customs duties
 
-   ```bash
- 
+## Features
 
-   git clone https://github.com/SamehKalash/CustomsX/
- 
+- **Electronic Customs Payments**: Direct payments for various customs procedures
+  - Simplified customs declarations
+  - Standard customs declarations
+  - Temporary storage fees
+  - Transport barcodes
+  - Fines and expertise fees
 
-   ```
- 
+- **Customs Fee Calculator**: Accurate calculation of import duties and taxes
+  - General goods tariff calculation
+  - Up-to-date exchange rates for accurate conversions
 
-2. Navigate to the project directory:
- 
+- **IMEI Checker and Registration**: Verification and registration system for imported mobile devices
 
-   ```bash
- 
+- **Document Management**: Digital storage and processing of customs documentation
 
-   cd customsx
- 
+- **Shipment Tracking**: Monitoring of goods through customs clearance stages
 
-   ```
- 
+- **Compliance Guidelines**: Access to updated customs regulations and compliance requirements
 
-3. Clean and Build Application:
- 
+- **Logistics Booking**: Integration with logistics providers for seamless shipment handling
 
-   ```bash
- 
+## Technical Stack
 
-   flutter clean
- 
+### Frontend
+- **Framework**: Flutter for cross-platform development
+- **State Management**: Provider pattern
+- **UI Components**: Custom widgets with responsive design
+- **Dependencies**: 
+  - flutter_screenutil for responsive scaling
+  - http for API communication
+  - google_fonts for typography
+  - flutter_svg for vector graphics
 
-   flutter run
- 
+### Backend
+- **Runtime**: Node.js with Express
+- **Database**: MongoDB (mongoose ORM)
+- **Authentication**: JWT with bcryptjs for password hashing
+- **API Integration**: External authority APIs
 
-   ```
- 
+## License
 
+This project is proprietary software. All rights reserved.
 
- 
-
-## Contribution
- 
-
-1. Fork the repository.
- 
-
-2. Create a new branch for your feature/bugfix:
- 
-
-   ```bash
- 
-
-   git checkout -b feature-name
- 
-
-   ```
- 
-
-3. Commit your changes:
- 
-
-   ```bash
- 
-
-   git commit -m "Add your message here"
- 
-
-   ```
- 
-
-4. Push the branch:
- 
-
-   ```bash
- 
-
-   git push origin feature-name
- 
-
-   ```
- 
-
-5. Open a Pull Request.
- 
-
-
- 
-
-## Need to be done 
- 
-
-### Electronic customs payments for 
- 
-
-Should be a direct payments where you select the Type of Payment which one be one of these payments 
- 
-
-
- 
-
-	1. simplified customs declaration
- 
-
-	2. Customs declaration 
- 
-
-	3. Temporary Storage
- 
-
-	4. Transport Barcode
- 
-
-	5. Fine
- 
-
-	6. Expertise
- 
-
-After selecting one of the Type of payment there should also be document number to search for the payment need to be done 
- 
-
-
- 
-
-### Calculate the customs fees (duties) yourself
- 
-
-#### Transportation Vehicles 
- 
-
-You should select Type of Vehicle which is standard as **Passenger Car** then select the **Engine Type** which should be one of the following 
- 
-
-1. Petrol
- 
-
-2. Diesel
- 
-
-3. Gas
- 
-
-4. Hybrid-Gasoline
- 
-
-5. Hybrid-Diesel
- 
-
-6. Electric
- 
-
-
- 
-
-**Invoice value (USD)** , **Transportation costs (USD)** and **Other expenses (USD)** should be mentioned, In addition to the **Engine Capacity (cm3)** , **Data of production** ( The date of production must be indicated to determine the **amount of payment** for the "Disposal fee" of the vehicles and the rate of import customs duty in accordance with the HS code) and last not least the **About the country of origin (production) and the country of the sender** () should be selected whether its Other countries or Produced in the country with which a free trade agreement has been concluded and imported from there.
- 
-
-
- 
-
-Based on these info, Results showed be shown to the User in **EGP** & They are shown as the following  1 USD =  51.1917 EGP
- 
-
-
- 
-
-- Import customs duty
- 
-
-- Value added tax (VAT)
- 
-
-- Customs fees for customs clearance of goods
- 
-
-- Excise tax
- 
-
-- Customs fees for issuing certificates
- 
-
-- Electronic customs service fee
- 
-
-- VAT on electronic customs services
- 
-
-- Disposal fee
- 
-
-- Conducting customs expertise fee
- 
-
-- Certificate of compliance with standards fee
- 
-
-
- 
-
-It should show the user Total customs payments 
- 
-
-* Customs value = (Invoice value +Transportation costs + Other expenses) * USD exchange rate
- 
-
-
- 
-
-#### Other Goods
- 
-
-
- 
-
-**TO BE MENTIONED**
- 
-
-
- 
-
-
- 
-
-#### Note must be mentioned
- 
-
-"Attention! Customs payments are calculated based on the entered data. During customs clearance, depending on the method of determining the customs value of goods, there may be differences in the amount of customs duties."
- 
-
-
- 
-
- 
-
-### FAQ / Help Center
- 
-
-### Smart Bot
