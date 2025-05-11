@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:sccf/providers/locale_provider.dart';
 import 'package:sccf/screens/about_us_screen.dart';
 import 'package:sccf/screens/security_screen.dart';
 import 'package:sccf/screens/terms_of_service_screen.dart';
 import '../theme/theme_provider.dart';
 import './payment_method.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     final isDarkMode = themeProvider.themeMode == ThemeMode.dark;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Settings',
+          AppLocalizations.of(context)!.settings,
           style: TextStyle(
             fontSize: 20.sp,
             fontWeight: FontWeight.w700,
@@ -40,6 +42,7 @@ class SettingsScreen extends StatelessWidget {
             _buildSectionHeader('Appearance', isDarkMode),
             _buildSettingsCard(
               context,
+              isDarkMode: isDarkMode,
               icon: Icons.dark_mode_rounded,
               title: 'Dark Mode',
               trailing: Switch(
@@ -53,6 +56,7 @@ class SettingsScreen extends StatelessWidget {
             _buildSectionHeader('Language', isDarkMode),
             _buildSettingsCard(
               context,
+              isDarkMode: isDarkMode,
               icon: Icons.language_rounded,
               title: 'App Language',
               subtitle: 'English (United States)',
@@ -63,12 +67,14 @@ class SettingsScreen extends StatelessWidget {
             _buildSectionHeader('Account', isDarkMode),
             _buildSettingsCard(
               context,
+              isDarkMode: isDarkMode,
               icon: Icons.security_rounded,
               title: 'Security',
               onTap: () => _navigateToSecurity(context),
             ),
             _buildSettingsCard(
               context,
+              isDarkMode: isDarkMode,
               icon: Icons.payment_rounded,
               title: 'Payment Methods',
               onTap: () => _navigateToPayments(context),
@@ -78,15 +84,20 @@ class SettingsScreen extends StatelessWidget {
             _buildSectionHeader('Support', isDarkMode),
             _buildSettingsCard(
               context,
+              isDarkMode: isDarkMode,
               icon: Icons.person_rounded,
               title: 'About Me',
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AboutUsScreen()),
-              ),
+              onTap:
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AboutUsScreen(),
+                    ),
+                  ),
             ),
             _buildSettingsCard(
               context,
+              isDarkMode: isDarkMode,
               icon: Icons.description_rounded,
               title: 'Terms of Service',
               onTap: () => _openTerms(context),
@@ -122,10 +133,8 @@ class SettingsScreen extends StatelessWidget {
     String? subtitle,
     Widget? trailing,
     VoidCallback? onTap,
+    required bool isDarkMode,
   }) {
-    final isDarkMode =
-        Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark;
-
     return Card(
       margin: EdgeInsets.only(bottom: 8.h),
       color: isDarkMode ? const Color(0xFF3C2A21) : Colors.white,
@@ -180,7 +189,9 @@ class SettingsScreen extends StatelessWidget {
 
   void _showLanguageSelector(BuildContext context) {
     final isDarkMode =
-        Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark;
+        Provider.of<ThemeProvider>(context, listen: false).themeMode ==
+        ThemeMode.dark;
+    final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
 
     showModalBottomSheet(
       context: context,
@@ -221,10 +232,20 @@ class SettingsScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 16.h),
-                _buildLanguageOption(context, 'English', 'US', isDarkMode),
-                _buildLanguageOption(context, 'العربية', 'AR', isDarkMode),
-                _buildLanguageOption(context, 'Français', 'FR', isDarkMode),
-                _buildLanguageOption(context, 'Español', 'ES', isDarkMode),
+                _buildLanguageOption(
+                  context,
+                  'English',
+                  'US',
+                  isDarkMode,
+                  const Locale('en'),
+                ),
+                _buildLanguageOption(
+                  context,
+                  'العربية',
+                  'AR',
+                  isDarkMode,
+                  const Locale('ar'),
+                ),
                 SizedBox(height: 24.h),
               ],
             ),
@@ -237,7 +258,9 @@ class SettingsScreen extends StatelessWidget {
     String language,
     String code,
     bool isDarkMode,
+    Locale locale,
   ) {
+    final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
     return ListTile(
       contentPadding: EdgeInsets.zero,
       leading: Container(
@@ -266,7 +289,10 @@ class SettingsScreen extends StatelessWidget {
           color: isDarkMode ? const Color(0xFFF5F5DC) : const Color(0xFF1A120B),
         ),
       ),
-      onTap: () => Navigator.pop(context),
+      onTap: () {
+        localeProvider.setLocale(locale);
+        Navigator.pop(context);
+      },
     );
   }
 
@@ -290,5 +316,4 @@ class SettingsScreen extends StatelessWidget {
       MaterialPageRoute(builder: (context) => const TermsOfServiceScreen()),
     );
   }
-
 }

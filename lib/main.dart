@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:window_size/window_size.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // <-- Add this import
 import 'screens/imei_checker_screen.dart';
 // Screen imports
 import 'screens/welcome_screen.dart';
@@ -26,6 +28,7 @@ import 'screens/unauthorized_access_screen.dart';
 import 'screens/subscription_page.dart';
 import 'screens/logistics_booking_screen.dart';
 import 'screens/appeal_screen.dart';
+import 'providers/locale_provider.dart';
 
 // Theme management
 import 'theme/theme_provider.dart';
@@ -66,6 +69,7 @@ void main() async {
           providers: [
             ChangeNotifierProvider(create: (_) => ThemeProvider()),
             ChangeNotifierProvider(create: (_) => UserProvider()),
+            ChangeNotifierProvider(create: (_) => LocaleProvider()),
           ],
           child: const GlobalClearApp(),
         );
@@ -108,6 +112,7 @@ class GlobalClearApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final localeProvider = Provider.of<LocaleProvider>(context);
 
     return MaterialApp(
       title: 'Customs Clearance',
@@ -115,6 +120,14 @@ class GlobalClearApp extends StatelessWidget {
       themeMode: themeProvider.themeMode,
       theme: lightTheme,
       darkTheme: darkTheme,
+      locale: localeProvider.locale,
+      supportedLocales: const [Locale('en'), Locale('ar')],
+      localizationsDelegates: const [
+        AppLocalizations.delegate, // <-- Add this line
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       initialRoute: '/welcome',
       routes: _appRoutes(),
       builder: (context, child) {
