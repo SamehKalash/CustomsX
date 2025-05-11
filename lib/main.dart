@@ -5,7 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:window_size/window_size.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // <-- Add this import
+import 'package:flutter_gen/gen_l10n/app_localizations.dart' as gen;
 import 'screens/imei_checker_screen.dart';
 // Screen imports
 import 'screens/welcome_screen.dart';
@@ -28,13 +28,22 @@ import 'screens/unauthorized_access_screen.dart';
 import 'screens/subscription_page.dart';
 import 'screens/logistics_booking_screen.dart';
 import 'screens/appeal_screen.dart';
-import 'providers/locale_provider.dart';
 
 // Theme management
 import 'theme/theme_provider.dart';
 import 'theme/theme.dart';
 
 import 'providers/user_provider.dart';
+
+class LocaleProvider with ChangeNotifier {
+  Locale _locale = const Locale('en');
+  Locale get locale => _locale;
+
+  void setLocale(Locale locale) {
+    _locale = locale;
+    notifyListeners();
+  }
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -121,12 +130,15 @@ class GlobalClearApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       locale: localeProvider.locale,
-      supportedLocales: const [Locale('en'), Locale('ar')],
-      localizationsDelegates: const [
-        AppLocalizations.delegate, // <-- Add this line
+      localizationsDelegates: [
+        gen.AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('ar'),
       ],
       initialRoute: '/welcome',
       routes: _appRoutes(),

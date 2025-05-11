@@ -39,12 +39,15 @@ class SettingsScreen extends StatelessWidget {
         padding: EdgeInsets.all(16.w),
         child: Column(
           children: [
-            _buildSectionHeader('Appearance', isDarkMode),
+            _buildSectionHeader(
+              AppLocalizations.of(context)!.appearance,
+              isDarkMode,
+            ),
             _buildSettingsCard(
               context,
               isDarkMode: isDarkMode,
               icon: Icons.dark_mode_rounded,
-              title: 'Dark Mode',
+              title: AppLocalizations.of(context)!.darkMode,
               trailing: Switch(
                 value: isDarkMode,
                 onChanged: (value) => themeProvider.toggleTheme(value),
@@ -53,40 +56,50 @@ class SettingsScreen extends StatelessWidget {
             ),
             _buildDivider(isDarkMode),
 
-            _buildSectionHeader('Language', isDarkMode),
+            _buildSectionHeader(
+              AppLocalizations.of(context)!.language,
+              isDarkMode,
+            ),
             _buildSettingsCard(
               context,
               isDarkMode: isDarkMode,
               icon: Icons.language_rounded,
-              title: 'App Language',
-              subtitle: 'English (United States)',
+              title: AppLocalizations.of(context)!.appLanguage,
+              subtitle:
+                  'English (United States)', // You can localize this if you want
               onTap: () => _showLanguageSelector(context),
             ),
             _buildDivider(isDarkMode),
 
-            _buildSectionHeader('Account', isDarkMode),
+            _buildSectionHeader(
+              AppLocalizations.of(context)!.account,
+              isDarkMode,
+            ),
             _buildSettingsCard(
               context,
               isDarkMode: isDarkMode,
               icon: Icons.security_rounded,
-              title: 'Security',
+              title: AppLocalizations.of(context)!.security,
               onTap: () => _navigateToSecurity(context),
             ),
             _buildSettingsCard(
               context,
               isDarkMode: isDarkMode,
               icon: Icons.payment_rounded,
-              title: 'Payment Methods',
+              title: AppLocalizations.of(context)!.paymentMethods,
               onTap: () => _navigateToPayments(context),
             ),
             _buildDivider(isDarkMode),
 
-            _buildSectionHeader('Support', isDarkMode),
+            _buildSectionHeader(
+              AppLocalizations.of(context)!.support,
+              isDarkMode,
+            ),
             _buildSettingsCard(
               context,
               isDarkMode: isDarkMode,
-              icon: Icons.person_rounded,
-              title: 'About Me',
+              icon: Icons.info_outline_rounded,
+              title: AppLocalizations.of(context)!.aboutUs,
               onTap:
                   () => Navigator.push(
                     context,
@@ -99,7 +112,7 @@ class SettingsScreen extends StatelessWidget {
               context,
               isDarkMode: isDarkMode,
               icon: Icons.description_rounded,
-              title: 'Terms of Service',
+              title: AppLocalizations.of(context)!.termsOfService,
               onTap: () => _openTerms(context),
             ),
           ],
@@ -191,65 +204,65 @@ class SettingsScreen extends StatelessWidget {
     final isDarkMode =
         Provider.of<ThemeProvider>(context, listen: false).themeMode ==
         ThemeMode.dark;
-    final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
 
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder:
-          (context) => Container(
-            decoration: BoxDecoration(
-              color: isDarkMode ? const Color(0xFF3C2A21) : Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(24.r),
-                topRight: Radius.circular(24.r),
-              ),
-            ),
-            padding: EdgeInsets.all(24.w),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Center(
-                  child: Container(
-                    width: 48.w,
-                    height: 4.h,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(2.r),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 24.h),
-                Text(
-                  'Select Language',
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w700,
-                    color:
-                        isDarkMode
-                            ? const Color(0xFFF5F5DC)
-                            : const Color(0xFF1A120B),
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                _buildLanguageOption(
-                  context,
-                  'English',
-                  'US',
-                  isDarkMode,
-                  const Locale('en'),
-                ),
-                _buildLanguageOption(
-                  context,
-                  'العربية',
-                  'AR',
-                  isDarkMode,
-                  const Locale('ar'),
-                ),
-                SizedBox(height: 24.h),
-              ],
+      builder: (context) => Builder(
+        builder: (bottomSheetContext) => Container(
+          // Use bottomSheetContext instead of context below!
+          decoration: BoxDecoration(
+            color: isDarkMode ? const Color(0xFF3C2A21) : Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24.r),
+              topRight: Radius.circular(24.r),
             ),
           ),
+          padding: EdgeInsets.all(24.w),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Container(
+                  width: 48.w,
+                  height: 4.h,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(2.r),
+                  ),
+                ),
+              ),
+              SizedBox(height: 24.h),
+              Text(
+                AppLocalizations.of(bottomSheetContext)!.selectLanguage,
+                style: TextStyle(
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w700,
+                  color: isDarkMode
+                      ? const Color(0xFFF5F5DC)
+                      : const Color(0xFF1A120B),
+                ),
+              ),
+              SizedBox(height: 16.h),
+              _buildLanguageOption(
+                bottomSheetContext,
+                'English',
+                'US',
+                isDarkMode,
+                const Locale('en'),
+              ),
+              _buildLanguageOption(
+                bottomSheetContext,
+                'العربية',
+                'AR',
+                isDarkMode,
+                const Locale('ar'),
+              ),
+              SizedBox(height: 24.h),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -260,7 +273,6 @@ class SettingsScreen extends StatelessWidget {
     bool isDarkMode,
     Locale locale,
   ) {
-    final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
     return ListTile(
       contentPadding: EdgeInsets.zero,
       leading: Container(
@@ -290,6 +302,10 @@ class SettingsScreen extends StatelessWidget {
         ),
       ),
       onTap: () {
+        final localeProvider = Provider.of<LocaleProvider>(
+          Navigator.of(context).context,
+          listen: false,
+        );
         localeProvider.setLocale(locale);
         Navigator.pop(context);
       },

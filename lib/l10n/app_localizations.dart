@@ -20,6 +20,8 @@ class AppLocalizations {
     },
   };
 
+  static var delegate;
+
   String get(String key) {
     return _localizedValues[locale.languageCode]?[key] ??
         _localizedValues['en']![key]!;
