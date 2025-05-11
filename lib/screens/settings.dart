@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:sccf/screens/security_screen.dart';
 import '../theme/theme_provider.dart';
 import './payment_method.dart';
 
@@ -267,20 +268,7 @@ class SettingsScreen extends StatelessWidget {
   void _navigateToSecurity(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder:
-            (context) => Scaffold(
-              appBar: AppBar(
-                title: const Text('Security Settings'),
-                backgroundColor:
-                    Provider.of<ThemeProvider>(context).themeMode ==
-                            ThemeMode.dark
-                        ? const Color(0xFF3C2A21)
-                        : Colors.white,
-              ),
-              body: const Center(child: Text('Security settings content')),
-            ),
-      ),
+      MaterialPageRoute(builder: (context) => const SecurityScreen()),
     );
   }
 
