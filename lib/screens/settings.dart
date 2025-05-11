@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:sccf/screens/about_us_screen.dart';
 import 'package:sccf/screens/security_screen.dart';
+import 'package:sccf/screens/terms_of_service_screen.dart';
 import '../theme/theme_provider.dart';
 import './payment_method.dart';
 
@@ -76,9 +78,12 @@ class SettingsScreen extends StatelessWidget {
             _buildSectionHeader('Support', isDarkMode),
             _buildSettingsCard(
               context,
-              icon: Icons.help_rounded,
-              title: 'Help Center',
-              onTap: () => _openHelpCenter(context),
+              icon: Icons.person_rounded,
+              title: 'About Me',
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AboutUsScreen()),
+              ),
             ),
             _buildSettingsCard(
               context,
@@ -279,11 +284,11 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  void _openHelpCenter(BuildContext context) {
-    // Implement help center
+  void _openTerms(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const TermsOfServiceScreen()),
+    );
   }
 
-  void _openTerms(BuildContext context) {
-    // Implement terms of service
-  }
 }
