@@ -1,0 +1,19 @@
+{
+  "settings": "Settings",
+  "appearance": "Appearance",
+  "darkMode": "Dark Mode",
+  "language": "Language",
+  "appLanguage": "App Language",
+  "account": "Account",
+  "security": "Security",
+  "paymentMethods": "Payment Methods",
+  "support": "Support",
+  "aboutUs": "About Us",
+  "termsOfService": "Terms of Service",
+  "selectLanguage": "Select Language",
+  "welcomeToCustomsX": "Welcome to CustomsX",
+  "egyptianCustomsAuthority": "Egyptian Customs Authority",
+  "aboutUsBody": "This application has been developed to provide access to e-Customs services rendered by the Egyptian Customs Authority from mobile devices. Both Egyptian companies and foreign nationals can use this application. The application allows users to submit tariff documentation, manage customs declarations, appeal decisions, calculate duties, and access premium services like Priority Clearance Pro and Compliance Audit Service.\n\nThe Egyptian Customs Authority, in collaboration with CustomsX, is planning to add more services and data tools to this application in the near future.\n\nPlease do not hesitate to contact us with your comments and suggestions at support@customsx.com.",
+  "allRightsReserved": "© 2025 CustomsX. All rights reserved.",
+  "version": "Version 1.0"
+}
