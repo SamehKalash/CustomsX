@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ComplianceGuideScreen extends StatefulWidget {
   const ComplianceGuideScreen({super.key});
@@ -55,7 +56,13 @@ class _ComplianceGuideScreenState extends State<ComplianceGuideScreen> {
       // Simulate loading prohibited items
       await Future.delayed(const Duration(seconds: 1));
       setState(() {
-        _prohibitedItems = ['Item 1', 'Item 2', 'Item 3'];
+        _prohibitedItems = [
+          'Firearms and Ammunition',
+          'Drugs and Narcotics',
+          'Counterfeit Goods',
+          'Endangered Species',
+          'Explosives',
+        ];
       });
     } catch (e) {
       setState(() {
@@ -74,103 +81,147 @@ class _ComplianceGuideScreenState extends State<ComplianceGuideScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final Color cardColor = isDarkMode ? const Color(0xFF3C2A21) : Colors.white;
+    final Color textColor = isDarkMode ? const Color(0xFFF5F5DC) : const Color(0xFF1A120B);
+    final Color iconBg = const Color(0xFFD4A373).withOpacity(0.2);
+    final Color iconColor = const Color(0xFFD4A373);
+
+    final BoxDecoration backgroundDecoration = BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: isDarkMode
+            ? [const Color(0xFF1A120B), const Color(0xFF3C2A21), const Color(0xFF1A120B)]
+            : [Colors.white, const Color(0xFFF5F5DC), Colors.white],
+        stops: const [0.0, 0.5, 1.0],
+      ),
+    );
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Regulatory Guide')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _isDropdownLoading
-                ? const Center(child: CircularProgressIndicator())
-                : DropdownButtonFormField(
-                  value: _selectedCountry,
-                  items:
-                      _countries.map((String country) {
-                        return DropdownMenuItem<String>(
-                          value: country,
-                          child: Text(country),
-                        );
-                      }).toList(),
-                  onChanged: (value) async {
-                    if (value != null) {
-                      setState(() => _selectedCountry = value);
-                      await _loadProhibitedItems();
-                    }
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Select Country',
-                    border: OutlineInputBorder(),
-                  ),
+      appBar: AppBar(
+        title: const Text('Regulatory Guide'),
+        backgroundColor: isDarkMode ? const Color(0xFF1A120B) : Colors.white,
+        foregroundColor: isDarkMode ? Colors.white : Colors.black,
+        elevation: 2,
+      ),
+      body: Container(
+        decoration: backgroundDecoration,
+        width: double.infinity,
+        child: Padding(
+          padding: EdgeInsets.all(16.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _isDropdownLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : DropdownButtonFormField(
+                      value: _selectedCountry,
+                      items: _countries
+                          .map((String country) => DropdownMenuItem<String>(
+                                value: country,
+                                child: Text(country),
+                              ))
+                          .toList(),
+                      onChanged: (value) async {
+                        if (value != null) {
+                          setState(() => _selectedCountry = value);
+                          await _loadProhibitedItems();
+                        }
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Select Country',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                        filled: true,
+                        fillColor: cardColor,
+                      ),
+                    ),
+              SizedBox(height: 20.h),
+              if (_errorMessage.isNotEmpty)
+                Column(
+                  children: [
+                    Text(
+                      _errorMessage,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () async {
+                        setState(() {
+                          _errorMessage = '';
+                          _isLoading = true;
+                        });
+                        _loadCountries();
+                        _loadProhibitedItems();
+                      },
+                      child: const Text('Retry'),
+                    ),
+                  ],
                 ),
-            const SizedBox(height: 20),
-            if (_errorMessage.isNotEmpty)
-              Column(
-                children: [
-                  Text(
-                    _errorMessage,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
+              SizedBox(height: 10.h),
+              Text(
+                'Prohibited Items in $_selectedCountry:',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: textColor,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () async {
-                      setState(() {
-                        _errorMessage = '';
-                        _isLoading = true;
-                      });
-                      _loadCountries();
-                      _loadProhibitedItems();
-                    },
-                    child: const Text('Retry'),
-                  ),
-                ],
               ),
-            const SizedBox(height: 10),
-            Text(
-              'Prohibited Items in $_selectedCountry:',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 10),
-            _isLoading
-                ? const Expanded(
-                  child: Center(child: CircularProgressIndicator()),
-                )
-                : _prohibitedItems.isEmpty
-                ? Expanded(
-                  child: Center(
-                    child: Text(
-                      'No prohibited items found for $_selectedCountry.',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ),
-                )
-                : Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: _refreshProhibitedItems,
-                    child: ListView.builder(
-                      itemCount: _prohibitedItems.length,
-                      itemBuilder:
-                          (context, index) => ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.red.shade100,
-                              child: Text(
-                                '${index + 1}',
-                                style: const TextStyle(color: Colors.red),
+              SizedBox(height: 10.h),
+              Expanded(
+                child: _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : _prohibitedItems.isEmpty
+                        ? Center(
+                            child: Text(
+                              'No prohibited items found for $_selectedCountry.',
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: textColor.withOpacity(0.7),
+                                  ),
+                            ),
+                          )
+                        : RefreshIndicator(
+                            onRefresh: _refreshProhibitedItems,
+                            child: ListView.separated(
+                              itemCount: _prohibitedItems.length,
+                              separatorBuilder: (_, __) => SizedBox(height: 12.h),
+                              itemBuilder: (context, index) => Material(
+                                color: cardColor,
+                                borderRadius: BorderRadius.circular(12.r),
+                                elevation: 2,
+                                child: ListTile(
+                                  leading: Container(
+                                    padding: EdgeInsets.all(8.w),
+                                    decoration: BoxDecoration(
+                                      color: iconBg,
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                    child: Icon(Icons.block, color: iconColor, size: 24.w),
+                                  ),
+                                  title: Text(
+                                    _prohibitedItems[index],
+                                    style: TextStyle(
+                                      color: textColor,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    'Prohibited in $_selectedCountry',
+                                    style: TextStyle(
+                                      color: textColor.withOpacity(0.7),
+                                    ),
+                                  ),
+                                  trailing: Icon(Icons.dangerous, color: Colors.red.shade400),
+                                ),
                               ),
                             ),
-                            title: Text(_prohibitedItems[index]),
-                            subtitle: Text('Prohibited in $_selectedCountry'),
-                            trailing: const Icon(
-                              Icons.dangerous,
-                              color: Colors.red,
-                            ),
                           ),
-                    ),
-                  ),
-                ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
