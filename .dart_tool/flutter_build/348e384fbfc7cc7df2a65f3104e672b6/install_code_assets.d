@@ -1,0 +1,1 @@
+ /home/adel/Documents/appeal/CustomsX/.dart_tool/flutter_build/348e384fbfc7cc7df2a65f3104e672b6/native_assets.json: 

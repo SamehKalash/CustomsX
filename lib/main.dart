@@ -25,6 +25,7 @@ import 'screens/declaration_screen.dart';
 import 'screens/unauthorized_access_screen.dart';
 import 'screens/subscription_page.dart';
 import 'screens/logistics_booking_screen.dart';
+import 'screens/appeal_screen.dart';
 
 // Theme management
 import 'theme/theme_provider.dart';
@@ -155,7 +156,9 @@ class GlobalClearApp extends StatelessWidget {
       '/payment_method': (context) => PaymentMethodsScreen(),
       '/declaration': (context) => const DeclarationScreen(),
       '/subscription': (context) => const SubscriptionPage(),
-      '/logistics-booking': (context) => const LogisticsBookingScreen(declarationId: ''),
+      '/logistics-booking':
+          (context) => const LogisticsBookingScreen(declarationId: ''),
+      '/appeal': (context) => const AppealScreen(),
     };
   }
 }

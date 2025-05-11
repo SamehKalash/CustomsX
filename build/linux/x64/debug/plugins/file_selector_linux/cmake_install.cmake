@@ -1,8 +1,8 @@
-# Install script for directory: /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/linux
+# Install script for directory: /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/linux
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/sam/Desktop/CustomsX/build/linux/x64/debug/bundle")
+  set(CMAKE_INSTALL_PREFIX "/home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/bundle")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

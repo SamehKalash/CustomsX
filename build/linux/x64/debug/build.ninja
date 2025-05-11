@@ -34,7 +34,7 @@ include rules.ninja
 # Utility command for install/strip
 
 build CMakeFiles/install/strip.util: CUSTOM_COMMAND all
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
   DESC = Installing the project stripped...
   pool = console
   restat = 1
@@ -46,7 +46,7 @@ build install/strip: phony CMakeFiles/install/strip.util
 # Utility command for install/local
 
 build CMakeFiles/install/local.util: CUSTOM_COMMAND all
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -58,7 +58,7 @@ build install/local: phony CMakeFiles/install/local.util
 # Utility command for install
 
 build CMakeFiles/install.util: CUSTOM_COMMAND all
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug && /snap/flutter/149/usr/bin/cmake -P cmake_install.cmake
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug && /snap/flutter/149/usr/bin/cmake -P cmake_install.cmake
   DESC = Install the project...
   pool = console
   restat = 1
@@ -76,7 +76,7 @@ build list_install_components: phony
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug && /snap/flutter/149/usr/bin/cmake -S/home/sam/Desktop/CustomsX/linux -B/home/sam/Desktop/CustomsX/build/linux/x64/debug
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug && /snap/flutter/149/usr/bin/cmake -S/home/adel/Documents/appeal/CustomsX/linux -B/home/adel/Documents/appeal/CustomsX/build/linux/x64/debug
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -88,7 +88,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug && /snap/flutter/149/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug && /snap/flutter/149/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -96,7 +96,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
-# /home/sam/Desktop/CustomsX/linux/CMakeLists.txt
+# /home/adel/Documents/appeal/CustomsX/linux/CMakeLists.txt
 # =============================================================================
 
 
@@ -104,7 +104,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 # Utility command for install/strip
 
 build flutter/CMakeFiles/install/strip.util: CUSTOM_COMMAND flutter/all
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/flutter && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/flutter && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
   DESC = Installing the project stripped...
   pool = console
   restat = 1
@@ -116,7 +116,7 @@ build flutter/install/strip: phony flutter/CMakeFiles/install/strip.util
 # Utility command for install/local
 
 build flutter/CMakeFiles/install/local.util: CUSTOM_COMMAND flutter/all
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/flutter && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/flutter && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -128,7 +128,7 @@ build flutter/install/local: phony flutter/CMakeFiles/install/local.util
 # Utility command for install
 
 build flutter/CMakeFiles/install.util: CUSTOM_COMMAND flutter/all
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/flutter && /snap/flutter/149/usr/bin/cmake -P cmake_install.cmake
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/flutter && /snap/flutter/149/usr/bin/cmake -P cmake_install.cmake
   DESC = Install the project...
   pool = console
   restat = 1
@@ -146,7 +146,7 @@ build flutter/list_install_components: phony
 # Utility command for rebuild_cache
 
 build flutter/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/flutter && /snap/flutter/149/usr/bin/cmake -S/home/sam/Desktop/CustomsX/linux -B/home/sam/Desktop/CustomsX/build/linux/x64/debug
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/flutter && /snap/flutter/149/usr/bin/cmake -S/home/adel/Documents/appeal/CustomsX/linux -B/home/adel/Documents/appeal/CustomsX/build/linux/x64/debug
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -158,7 +158,7 @@ build flutter/rebuild_cache: phony flutter/CMakeFiles/rebuild_cache.util
 # Utility command for edit_cache
 
 build flutter/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/flutter && /snap/flutter/149/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/flutter && /snap/flutter/149/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -168,26 +168,26 @@ build flutter/edit_cache: phony flutter/CMakeFiles/edit_cache.util
 #############################################
 # Utility command for flutter_assemble
 
-build flutter/flutter_assemble: phony flutter/CMakeFiles/flutter_assemble /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_basic_message_channel.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_binary_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_binary_messenger.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_dart_project.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_engine.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_json_message_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_json_method_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_message_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_call.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_channel.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_response.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_plugin_registrar.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_plugin_registry.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_standard_message_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_standard_method_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_string_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_value.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_view.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/flutter_linux.h flutter/_phony_
+build flutter/flutter_assemble: phony flutter/CMakeFiles/flutter_assemble /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_basic_message_channel.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_binary_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_binary_messenger.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_dart_project.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_engine.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_json_message_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_json_method_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_message_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_call.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_channel.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_response.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_plugin_registrar.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_plugin_registry.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_standard_message_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_standard_method_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_string_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_value.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_view.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/flutter_linux.h flutter/_phony_
 
 
 #############################################
 # Phony custom command for flutter/CMakeFiles/flutter_assemble
 
-build flutter/CMakeFiles/flutter_assemble: phony /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_basic_message_channel.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_binary_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_binary_messenger.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_dart_project.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_engine.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_json_message_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_json_method_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_message_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_call.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_channel.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_response.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_plugin_registrar.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_plugin_registry.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_standard_message_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_standard_method_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_string_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_value.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_view.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/flutter_linux.h
+build flutter/CMakeFiles/flutter_assemble: phony /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_basic_message_channel.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_binary_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_binary_messenger.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_dart_project.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_engine.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_json_message_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_json_method_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_message_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_call.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_channel.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_response.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_plugin_registrar.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_plugin_registry.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_standard_message_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_standard_method_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_string_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_value.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_view.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/flutter_linux.h
 
 
 #############################################
-# Custom command for /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so
+# Custom command for /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so
 
-build /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_basic_message_channel.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_binary_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_binary_messenger.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_dart_project.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_engine.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_json_message_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_json_method_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_message_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_call.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_channel.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_response.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_plugin_registrar.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_plugin_registry.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_standard_message_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_standard_method_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_string_codec.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_value.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_view.h /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/flutter_linux.h flutter/_phony_: CUSTOM_COMMAND
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/flutter && /snap/flutter/149/usr/bin/cmake -E env FLUTTER_ROOT=/home/sam/snap/flutter/common/flutter PROJECT_DIR=/home/sam/Desktop/CustomsX DART_OBFUSCATION=false TRACK_WIDGET_CREATION=true TREE_SHAKE_ICONS=false PACKAGE_CONFIG=/home/sam/Desktop/CustomsX/.dart_tool/package_config.json FLUTTER_TARGET=/home/sam/Desktop/CustomsX/lib/main.dart /home/sam/snap/flutter/common/flutter/packages/flutter_tools/bin/tool_backend.sh linux-x64 Debug
-  DESC = Generating /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_basic_message_channel.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_binary_codec.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_binary_messenger.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_dart_project.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_engine.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_json_message_codec.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_json_method_codec.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_message_codec.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_call.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_channel.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_codec.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_response.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_plugin_registrar.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_plugin_registry.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_standard_message_codec.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_standard_method_codec.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_string_codec.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_value.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_view.h, /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/flutter_linux/flutter_linux.h, _phony_
+build /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_basic_message_channel.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_binary_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_binary_messenger.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_dart_project.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_engine.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_json_message_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_json_method_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_message_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_call.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_channel.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_response.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_plugin_registrar.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_plugin_registry.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_standard_message_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_standard_method_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_string_codec.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_value.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_view.h /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/flutter_linux.h flutter/_phony_: CUSTOM_COMMAND
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/flutter && /snap/flutter/149/usr/bin/cmake -E env FLUTTER_ROOT=/home/adel/snap/flutter/common/flutter PROJECT_DIR=/home/adel/Documents/appeal/CustomsX DART_OBFUSCATION=false TRACK_WIDGET_CREATION=true TREE_SHAKE_ICONS=false PACKAGE_CONFIG=/home/adel/Documents/appeal/CustomsX/.dart_tool/package_config.json FLUTTER_TARGET=/home/adel/Documents/appeal/CustomsX/lib/main.dart /home/adel/snap/flutter/common/flutter/packages/flutter_tools/bin/tool_backend.sh linux-x64 Debug
+  DESC = Generating /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_basic_message_channel.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_binary_codec.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_binary_messenger.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_dart_project.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_engine.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_json_message_codec.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_json_method_codec.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_message_codec.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_call.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_channel.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_codec.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_method_response.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_plugin_registrar.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_plugin_registry.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_standard_message_codec.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_standard_method_codec.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_string_codec.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_value.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/fl_view.h, /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/flutter_linux/flutter_linux.h, _phony_
   restat = 1
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
-# /home/sam/Desktop/CustomsX/linux/CMakeLists.txt
+# /home/adel/Documents/appeal/CustomsX/linux/CMakeLists.txt
 # =============================================================================
 
 
@@ -195,7 +195,7 @@ build /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so
 # Utility command for install/strip
 
 build runner/CMakeFiles/install/strip.util: CUSTOM_COMMAND runner/all
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/runner && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/runner && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
   DESC = Installing the project stripped...
   pool = console
   restat = 1
@@ -207,7 +207,7 @@ build runner/install/strip: phony runner/CMakeFiles/install/strip.util
 # Utility command for install/local
 
 build runner/CMakeFiles/install/local.util: CUSTOM_COMMAND runner/all
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/runner && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/runner && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -219,7 +219,7 @@ build runner/install/local: phony runner/CMakeFiles/install/local.util
 # Utility command for install
 
 build runner/CMakeFiles/install.util: CUSTOM_COMMAND runner/all
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/runner && /snap/flutter/149/usr/bin/cmake -P cmake_install.cmake
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/runner && /snap/flutter/149/usr/bin/cmake -P cmake_install.cmake
   DESC = Install the project...
   pool = console
   restat = 1
@@ -237,7 +237,7 @@ build runner/list_install_components: phony
 # Utility command for rebuild_cache
 
 build runner/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/runner && /snap/flutter/149/usr/bin/cmake -S/home/sam/Desktop/CustomsX/linux -B/home/sam/Desktop/CustomsX/build/linux/x64/debug
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/runner && /snap/flutter/149/usr/bin/cmake -S/home/adel/Documents/appeal/CustomsX/linux -B/home/adel/Documents/appeal/CustomsX/build/linux/x64/debug
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -249,7 +249,7 @@ build runner/rebuild_cache: phony runner/CMakeFiles/rebuild_cache.util
 # Utility command for edit_cache
 
 build runner/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/runner && /snap/flutter/149/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/runner && /snap/flutter/149/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -264,27 +264,27 @@ build runner/edit_cache: phony runner/CMakeFiles/edit_cache.util
 
 build cmake_object_order_depends_target_sccf: phony || cmake_object_order_depends_target_file_selector_linux_plugin cmake_object_order_depends_target_window_size_plugin flutter/flutter_assemble
 
-build runner/CMakeFiles/sccf.dir/main.cc.o: CXX_COMPILER__sccf /home/sam/Desktop/CustomsX/linux/runner/main.cc || cmake_object_order_depends_target_sccf
+build runner/CMakeFiles/sccf.dir/main.cc.o: CXX_COMPILER__sccf /home/adel/Documents/appeal/CustomsX/linux/runner/main.cc || cmake_object_order_depends_target_sccf
   DEFINES = -DAPPLICATION_ID=\"com.example.sccf\"
   DEP_FILE = runner/CMakeFiles/sccf.dir/main.cc.o.d
   FLAGS = -g   -Wall -Werror -pthread
-  INCLUDES = -I/home/sam/Desktop/CustomsX/linux -I/home/sam/Desktop/CustomsX/linux/flutter/ephemeral -I/home/sam/Desktop/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/linux/include -I/home/sam/Desktop/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux/include -isystem /snap/flutter/current/usr/include/gtk-3.0 -isystem /snap/flutter/current/usr/include/at-spi2-atk/2.0 -isystem /snap/flutter/current/usr/include/at-spi-2.0 -isystem /snap/flutter/current/usr/include/dbus-1.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/dbus-1.0/include -isystem /snap/flutter/current/usr/include/gio-unix-2.0 -isystem /snap/flutter/current/usr/include/cairo -isystem /snap/flutter/current/usr/include/pango-1.0 -isystem /snap/flutter/current/usr/include/fribidi -isystem /snap/flutter/current/usr/include/harfbuzz -isystem /snap/flutter/current/usr/include/atk-1.0 -isystem /snap/flutter/current/usr/include/pixman-1 -isystem /snap/flutter/current/usr/include/uuid -isystem /snap/flutter/current/usr/include/freetype2 -isystem /snap/flutter/current/usr/include/libpng16 -isystem /snap/flutter/current/usr/include/gdk-pixbuf-2.0 -isystem /snap/flutter/current/usr/include/libmount -isystem /snap/flutter/current/usr/include/blkid -isystem /snap/flutter/current/usr/include/glib-2.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/glib-2.0/include
+  INCLUDES = -I/home/adel/Documents/appeal/CustomsX/linux -I/home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral -I/home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/linux/include -I/home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux/include -isystem /snap/flutter/current/usr/include/gtk-3.0 -isystem /snap/flutter/current/usr/include/at-spi2-atk/2.0 -isystem /snap/flutter/current/usr/include/at-spi-2.0 -isystem /snap/flutter/current/usr/include/dbus-1.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/dbus-1.0/include -isystem /snap/flutter/current/usr/include/gio-unix-2.0 -isystem /snap/flutter/current/usr/include/cairo -isystem /snap/flutter/current/usr/include/pango-1.0 -isystem /snap/flutter/current/usr/include/fribidi -isystem /snap/flutter/current/usr/include/harfbuzz -isystem /snap/flutter/current/usr/include/atk-1.0 -isystem /snap/flutter/current/usr/include/pixman-1 -isystem /snap/flutter/current/usr/include/uuid -isystem /snap/flutter/current/usr/include/freetype2 -isystem /snap/flutter/current/usr/include/libpng16 -isystem /snap/flutter/current/usr/include/gdk-pixbuf-2.0 -isystem /snap/flutter/current/usr/include/libmount -isystem /snap/flutter/current/usr/include/blkid -isystem /snap/flutter/current/usr/include/glib-2.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/glib-2.0/include
   OBJECT_DIR = runner/CMakeFiles/sccf.dir
   OBJECT_FILE_DIR = runner/CMakeFiles/sccf.dir
 
-build runner/CMakeFiles/sccf.dir/my_application.cc.o: CXX_COMPILER__sccf /home/sam/Desktop/CustomsX/linux/runner/my_application.cc || cmake_object_order_depends_target_sccf
+build runner/CMakeFiles/sccf.dir/my_application.cc.o: CXX_COMPILER__sccf /home/adel/Documents/appeal/CustomsX/linux/runner/my_application.cc || cmake_object_order_depends_target_sccf
   DEFINES = -DAPPLICATION_ID=\"com.example.sccf\"
   DEP_FILE = runner/CMakeFiles/sccf.dir/my_application.cc.o.d
   FLAGS = -g   -Wall -Werror -pthread
-  INCLUDES = -I/home/sam/Desktop/CustomsX/linux -I/home/sam/Desktop/CustomsX/linux/flutter/ephemeral -I/home/sam/Desktop/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/linux/include -I/home/sam/Desktop/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux/include -isystem /snap/flutter/current/usr/include/gtk-3.0 -isystem /snap/flutter/current/usr/include/at-spi2-atk/2.0 -isystem /snap/flutter/current/usr/include/at-spi-2.0 -isystem /snap/flutter/current/usr/include/dbus-1.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/dbus-1.0/include -isystem /snap/flutter/current/usr/include/gio-unix-2.0 -isystem /snap/flutter/current/usr/include/cairo -isystem /snap/flutter/current/usr/include/pango-1.0 -isystem /snap/flutter/current/usr/include/fribidi -isystem /snap/flutter/current/usr/include/harfbuzz -isystem /snap/flutter/current/usr/include/atk-1.0 -isystem /snap/flutter/current/usr/include/pixman-1 -isystem /snap/flutter/current/usr/include/uuid -isystem /snap/flutter/current/usr/include/freetype2 -isystem /snap/flutter/current/usr/include/libpng16 -isystem /snap/flutter/current/usr/include/gdk-pixbuf-2.0 -isystem /snap/flutter/current/usr/include/libmount -isystem /snap/flutter/current/usr/include/blkid -isystem /snap/flutter/current/usr/include/glib-2.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/glib-2.0/include
+  INCLUDES = -I/home/adel/Documents/appeal/CustomsX/linux -I/home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral -I/home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/linux/include -I/home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux/include -isystem /snap/flutter/current/usr/include/gtk-3.0 -isystem /snap/flutter/current/usr/include/at-spi2-atk/2.0 -isystem /snap/flutter/current/usr/include/at-spi-2.0 -isystem /snap/flutter/current/usr/include/dbus-1.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/dbus-1.0/include -isystem /snap/flutter/current/usr/include/gio-unix-2.0 -isystem /snap/flutter/current/usr/include/cairo -isystem /snap/flutter/current/usr/include/pango-1.0 -isystem /snap/flutter/current/usr/include/fribidi -isystem /snap/flutter/current/usr/include/harfbuzz -isystem /snap/flutter/current/usr/include/atk-1.0 -isystem /snap/flutter/current/usr/include/pixman-1 -isystem /snap/flutter/current/usr/include/uuid -isystem /snap/flutter/current/usr/include/freetype2 -isystem /snap/flutter/current/usr/include/libpng16 -isystem /snap/flutter/current/usr/include/gdk-pixbuf-2.0 -isystem /snap/flutter/current/usr/include/libmount -isystem /snap/flutter/current/usr/include/blkid -isystem /snap/flutter/current/usr/include/glib-2.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/glib-2.0/include
   OBJECT_DIR = runner/CMakeFiles/sccf.dir
   OBJECT_FILE_DIR = runner/CMakeFiles/sccf.dir
 
-build runner/CMakeFiles/sccf.dir/__/flutter/generated_plugin_registrant.cc.o: CXX_COMPILER__sccf /home/sam/Desktop/CustomsX/linux/flutter/generated_plugin_registrant.cc || cmake_object_order_depends_target_sccf
+build runner/CMakeFiles/sccf.dir/__/flutter/generated_plugin_registrant.cc.o: CXX_COMPILER__sccf /home/adel/Documents/appeal/CustomsX/linux/flutter/generated_plugin_registrant.cc || cmake_object_order_depends_target_sccf
   DEFINES = -DAPPLICATION_ID=\"com.example.sccf\"
   DEP_FILE = runner/CMakeFiles/sccf.dir/__/flutter/generated_plugin_registrant.cc.o.d
   FLAGS = -g   -Wall -Werror -pthread
-  INCLUDES = -I/home/sam/Desktop/CustomsX/linux -I/home/sam/Desktop/CustomsX/linux/flutter/ephemeral -I/home/sam/Desktop/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/linux/include -I/home/sam/Desktop/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux/include -isystem /snap/flutter/current/usr/include/gtk-3.0 -isystem /snap/flutter/current/usr/include/at-spi2-atk/2.0 -isystem /snap/flutter/current/usr/include/at-spi-2.0 -isystem /snap/flutter/current/usr/include/dbus-1.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/dbus-1.0/include -isystem /snap/flutter/current/usr/include/gio-unix-2.0 -isystem /snap/flutter/current/usr/include/cairo -isystem /snap/flutter/current/usr/include/pango-1.0 -isystem /snap/flutter/current/usr/include/fribidi -isystem /snap/flutter/current/usr/include/harfbuzz -isystem /snap/flutter/current/usr/include/atk-1.0 -isystem /snap/flutter/current/usr/include/pixman-1 -isystem /snap/flutter/current/usr/include/uuid -isystem /snap/flutter/current/usr/include/freetype2 -isystem /snap/flutter/current/usr/include/libpng16 -isystem /snap/flutter/current/usr/include/gdk-pixbuf-2.0 -isystem /snap/flutter/current/usr/include/libmount -isystem /snap/flutter/current/usr/include/blkid -isystem /snap/flutter/current/usr/include/glib-2.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/glib-2.0/include
+  INCLUDES = -I/home/adel/Documents/appeal/CustomsX/linux -I/home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral -I/home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/linux/include -I/home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux/include -isystem /snap/flutter/current/usr/include/gtk-3.0 -isystem /snap/flutter/current/usr/include/at-spi2-atk/2.0 -isystem /snap/flutter/current/usr/include/at-spi-2.0 -isystem /snap/flutter/current/usr/include/dbus-1.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/dbus-1.0/include -isystem /snap/flutter/current/usr/include/gio-unix-2.0 -isystem /snap/flutter/current/usr/include/cairo -isystem /snap/flutter/current/usr/include/pango-1.0 -isystem /snap/flutter/current/usr/include/fribidi -isystem /snap/flutter/current/usr/include/harfbuzz -isystem /snap/flutter/current/usr/include/atk-1.0 -isystem /snap/flutter/current/usr/include/pixman-1 -isystem /snap/flutter/current/usr/include/uuid -isystem /snap/flutter/current/usr/include/freetype2 -isystem /snap/flutter/current/usr/include/libpng16 -isystem /snap/flutter/current/usr/include/gdk-pixbuf-2.0 -isystem /snap/flutter/current/usr/include/libmount -isystem /snap/flutter/current/usr/include/blkid -isystem /snap/flutter/current/usr/include/glib-2.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/glib-2.0/include
   OBJECT_DIR = runner/CMakeFiles/sccf.dir
   OBJECT_FILE_DIR = runner/CMakeFiles/sccf.dir/__/flutter
 
@@ -296,10 +296,10 @@ build runner/CMakeFiles/sccf.dir/__/flutter/generated_plugin_registrant.cc.o: CX
 #############################################
 # Link the executable intermediates_do_not_run/sccf
 
-build intermediates_do_not_run/sccf: CXX_EXECUTABLE_LINKER__sccf runner/CMakeFiles/sccf.dir/main.cc.o runner/CMakeFiles/sccf.dir/my_application.cc.o runner/CMakeFiles/sccf.dir/__/flutter/generated_plugin_registrant.cc.o | plugins/file_selector_linux/libfile_selector_linux_plugin.so plugins/window_size/libwindow_size_plugin.so /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgtk-3.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk-3.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpango-1.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libharfbuzz.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libatk-1.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo-gobject.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgio-2.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgobject-2.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libglib-2.0.so || flutter/flutter_assemble plugins/file_selector_linux/libfile_selector_linux_plugin.so plugins/window_size/libwindow_size_plugin.so
+build intermediates_do_not_run/sccf: CXX_EXECUTABLE_LINKER__sccf runner/CMakeFiles/sccf.dir/main.cc.o runner/CMakeFiles/sccf.dir/my_application.cc.o runner/CMakeFiles/sccf.dir/__/flutter/generated_plugin_registrant.cc.o | plugins/file_selector_linux/libfile_selector_linux_plugin.so plugins/window_size/libwindow_size_plugin.so /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgtk-3.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk-3.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpango-1.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libharfbuzz.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libatk-1.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo-gobject.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgio-2.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgobject-2.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libglib-2.0.so || flutter/flutter_assemble plugins/file_selector_linux/libfile_selector_linux_plugin.so plugins/window_size/libwindow_size_plugin.so
   FLAGS = -g
   LINK_FLAGS = -B/snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9 -B/snap/flutter/current/usr/lib/x86_64-linux-gnu -B/snap/flutter/current/lib/x86_64-linux-gnu -B/snap/flutter/current/usr/lib/ -L/snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9 -L/snap/flutter/current/usr/lib/x86_64-linux-gnu -L/snap/flutter/current/lib/x86_64-linux-gnu -L/snap/flutter/current/usr/lib/ -lblkid -lgcrypt -llzma -llz4 -lgpg-error -luuid -lpthread -ldl -lepoxy -lfontconfig
-  LINK_LIBRARIES = -Wl,-rpath,/home/sam/Desktop/CustomsX/build/linux/x64/debug/plugins/file_selector_linux:/home/sam/Desktop/CustomsX/build/linux/x64/debug/plugins/window_size:/home/sam/Desktop/CustomsX/linux/flutter/ephemeral:  plugins/file_selector_linux/libfile_selector_linux_plugin.so  plugins/window_size/libwindow_size_plugin.so  /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgtk-3.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk-3.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpango-1.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libharfbuzz.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libatk-1.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo-gobject.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgio-2.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgobject-2.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libglib-2.0.so
+  LINK_LIBRARIES = -Wl,-rpath,/home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/plugins/file_selector_linux:/home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/plugins/window_size:/home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral:  plugins/file_selector_linux/libfile_selector_linux_plugin.so  plugins/window_size/libwindow_size_plugin.so  /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgtk-3.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk-3.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpango-1.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libharfbuzz.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libatk-1.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo-gobject.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgio-2.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgobject-2.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libglib-2.0.so
   OBJECT_DIR = runner/CMakeFiles/sccf.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -308,7 +308,7 @@ build intermediates_do_not_run/sccf: CXX_EXECUTABLE_LINKER__sccf runner/CMakeFil
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
-# /home/sam/Desktop/CustomsX/linux/flutter/generated_plugins.cmake
+# /home/adel/Documents/appeal/CustomsX/linux/flutter/generated_plugins.cmake
 # =============================================================================
 
 
@@ -316,7 +316,7 @@ build intermediates_do_not_run/sccf: CXX_EXECUTABLE_LINKER__sccf runner/CMakeFil
 # Utility command for install/strip
 
 build plugins/file_selector_linux/CMakeFiles/install/strip.util: CUSTOM_COMMAND plugins/file_selector_linux/all
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/plugins/file_selector_linux && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/plugins/file_selector_linux && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
   DESC = Installing the project stripped...
   pool = console
   restat = 1
@@ -328,7 +328,7 @@ build plugins/file_selector_linux/install/strip: phony plugins/file_selector_lin
 # Utility command for install/local
 
 build plugins/file_selector_linux/CMakeFiles/install/local.util: CUSTOM_COMMAND plugins/file_selector_linux/all
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/plugins/file_selector_linux && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/plugins/file_selector_linux && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -340,7 +340,7 @@ build plugins/file_selector_linux/install/local: phony plugins/file_selector_lin
 # Utility command for install
 
 build plugins/file_selector_linux/CMakeFiles/install.util: CUSTOM_COMMAND plugins/file_selector_linux/all
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/plugins/file_selector_linux && /snap/flutter/149/usr/bin/cmake -P cmake_install.cmake
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/plugins/file_selector_linux && /snap/flutter/149/usr/bin/cmake -P cmake_install.cmake
   DESC = Install the project...
   pool = console
   restat = 1
@@ -358,7 +358,7 @@ build plugins/file_selector_linux/list_install_components: phony
 # Utility command for rebuild_cache
 
 build plugins/file_selector_linux/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/plugins/file_selector_linux && /snap/flutter/149/usr/bin/cmake -S/home/sam/Desktop/CustomsX/linux -B/home/sam/Desktop/CustomsX/build/linux/x64/debug
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/plugins/file_selector_linux && /snap/flutter/149/usr/bin/cmake -S/home/adel/Documents/appeal/CustomsX/linux -B/home/adel/Documents/appeal/CustomsX/build/linux/x64/debug
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -370,7 +370,7 @@ build plugins/file_selector_linux/rebuild_cache: phony plugins/file_selector_lin
 # Utility command for edit_cache
 
 build plugins/file_selector_linux/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/plugins/file_selector_linux && /snap/flutter/149/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/plugins/file_selector_linux && /snap/flutter/149/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -385,19 +385,19 @@ build plugins/file_selector_linux/edit_cache: phony plugins/file_selector_linux/
 
 build cmake_object_order_depends_target_file_selector_linux_plugin: phony || flutter/flutter_assemble
 
-build plugins/file_selector_linux/CMakeFiles/file_selector_linux_plugin.dir/file_selector_plugin.cc.o: CXX_COMPILER__file_selector_linux_plugin /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/linux/file_selector_plugin.cc || cmake_object_order_depends_target_file_selector_linux_plugin
+build plugins/file_selector_linux/CMakeFiles/file_selector_linux_plugin.dir/file_selector_plugin.cc.o: CXX_COMPILER__file_selector_linux_plugin /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/linux/file_selector_plugin.cc || cmake_object_order_depends_target_file_selector_linux_plugin
   DEFINES = -DFLUTTER_PLUGIN_IMPL -Dfile_selector_linux_plugin_EXPORTS
   DEP_FILE = plugins/file_selector_linux/CMakeFiles/file_selector_linux_plugin.dir/file_selector_plugin.cc.o.d
   FLAGS = -g -fPIC -fvisibility=hidden   -Wall -Werror -pthread
-  INCLUDES = -I/home/sam/Desktop/CustomsX/linux/flutter/ephemeral -isystem /snap/flutter/current/usr/include/gtk-3.0 -isystem /snap/flutter/current/usr/include/at-spi2-atk/2.0 -isystem /snap/flutter/current/usr/include/at-spi-2.0 -isystem /snap/flutter/current/usr/include/dbus-1.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/dbus-1.0/include -isystem /snap/flutter/current/usr/include/gio-unix-2.0 -isystem /snap/flutter/current/usr/include/cairo -isystem /snap/flutter/current/usr/include/pango-1.0 -isystem /snap/flutter/current/usr/include/fribidi -isystem /snap/flutter/current/usr/include/harfbuzz -isystem /snap/flutter/current/usr/include/atk-1.0 -isystem /snap/flutter/current/usr/include/pixman-1 -isystem /snap/flutter/current/usr/include/uuid -isystem /snap/flutter/current/usr/include/freetype2 -isystem /snap/flutter/current/usr/include/libpng16 -isystem /snap/flutter/current/usr/include/gdk-pixbuf-2.0 -isystem /snap/flutter/current/usr/include/libmount -isystem /snap/flutter/current/usr/include/blkid -isystem /snap/flutter/current/usr/include/glib-2.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/glib-2.0/include
+  INCLUDES = -I/home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral -isystem /snap/flutter/current/usr/include/gtk-3.0 -isystem /snap/flutter/current/usr/include/at-spi2-atk/2.0 -isystem /snap/flutter/current/usr/include/at-spi-2.0 -isystem /snap/flutter/current/usr/include/dbus-1.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/dbus-1.0/include -isystem /snap/flutter/current/usr/include/gio-unix-2.0 -isystem /snap/flutter/current/usr/include/cairo -isystem /snap/flutter/current/usr/include/pango-1.0 -isystem /snap/flutter/current/usr/include/fribidi -isystem /snap/flutter/current/usr/include/harfbuzz -isystem /snap/flutter/current/usr/include/atk-1.0 -isystem /snap/flutter/current/usr/include/pixman-1 -isystem /snap/flutter/current/usr/include/uuid -isystem /snap/flutter/current/usr/include/freetype2 -isystem /snap/flutter/current/usr/include/libpng16 -isystem /snap/flutter/current/usr/include/gdk-pixbuf-2.0 -isystem /snap/flutter/current/usr/include/libmount -isystem /snap/flutter/current/usr/include/blkid -isystem /snap/flutter/current/usr/include/glib-2.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/glib-2.0/include
   OBJECT_DIR = plugins/file_selector_linux/CMakeFiles/file_selector_linux_plugin.dir
   OBJECT_FILE_DIR = plugins/file_selector_linux/CMakeFiles/file_selector_linux_plugin.dir
 
-build plugins/file_selector_linux/CMakeFiles/file_selector_linux_plugin.dir/messages.g.cc.o: CXX_COMPILER__file_selector_linux_plugin /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/linux/messages.g.cc || cmake_object_order_depends_target_file_selector_linux_plugin
+build plugins/file_selector_linux/CMakeFiles/file_selector_linux_plugin.dir/messages.g.cc.o: CXX_COMPILER__file_selector_linux_plugin /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/linux/messages.g.cc || cmake_object_order_depends_target_file_selector_linux_plugin
   DEFINES = -DFLUTTER_PLUGIN_IMPL -Dfile_selector_linux_plugin_EXPORTS
   DEP_FILE = plugins/file_selector_linux/CMakeFiles/file_selector_linux_plugin.dir/messages.g.cc.o.d
   FLAGS = -g -fPIC -fvisibility=hidden   -Wall -Werror -pthread
-  INCLUDES = -I/home/sam/Desktop/CustomsX/linux/flutter/ephemeral -isystem /snap/flutter/current/usr/include/gtk-3.0 -isystem /snap/flutter/current/usr/include/at-spi2-atk/2.0 -isystem /snap/flutter/current/usr/include/at-spi-2.0 -isystem /snap/flutter/current/usr/include/dbus-1.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/dbus-1.0/include -isystem /snap/flutter/current/usr/include/gio-unix-2.0 -isystem /snap/flutter/current/usr/include/cairo -isystem /snap/flutter/current/usr/include/pango-1.0 -isystem /snap/flutter/current/usr/include/fribidi -isystem /snap/flutter/current/usr/include/harfbuzz -isystem /snap/flutter/current/usr/include/atk-1.0 -isystem /snap/flutter/current/usr/include/pixman-1 -isystem /snap/flutter/current/usr/include/uuid -isystem /snap/flutter/current/usr/include/freetype2 -isystem /snap/flutter/current/usr/include/libpng16 -isystem /snap/flutter/current/usr/include/gdk-pixbuf-2.0 -isystem /snap/flutter/current/usr/include/libmount -isystem /snap/flutter/current/usr/include/blkid -isystem /snap/flutter/current/usr/include/glib-2.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/glib-2.0/include
+  INCLUDES = -I/home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral -isystem /snap/flutter/current/usr/include/gtk-3.0 -isystem /snap/flutter/current/usr/include/at-spi2-atk/2.0 -isystem /snap/flutter/current/usr/include/at-spi-2.0 -isystem /snap/flutter/current/usr/include/dbus-1.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/dbus-1.0/include -isystem /snap/flutter/current/usr/include/gio-unix-2.0 -isystem /snap/flutter/current/usr/include/cairo -isystem /snap/flutter/current/usr/include/pango-1.0 -isystem /snap/flutter/current/usr/include/fribidi -isystem /snap/flutter/current/usr/include/harfbuzz -isystem /snap/flutter/current/usr/include/atk-1.0 -isystem /snap/flutter/current/usr/include/pixman-1 -isystem /snap/flutter/current/usr/include/uuid -isystem /snap/flutter/current/usr/include/freetype2 -isystem /snap/flutter/current/usr/include/libpng16 -isystem /snap/flutter/current/usr/include/gdk-pixbuf-2.0 -isystem /snap/flutter/current/usr/include/libmount -isystem /snap/flutter/current/usr/include/blkid -isystem /snap/flutter/current/usr/include/glib-2.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/glib-2.0/include
   OBJECT_DIR = plugins/file_selector_linux/CMakeFiles/file_selector_linux_plugin.dir
   OBJECT_FILE_DIR = plugins/file_selector_linux/CMakeFiles/file_selector_linux_plugin.dir
 
@@ -409,10 +409,10 @@ build plugins/file_selector_linux/CMakeFiles/file_selector_linux_plugin.dir/mess
 #############################################
 # Link the shared library plugins/file_selector_linux/libfile_selector_linux_plugin.so
 
-build plugins/file_selector_linux/libfile_selector_linux_plugin.so: CXX_SHARED_LIBRARY_LINKER__file_selector_linux_plugin plugins/file_selector_linux/CMakeFiles/file_selector_linux_plugin.dir/file_selector_plugin.cc.o plugins/file_selector_linux/CMakeFiles/file_selector_linux_plugin.dir/messages.g.cc.o | /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgtk-3.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk-3.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpango-1.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libharfbuzz.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libatk-1.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo-gobject.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgio-2.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgobject-2.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libglib-2.0.so || flutter/flutter_assemble
+build plugins/file_selector_linux/libfile_selector_linux_plugin.so: CXX_SHARED_LIBRARY_LINKER__file_selector_linux_plugin plugins/file_selector_linux/CMakeFiles/file_selector_linux_plugin.dir/file_selector_plugin.cc.o plugins/file_selector_linux/CMakeFiles/file_selector_linux_plugin.dir/messages.g.cc.o | /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgtk-3.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk-3.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpango-1.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libharfbuzz.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libatk-1.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo-gobject.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgio-2.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgobject-2.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libglib-2.0.so || flutter/flutter_assemble
   LANGUAGE_COMPILE_FLAGS = -g
   LINK_FLAGS = -B/snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9 -B/snap/flutter/current/usr/lib/x86_64-linux-gnu -B/snap/flutter/current/lib/x86_64-linux-gnu -B/snap/flutter/current/usr/lib/ -L/snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9 -L/snap/flutter/current/usr/lib/x86_64-linux-gnu -L/snap/flutter/current/lib/x86_64-linux-gnu -L/snap/flutter/current/usr/lib/ -lblkid -lgcrypt -llzma -llz4 -lgpg-error -luuid -lpthread -ldl -lepoxy -lfontconfig
-  LINK_LIBRARIES = -Wl,-rpath,/home/sam/Desktop/CustomsX/linux/flutter/ephemeral  /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgtk-3.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk-3.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpango-1.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libharfbuzz.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libatk-1.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo-gobject.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgio-2.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgobject-2.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libglib-2.0.so
+  LINK_LIBRARIES = -Wl,-rpath,/home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral  /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgtk-3.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk-3.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpango-1.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libharfbuzz.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libatk-1.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo-gobject.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgio-2.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgobject-2.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libglib-2.0.so
   OBJECT_DIR = plugins/file_selector_linux/CMakeFiles/file_selector_linux_plugin.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -423,7 +423,7 @@ build plugins/file_selector_linux/libfile_selector_linux_plugin.so: CXX_SHARED_L
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
-# /home/sam/Desktop/CustomsX/linux/flutter/generated_plugins.cmake
+# /home/adel/Documents/appeal/CustomsX/linux/flutter/generated_plugins.cmake
 # =============================================================================
 
 
@@ -431,7 +431,7 @@ build plugins/file_selector_linux/libfile_selector_linux_plugin.so: CXX_SHARED_L
 # Utility command for install/strip
 
 build plugins/window_size/CMakeFiles/install/strip.util: CUSTOM_COMMAND plugins/window_size/all
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/plugins/window_size && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/plugins/window_size && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
   DESC = Installing the project stripped...
   pool = console
   restat = 1
@@ -443,7 +443,7 @@ build plugins/window_size/install/strip: phony plugins/window_size/CMakeFiles/in
 # Utility command for install/local
 
 build plugins/window_size/CMakeFiles/install/local.util: CUSTOM_COMMAND plugins/window_size/all
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/plugins/window_size && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/plugins/window_size && /snap/flutter/149/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -455,7 +455,7 @@ build plugins/window_size/install/local: phony plugins/window_size/CMakeFiles/in
 # Utility command for install
 
 build plugins/window_size/CMakeFiles/install.util: CUSTOM_COMMAND plugins/window_size/all
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/plugins/window_size && /snap/flutter/149/usr/bin/cmake -P cmake_install.cmake
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/plugins/window_size && /snap/flutter/149/usr/bin/cmake -P cmake_install.cmake
   DESC = Install the project...
   pool = console
   restat = 1
@@ -473,7 +473,7 @@ build plugins/window_size/list_install_components: phony
 # Utility command for rebuild_cache
 
 build plugins/window_size/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/plugins/window_size && /snap/flutter/149/usr/bin/cmake -S/home/sam/Desktop/CustomsX/linux -B/home/sam/Desktop/CustomsX/build/linux/x64/debug
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/plugins/window_size && /snap/flutter/149/usr/bin/cmake -S/home/adel/Documents/appeal/CustomsX/linux -B/home/adel/Documents/appeal/CustomsX/build/linux/x64/debug
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -485,7 +485,7 @@ build plugins/window_size/rebuild_cache: phony plugins/window_size/CMakeFiles/re
 # Utility command for edit_cache
 
 build plugins/window_size/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/sam/Desktop/CustomsX/build/linux/x64/debug/plugins/window_size && /snap/flutter/149/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  COMMAND = cd /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/plugins/window_size && /snap/flutter/149/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -500,11 +500,11 @@ build plugins/window_size/edit_cache: phony plugins/window_size/CMakeFiles/edit_
 
 build cmake_object_order_depends_target_window_size_plugin: phony || flutter/flutter_assemble
 
-build plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.o: CXX_COMPILER__window_size_plugin /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux/window_size_plugin.cc || cmake_object_order_depends_target_window_size_plugin
+build plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.o: CXX_COMPILER__window_size_plugin /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux/window_size_plugin.cc || cmake_object_order_depends_target_window_size_plugin
   DEFINES = -DFLUTTER_PLUGIN_IMPL -Dwindow_size_plugin_EXPORTS
   DEP_FILE = plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.o.d
   FLAGS = -g -fPIC -fvisibility=hidden   -Wall -Werror -pthread
-  INCLUDES = -I/home/sam/Desktop/CustomsX/linux/flutter/ephemeral -isystem /snap/flutter/current/usr/include/gtk-3.0 -isystem /snap/flutter/current/usr/include/at-spi2-atk/2.0 -isystem /snap/flutter/current/usr/include/at-spi-2.0 -isystem /snap/flutter/current/usr/include/dbus-1.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/dbus-1.0/include -isystem /snap/flutter/current/usr/include/gio-unix-2.0 -isystem /snap/flutter/current/usr/include/cairo -isystem /snap/flutter/current/usr/include/pango-1.0 -isystem /snap/flutter/current/usr/include/fribidi -isystem /snap/flutter/current/usr/include/harfbuzz -isystem /snap/flutter/current/usr/include/atk-1.0 -isystem /snap/flutter/current/usr/include/pixman-1 -isystem /snap/flutter/current/usr/include/uuid -isystem /snap/flutter/current/usr/include/freetype2 -isystem /snap/flutter/current/usr/include/libpng16 -isystem /snap/flutter/current/usr/include/gdk-pixbuf-2.0 -isystem /snap/flutter/current/usr/include/libmount -isystem /snap/flutter/current/usr/include/blkid -isystem /snap/flutter/current/usr/include/glib-2.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/glib-2.0/include
+  INCLUDES = -I/home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral -isystem /snap/flutter/current/usr/include/gtk-3.0 -isystem /snap/flutter/current/usr/include/at-spi2-atk/2.0 -isystem /snap/flutter/current/usr/include/at-spi-2.0 -isystem /snap/flutter/current/usr/include/dbus-1.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/dbus-1.0/include -isystem /snap/flutter/current/usr/include/gio-unix-2.0 -isystem /snap/flutter/current/usr/include/cairo -isystem /snap/flutter/current/usr/include/pango-1.0 -isystem /snap/flutter/current/usr/include/fribidi -isystem /snap/flutter/current/usr/include/harfbuzz -isystem /snap/flutter/current/usr/include/atk-1.0 -isystem /snap/flutter/current/usr/include/pixman-1 -isystem /snap/flutter/current/usr/include/uuid -isystem /snap/flutter/current/usr/include/freetype2 -isystem /snap/flutter/current/usr/include/libpng16 -isystem /snap/flutter/current/usr/include/gdk-pixbuf-2.0 -isystem /snap/flutter/current/usr/include/libmount -isystem /snap/flutter/current/usr/include/blkid -isystem /snap/flutter/current/usr/include/glib-2.0 -isystem /snap/flutter/current/usr/lib/x86_64-linux-gnu/glib-2.0/include
   OBJECT_DIR = plugins/window_size/CMakeFiles/window_size_plugin.dir
   OBJECT_FILE_DIR = plugins/window_size/CMakeFiles/window_size_plugin.dir
 
@@ -516,10 +516,10 @@ build plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.c
 #############################################
 # Link the shared library plugins/window_size/libwindow_size_plugin.so
 
-build plugins/window_size/libwindow_size_plugin.so: CXX_SHARED_LIBRARY_LINKER__window_size_plugin plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.o | /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgtk-3.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk-3.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpango-1.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libharfbuzz.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libatk-1.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo-gobject.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgio-2.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgobject-2.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libglib-2.0.so || flutter/flutter_assemble
+build plugins/window_size/libwindow_size_plugin.so: CXX_SHARED_LIBRARY_LINKER__window_size_plugin plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.o | /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgtk-3.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk-3.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpango-1.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libharfbuzz.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libatk-1.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo-gobject.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgio-2.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgobject-2.0.so /snap/flutter/current/usr/lib/x86_64-linux-gnu/libglib-2.0.so || flutter/flutter_assemble
   LANGUAGE_COMPILE_FLAGS = -g
   LINK_FLAGS = -B/snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9 -B/snap/flutter/current/usr/lib/x86_64-linux-gnu -B/snap/flutter/current/lib/x86_64-linux-gnu -B/snap/flutter/current/usr/lib/ -L/snap/flutter/current/usr/lib/gcc/x86_64-linux-gnu/9 -L/snap/flutter/current/usr/lib/x86_64-linux-gnu -L/snap/flutter/current/lib/x86_64-linux-gnu -L/snap/flutter/current/usr/lib/ -lblkid -lgcrypt -llzma -llz4 -lgpg-error -luuid -lpthread -ldl -lepoxy -lfontconfig
-  LINK_LIBRARIES = -Wl,-rpath,/home/sam/Desktop/CustomsX/linux/flutter/ephemeral  /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgtk-3.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk-3.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpango-1.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libharfbuzz.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libatk-1.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo-gobject.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgio-2.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgobject-2.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libglib-2.0.so
+  LINK_LIBRARIES = -Wl,-rpath,/home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral  /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/libflutter_linux_gtk.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgtk-3.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk-3.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libpango-1.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libharfbuzz.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libatk-1.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo-gobject.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libcairo.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgio-2.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libgobject-2.0.so  /snap/flutter/current/usr/lib/x86_64-linux-gnu/libglib-2.0.so
   OBJECT_DIR = plugins/window_size/CMakeFiles/window_size_plugin.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -549,35 +549,35 @@ build window_size_plugin: phony plugins/window_size/libwindow_size_plugin.so
 # =============================================================================
 
 #############################################
-# Folder: /home/sam/Desktop/CustomsX/build/linux/x64/debug
+# Folder: /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug
 
 build all: phony flutter/all runner/all plugins/file_selector_linux/all plugins/window_size/all
 
 # =============================================================================
 
 #############################################
-# Folder: /home/sam/Desktop/CustomsX/build/linux/x64/debug/flutter
+# Folder: /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/flutter
 
 build flutter/all: phony
 
 # =============================================================================
 
 #############################################
-# Folder: /home/sam/Desktop/CustomsX/build/linux/x64/debug/plugins/file_selector_linux
+# Folder: /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/plugins/file_selector_linux
 
 build plugins/file_selector_linux/all: phony plugins/file_selector_linux/libfile_selector_linux_plugin.so
 
 # =============================================================================
 
 #############################################
-# Folder: /home/sam/Desktop/CustomsX/build/linux/x64/debug/plugins/window_size
+# Folder: /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/plugins/window_size
 
 build plugins/window_size/all: phony plugins/window_size/libwindow_size_plugin.so
 
 # =============================================================================
 
 #############################################
-# Folder: /home/sam/Desktop/CustomsX/build/linux/x64/debug/runner
+# Folder: /home/adel/Documents/appeal/CustomsX/build/linux/x64/debug/runner
 
 build runner/all: phony intermediates_do_not_run/sccf
 
@@ -593,14 +593,14 @@ default all
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | /home/sam/Desktop/CustomsX/linux/CMakeLists.txt /home/sam/Desktop/CustomsX/linux/flutter/CMakeLists.txt /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/linux/CMakeLists.txt /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux/CMakeLists.txt /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/generated_config.cmake /home/sam/Desktop/CustomsX/linux/flutter/generated_plugins.cmake /home/sam/Desktop/CustomsX/linux/runner/CMakeLists.txt /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeCXXInformation.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeCommonLanguageInclude.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeGenericSystem.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeInitializeConfigs.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeLanguageInformation.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeSystemSpecificInformation.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeSystemSpecificInitialize.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Compiler/CMakeCommonCompilerMacros.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Compiler/Clang-CXX.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Compiler/Clang.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Compiler/GNU.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/FindPackageHandleStandardArgs.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/FindPackageMessage.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/FindPkgConfig.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Internal/CMakeCheckCompilerFlag.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/Linux-Clang-CXX.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/Linux-GNU-CXX.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/Linux-GNU.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/Linux.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.16.3/CMakeCXXCompiler.cmake CMakeFiles/3.16.3/CMakeSystem.cmake
+build build.ninja: RERUN_CMAKE | /home/adel/Documents/appeal/CustomsX/linux/CMakeLists.txt /home/adel/Documents/appeal/CustomsX/linux/flutter/CMakeLists.txt /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/linux/CMakeLists.txt /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux/CMakeLists.txt /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/generated_config.cmake /home/adel/Documents/appeal/CustomsX/linux/flutter/generated_plugins.cmake /home/adel/Documents/appeal/CustomsX/linux/runner/CMakeLists.txt /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeCXXInformation.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeCommonLanguageInclude.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeGenericSystem.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeInitializeConfigs.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeLanguageInformation.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeSystemSpecificInformation.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeSystemSpecificInitialize.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Compiler/CMakeCommonCompilerMacros.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Compiler/Clang-CXX.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Compiler/Clang.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Compiler/GNU.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/FindPackageHandleStandardArgs.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/FindPackageMessage.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/FindPkgConfig.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Internal/CMakeCheckCompilerFlag.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/Linux-Clang-CXX.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/Linux-GNU-CXX.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/Linux-GNU.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/Linux.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.16.3/CMakeCXXCompiler.cmake CMakeFiles/3.16.3/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build /home/sam/Desktop/CustomsX/linux/CMakeLists.txt /home/sam/Desktop/CustomsX/linux/flutter/CMakeLists.txt /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/linux/CMakeLists.txt /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux/CMakeLists.txt /home/sam/Desktop/CustomsX/linux/flutter/ephemeral/generated_config.cmake /home/sam/Desktop/CustomsX/linux/flutter/generated_plugins.cmake /home/sam/Desktop/CustomsX/linux/runner/CMakeLists.txt /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeCXXInformation.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeCommonLanguageInclude.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeGenericSystem.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeInitializeConfigs.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeLanguageInformation.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeSystemSpecificInformation.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeSystemSpecificInitialize.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Compiler/CMakeCommonCompilerMacros.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Compiler/Clang-CXX.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Compiler/Clang.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Compiler/GNU.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/FindPackageHandleStandardArgs.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/FindPackageMessage.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/FindPkgConfig.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Internal/CMakeCheckCompilerFlag.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/Linux-Clang-CXX.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/Linux-GNU-CXX.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/Linux-GNU.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/Linux.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.16.3/CMakeCXXCompiler.cmake CMakeFiles/3.16.3/CMakeSystem.cmake: phony
+build /home/adel/Documents/appeal/CustomsX/linux/CMakeLists.txt /home/adel/Documents/appeal/CustomsX/linux/flutter/CMakeLists.txt /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/linux/CMakeLists.txt /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux/CMakeLists.txt /home/adel/Documents/appeal/CustomsX/linux/flutter/ephemeral/generated_config.cmake /home/adel/Documents/appeal/CustomsX/linux/flutter/generated_plugins.cmake /home/adel/Documents/appeal/CustomsX/linux/runner/CMakeLists.txt /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeCXXInformation.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeCommonLanguageInclude.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeGenericSystem.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeInitializeConfigs.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeLanguageInformation.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeSystemSpecificInformation.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/CMakeSystemSpecificInitialize.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Compiler/CMakeCommonCompilerMacros.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Compiler/Clang-CXX.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Compiler/Clang.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Compiler/GNU.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/FindPackageHandleStandardArgs.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/FindPackageMessage.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/FindPkgConfig.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Internal/CMakeCheckCompilerFlag.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/Linux-Clang-CXX.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/Linux-GNU-CXX.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/Linux-GNU.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/Linux.cmake /snap/flutter/149/usr/share/cmake-3.16/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.16.3/CMakeCXXCompiler.cmake CMakeFiles/3.16.3/CMakeSystem.cmake: phony
 
 
 #############################################
