@@ -117,9 +117,12 @@ class GlobalClearApp extends StatelessWidget {
       initialRoute: '/welcome',
       routes: _appRoutes(),
       builder: (context, child) {
+        if (child == null) {
+          return const SizedBox.shrink(); // or a fallback widget
+        }
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-          child: child!,
+          child: child,
         );
       },
     );
@@ -155,7 +158,8 @@ class GlobalClearApp extends StatelessWidget {
       '/payment_method': (context) => PaymentMethodsScreen(),
       '/declaration': (context) => const DeclarationScreen(),
       '/subscription': (context) => const SubscriptionPage(),
-      '/logistics-booking': (context) => const LogisticsBookingScreen(declarationId: ''),
+      '/logistics-booking':
+          (context) => const LogisticsBookingScreen(declarationId: ''),
     };
   }
 }

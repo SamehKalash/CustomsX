@@ -271,33 +271,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildQuickActions(BuildContext context, bool isDarkMode) {
     return Center(
-      child: Wrap(
-        spacing: 16.w,
-        runSpacing: 16.h,
-        alignment: WrapAlignment.center,
-        children: [
-          _buildActionButton(
-            context,
-            Icons.calculate,
-            'Calculator',
-            '/customs-fee',
-            isDarkMode,
-          ),
-          _buildActionButton(
-            context,
-            Icons.search,
-            'IMEI Checker',
-            '/imei-checker',
-            isDarkMode,
-          ),
-          _buildActionButton(
-            context,
-            Icons.payment,
-            'Payments',
-            '/payments',
-            isDarkMode,
-          ),
-        ],
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildActionButton(
+              context,
+              Icons.calculate,
+              'Calculator',
+              '/customs-fee',
+              isDarkMode,
+            ),
+            SizedBox(width: 16.w),
+            _buildActionButton(
+              context,
+              Icons.search,
+              'IMEI Checker',
+              '/imei-checker',
+              isDarkMode,
+            ),
+            SizedBox(width: 16.w),
+            _buildActionButton(
+              context,
+              Icons.payment,
+              'Payments',
+              '/payments',
+              isDarkMode,
+            ),
+            SizedBox(width: 16.w),
+            _buildActionButton(
+              context,
+              Icons.how_to_vote, // Changed from Icons.gavel to a different icon
+              'Appeal',
+              '/appeal',
+              isDarkMode,
+            ),
+          ],
+        ),
       ),
     );
   }
