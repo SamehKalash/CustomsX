@@ -1,0 +1,10 @@
+^S:\CUSTOMSX\BUILD\WINDOWS\X64\CMAKEFILES\A8B32660E7BD4034C19AB1F45969A0D7\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SS:/CustomsX/windows -BS:/CustomsX/build/windows/x64 --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file S:/CustomsX/build/windows/x64/sccf.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
